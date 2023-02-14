@@ -14,10 +14,9 @@ I would guess that it may make the most sense to host on a local server. I would
 
 Pending hardware specs, currently planning on the following framework:
 
-- Server webdev in Rust using the Rocket framework
-- An SQL database
-- The Diesel library for the query tool
-- REACT Hook for front end
+- Server webdev in Python using the Flask framework.
+- An SQL database via SQLAlchemy
+- Bootstrap Flask for a front end UI display
 
 # Building
 
