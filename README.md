@@ -19,3 +19,40 @@ Pending hardware specs, currently planning on the following framework:
 - The Diesel library for the query tool
 - REACT Hook for front end
 
+# Building
+
+1. First, make sure your enviroment has Python 3 installed with your preferred package manager or download from:
+
+https://www.python.org/downloads/
+
+2. Clone this project down:
+
+```
+$ cd your/project/directory/here
+$ git clone https://github.com/ZYostSass/EPL-Card-Reader-Interface.git
+```
+
+3. Create your virtual enviroment:
+
+```
+$ python3 -m venv venv
+```
+
+4. And run the application
+
+```
+$ ./run.sh
+```
+
+# Day to day development
+
+The `run.sh` script is very simple. It:
+
+- Activates your enviroment, so pip doesn't clutter up your $PATH
+- Installs all the depencies listed in requirements.txt. This is very fast as pip only checks for new packages.
+- Runs flask
+
+This should make it so that this project 'just runs' every time on unix-compatible shells. 
+(DM Mikayla if this doesn't work on Windows and we'll try to sort it out. Might need to install the [bash shell](https://superuser.com/a/1059340) that comes with Windows 10)
+
+If you need to add a dependency from pip, add a new line to requirements.txt with the dependency name, exactly as you would write it for a normal `pip install`, as soon as someone else pulls down your changes we'll all have the dependency installed immediately.
