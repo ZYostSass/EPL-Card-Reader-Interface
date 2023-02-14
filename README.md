@@ -52,6 +52,7 @@ The `run.sh` script is very simple. It:
 - Installs all the depencies listed in requirements.txt. This is very fast as pip only checks for new packages.
 - Runs flask
 
-This should make it so that this project 'just runs' every time on unix-compatible shells. DM Mikayla if this doesn't work on Windows and we'll try to sort it out.
+This should make it so that this project 'just runs' every time on unix-compatible shells. 
+(DM Mikayla if this doesn't work on Windows and we'll try to sort it out. Might need to install the bash shell that comes with Windows 10: https://superuser.com/a/1059340)
 
 If you need to add a dependency from pip, add a new line to requirements.txt with the dependency name, exactly as you would write it for a normal `pip install`, as soon as someone else pulls down your changes we'll all have the dependency installed immediately.
