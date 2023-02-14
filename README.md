@@ -53,6 +53,6 @@ The `run.sh` script is very simple. It:
 - Runs flask
 
 This should make it so that this project 'just runs' every time on unix-compatible shells. 
-(DM Mikayla if this doesn't work on Windows and we'll try to sort it out. Might need to install the bash shell that comes with Windows 10: https://superuser.com/a/1059340)
+(DM Mikayla if this doesn't work on Windows and we'll try to sort it out. Might need to install the [bash shell](https://superuser.com/a/1059340) that comes with Windows 10)
 
 If you need to add a dependency from pip, add a new line to requirements.txt with the dependency name, exactly as you would write it for a normal `pip install`, as soon as someone else pulls down your changes we'll all have the dependency installed immediately.
