@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS people;
+
+CREATE TABLE people (
+  id INTEGER PRIMARY KEY,
+  lname VARCHAR NOT NULL,
+  fname VARCHAR NOT NULL,
+  passwd VARCHAR NOT NULL
+);
