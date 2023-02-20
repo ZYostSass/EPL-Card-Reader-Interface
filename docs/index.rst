@@ -3,6 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+
+
 Welcome to EPL Card Reader at PSU's documentation!
 ==================================================
 
@@ -10,14 +12,13 @@ The Experimental Prototyping Lab, or EPL at PSU is a lab used for testing and de
 The purpose of this project is to allow managers and students to maintain a database using card reader technology.
 They will be able to use student ID cards to scan in and update their trained status for machines around the lab.
 
+Contents
+---------
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   README.rst
-   Our README <README.rst>
-   index.rst
-
-
+   
+   README
 
 Indices and tables
 ==================
