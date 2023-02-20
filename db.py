@@ -15,5 +15,25 @@ class Person(Base):
         self.firstname = firstname
         self.lastname = lastname
 
-    def __repr__(self) -> str:
-        return super().__repr__()
+    #def __repr__(self) -> str:
+    #    return super().__repr__()
+
+    def __repr__(self):
+        return f"({self.idnumber} {self.firstname} {self.lastname})"
+    
+# TODO - Format for Flask
+engine = create_engine("flask:")
+
+Base.metadata.create_all(bind=engine)
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Example of Entry
+person = Person(234324, "John", "Doe")
+session.add(person)
+session.commit()
+
+# Queries
+results = session.query(Person).all()
+print(results)
