@@ -12,4 +12,4 @@ python:
   #Python package will need to be installed:
   install:
     - method: pip
-    path: .
+      path: .
