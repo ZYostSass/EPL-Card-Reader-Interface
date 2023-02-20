@@ -13,6 +13,9 @@ They will be able to use student ID cards to scan in and update their trained st
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   README.rst
+   Our README <README.rst>
+   index.rst
 
 
 
