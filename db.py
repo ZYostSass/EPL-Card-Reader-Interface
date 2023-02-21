@@ -9,6 +9,7 @@ class Person(Base):
     idnumber = Column("ID", Integer, primary_key = True)
     firstname = Column("firstname", String)
     lastname = Column("lastname", String)
+    # Pointer to array with trained boolean?
     
     def __init__(self, idnumber, firstname, lastname):
         self.idnumber = idnumber
@@ -22,7 +23,8 @@ class Person(Base):
         return f"({self.idnumber} {self.firstname} {self.lastname})"
     
 # TODO - Format for Flask
-engine = create_engine("flask:")
+# "sqlite:///mydb.db"
+engine = create_engine("sqlite:///mydb.db", echo = True)
 
 Base.metadata.create_all(bind=engine)
 
@@ -31,9 +33,13 @@ session = Session()
 
 # Example of Entry
 person = Person(234324, "John", "Doe")
+# New user has all training set to False
+# Admins can edit info as needed
 session.add(person)
 session.commit()
 
 # Queries
 results = session.query(Person).all()
 print(results)
+
+#
