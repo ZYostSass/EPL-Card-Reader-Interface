@@ -1,0 +1,78 @@
+:root {
+  --PSUgreen: #3c4c0c;
+  --lightGrey: #bebebe;
+  --red: #b22222;
+  --green: #228b22;
+}
+
+body {
+  background-color: white;
+}
+
+#side_nav {
+  background: var(--PSUgreen);
+  min-width: 250px;
+  max-width: 250px;
+  transition: all 0.3s;
+}
+
+.content {
+  min-height: 100vh;
+  width: 100%;
+}
+
+hr.h-color {
+  background: white;
+}
+
+.sidebar li.active {
+  background: white;
+  border-radius: 8px;
+}
+
+.sidebar li.active a,
+.sidebar li.active a:hover {
+  color: black;
+}
+
+.sidebar li a {
+  color: white;
+}
+
+.navbar-brand span {
+  background: var(--PSUgreen);
+}
+
+.container .equipStudent-content {
+  display: flex;
+  justify-content: center;
+}
+
+.equipStudent-content img {
+  max-width: 75%;
+  height: auto;
+  border: 2px solid;
+  border-radius: 5px;
+  border-color: var(--lightGrey);
+}
+
+.equipStudent-content img.true {
+  filter: opacity(0.5) drop-shadow(0 0 0 green);
+}
+
+.equipStudent-content img.false {
+  filter: opacity(0.5) drop-shadow(0 0 0 red);
+}
+
+@media (max-width: 767px) {
+  #side_nav {
+    margin-left: -250px;
+    position: fixed;
+    min-height: 100vh;
+    z-index: 1;
+  }
+
+  #side_nav.active {
+    margin-left: 0;
+  }
+}
