@@ -33,23 +33,30 @@ $ git clone https://github.com/ZYostSass/EPL-Card-Reader-Interface.git
 
 3. Create your virtual enviroment:
 
+Bash compatible shell:
+
 ```
 $ python3 -m venv venv
+```
+
+Powershell:
+```
+> py -3 -m venv venv
 ```
 
 4. And run the application
 
 ```
-$ ./run.sh
+$ ./run.ps1
 ```
 
 # Day to day development
 
-The `run.sh` script is very simple. It:
+The `run.ps1` script is very simple. It uses the [polyshell template](https://github.com/llamasoft/polyshell) to:
 
-- Activates your enviroment, so pip doesn't clutter up your $PATH
-- Installs all the depencies listed in requirements.txt. This is very fast as pip only checks for new packages.
-- Runs flask
+- Activate your enviroment, so pip doesn't clutter up your $PATH
+- Install all the depencies listed in requirements.txt. This is very fast as pip only checks for new packages.
+- Run flask
 
 This should make it so that this project 'just runs' every time on unix-compatible shells. 
 (DM Mikayla if this doesn't work on Windows and we'll try to sort it out. Might need to install the [bash shell](https://superuser.com/a/1059340) that comes with Windows 10)
