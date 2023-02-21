@@ -10,6 +10,7 @@ class Person(Base):
     firstname = Column("firstname", String)
     lastname = Column("lastname", String)
     # Pointer to array with trained boolean?
+    # Admin, Manager, Student
     
     def __init__(self, idnumber, firstname, lastname):
         self.idnumber = idnumber
@@ -35,6 +36,8 @@ session = Session()
 person = Person(234324, "John", "Doe")
 # New user has all training set to False
 # Admins can edit info as needed
+# Check to see if table file is present
+# Last login
 session.add(person)
 session.commit()
 
