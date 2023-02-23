@@ -1,2 +1,4 @@
-from . import app
+from . import models
 from . import views
+
+from . import app
