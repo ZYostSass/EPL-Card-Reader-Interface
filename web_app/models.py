@@ -53,14 +53,14 @@ class Admin(Manager):
     
     
     def promoteManager(lucky_user):
-        new_mgr = Manager(lucky_user)
+        new_mgr = Manager(id=lucky_user.id,firstname=lucky_user.firstname,lastname=lucky_user.lastname,email=lucky_user.lastname)
         db.session.delete(lucky_user)
         db.session.add(new_mgr)
         db.session.commit()
         return new_mgr
     
     def promoteAdmin(lucky_mgr):
-        new_admin = Manager(lucky_mgr)
+        new_admin = Manager(id=lucky_mgr.id,firstname=lucky_mgr.firstname,lastname=lucky_mgr.lastname,email=lucky_mgr.email)
         db.session.delete(lucky_mgr)
         db.session.add(new_admin)
         db.session.commit()
