@@ -40,8 +40,8 @@ class User(db.Model):
     # "This property should return True if this is an active user - 
     # in addition to being authenticated, they also have activated their account, 
     # not been suspended, or any condition your application has for rejecting an account. 
-    # Inactive accounts may not log in (without being forced of course).# -from docs
-    # Returns this fiels 
+    # Inactive accounts may not log in (without being forced of course)." -from docs
+    
 
     def is_active(self):
       return self.is_active
@@ -93,14 +93,14 @@ class Admin(Manager):
         return f"({self.id} {self.firstname} {self.lastname})"
     
     
-    def promoteManager(lucky_user):
+    def promoteManager(self, lucky_user):
         new_mgr = Manager(id=lucky_user.id,firstname=lucky_user.firstname,lastname=lucky_user.lastname,email=lucky_user.lastname, active=True)
         db.session.delete(lucky_user)
         db.session.add(new_mgr)
         db.session.commit()
         return new_mgr
     
-    def promoteAdmin(lucky_mgr):
+    def promoteAdmin(self, lucky_mgr):
         new_admin = Manager(id=lucky_mgr.id,firstname=lucky_mgr.firstname,lastname=lucky_mgr.lastname,email=lucky_mgr.email, active=True)
         db.session.delete(lucky_mgr)
         db.session.add(new_admin)
