@@ -15,8 +15,8 @@ set +o histexpand 2>/dev/null
 # ===== Bash Script Begin =====
 . venv/bin/activate
 pip install -qr requirements.txt
-flask --app web_app/webapp.py db upgrade
-flask --app web_app/webapp.py --debug run
+flask --app web_app db upgrade
+flask --app web_app --debug run
 # ====== Bash Script End ======
 case $- in *"i"*) cat /dev/stdin >/dev/null ;; esac
 exit

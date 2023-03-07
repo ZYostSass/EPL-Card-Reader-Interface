@@ -1,37 +1,25 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, Blueprint, g
 from .models import User
-from . import db
-from . import app
+from .db import db
 
+bp = Blueprint('views', __name__)
 
-@app.route("/")
+@bp.route("/")
 def index():
     return render_template('index.html')
 
 # Pulling from the database
-@app.route('/read-user/', defaults={'id': 1})
-@app.route("/read-user/<id>")
+@bp.route('/read-user/', defaults={'id': 1})
+@bp.route("/read-user/<id>")
 def test_read(id):
     user = db.get_or_404(User, id)
     return render_template('read_user.html', user=user)
 
 
-# Inserting into the database
-@app.route("/add-user/<name>")
-def test_write(name):
-    user = User(
-        firstname=name,
-    )
-    db.session.add(user)
-    db.session.commit()
-
-    return render_template('added_user.html', user=user)
-
 # Adding new user into database from form
 # TODO: Only allow access to this page when logged in as an Admin or Manager
-@app.route("/add-user-form/", methods=['POST', 'GET'])
+@bp.route("/add-user-form/", methods=['POST', 'GET'])
 def add_user_form():
-
     if request.method == "POST":
         user_id = request.form['id']
         user_fname = request.form['fname']
@@ -50,8 +38,8 @@ def add_user_form():
 
         new_user = User(
             id=user_id,
-            firstname=user_fname,
-            lastname=user_lname,
+            fname=user_fname,
+            lname=user_lname,
             email=user_email
         )
 
@@ -67,26 +55,26 @@ def add_user_form():
         return render_template("add_user_form.html")
 
 
-@ app.route("/dashboard/")
+@bp.route("/dashboard/")
 def dashboard():
     return render_template("dashboard.html")
 
 
-@ app.route("/equipOverview/")
+@bp.route("/equipOverview/")
 def equipOverview():
     return render_template("equipOverview.html")
 
 
-@ app.route("/equipOverview/student/")
+@bp.route("/equipOverview/student/")
 def equipStudent():
     return render_template("equipStudent.html")
 
 
-@ app.route("/permissions/")
+@bp.route("/permissions/")
 def permissions():
     return render_template("permissions.html")
 
 
-@ app.route("/waiver/")
+@bp.route("/waiver/")
 def waiver():
     return render_template("waiver.html")
