@@ -74,3 +74,4 @@ This will add the associated scripts to the migrations folder. Note that these a
 For more detail, read the associated `docs <https://flask-migrate.readthedocs.io/en/latest/>`_
 
 
+This is Tam
