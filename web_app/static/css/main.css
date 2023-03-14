@@ -64,6 +64,11 @@ hr.h-color {
   filter: opacity(0.5) drop-shadow(0 0 0 red);
 }
 
+.form-content .btn-primary {
+  background-color: var(--PSUgreen);
+  border: solid var(--PSUgreen);
+}
+
 @media (max-width: 767px) {
   #side_nav {
     margin-left: -250px;
