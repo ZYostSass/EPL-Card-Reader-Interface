@@ -72,5 +72,3 @@ In order to update the database, first modify the associated classes, then run::
 This will add the associated scripts to the migrations folder. Note that these are not live reloaded, and so you need to restart the run script.
 
 For more detail, read the associated `docs <https://flask-migrate.readthedocs.io/en/latest/>`_
-
-Split Test
