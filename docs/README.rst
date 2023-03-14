@@ -59,4 +59,4 @@ This should make it so that this project 'just runs' every time on unix-compatib
 
 If you need to add a dependency from pip, add a new line to requirements.txt with the dependency name, exactly as you would write it for a normal `pip install`, as soon as someone else pulls down your changes we'll all have the dependency installed immediately.
 
-RealTest
+Split Test
