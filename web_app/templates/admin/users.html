@@ -1,7 +1,11 @@
-{% extends "index.html" %} {% block content %}
+{% extends "index.html" %}
+{% block content %}
 <div>
   {% for user in users %}
+  <div>
+    <span style="font-weight: bold;">{{ user }}</span>
+    <a href="">edit</a>
+  </div>
   {% endfor %}
 </div>
-
 {% endblock %}
