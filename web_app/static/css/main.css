@@ -79,18 +79,14 @@ hr.h-color {
   width: 100%;
 }
 
-.dashboard-top {
-  display: flex;
-  width: 100%;
-}
-
 .dashboard-menu {
   display: flex;
-  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 .dashboard-menu .card {
   width: 25%;
+  flex-grow: 4;
   margin: 10px;
   background: gainsboro;
   text-align: center;
@@ -108,6 +104,11 @@ hr.h-color {
   font-size: 100%;
 }
 
+.dashboard-menu .card p {
+  font-size: 10px;
+  margin-bottom: 0;
+}
+
 .dashboard-menu .card .card-buttons {
   width: 100%;
   text-align: center;
@@ -118,10 +119,53 @@ hr.h-color {
   background: #6e7d3c;
   color: white;
   font-size: 75%;
-  padding: 7px 7px;
+  padding: 0.5em 1em;
   border-radius: 10px;
   margin-top: 15px;
   cursor: pointer;
+}
+
+.daily-user-log {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.daily-user-log .title {
+  display: flex;
+  padding: 5px;
+  align-items: center;
+}
+
+.daily-user-log .title i {
+  margin-right: 10px;
+  font-size: 1.25em;
+}
+
+.daily-user-log .title h3 {
+  margin: 0;
+}
+
+.daily-user-log .daily-user-log-data {
+  display: flex;
+  justify-content: space-between;
+}
+
+.daily-user-log-data .data {
+  display: flex;
+  flex-direction: column;
+  margin: 0 15px;
+}
+
+.daily-user-log-data .data .data-list {
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 10px;
+  white-space: nowrap;
+}
+
+.daily-user-log-data .data-title {
+  font-size: 16px;
+  font-weight: 500;
 }
 
 @media (max-width: 767px) {
