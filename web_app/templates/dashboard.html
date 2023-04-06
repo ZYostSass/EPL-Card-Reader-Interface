@@ -1,21 +1,18 @@
 {% extends "index.html" %} {% block content %}
-<div class="dashboard-content px-3 pt-4">
-  <h2 class="fs-5 pe-2">Dashboard</h2>
-  <p>
-    This is where general overview content would go. Some ideas for what could
-    go on here:
-  </p>
-  <ul>
-    <li>
-      Have the most recent student's equipment permissions displayed to the
-      screen
-    </li>
-    <li>
-      List of the most recent students to check into the lab that day. From this
-      list, we could link to each student's equipment permissions, waiver, and
-      emergency contact information, so they wouldn't need to tap their card
-      twice in one lab session.
-    </li>
-  </ul>
-</div>
+<section class="dashboard">
+  <div class="dashboard-top px-3 pt-4">
+    <h2 class="fs-5 pe-2">Dashboard</h2>
+  </div>
+  <div class="dashboard-menu">
+    <div class="card">
+      <i class="fa-solid fa-user-large"></i>
+      <h3>Student Management</h3>
+      <div class="card-buttons">
+        <button>Add Student</button>
+        <button>Edit Student</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% endblock %}
