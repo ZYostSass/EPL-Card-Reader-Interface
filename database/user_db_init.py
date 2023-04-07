@@ -4,7 +4,7 @@
 	# First Name
 	# Last Name
 	# Emergency Contact Info
-	# User Level
+	# User Level (Admin, Manager, Student)
 
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
@@ -18,8 +18,7 @@ class Person(Base):
     role = Column("role", String)
     firstname = Column("firstname", String)
     lastname = Column("lastname", String)
-    # Admin, Manager, Student
-    
+        
     def __init__(self, idnumber, accessnumber, role, firstname, lastname):
         self.idnumber = idnumber
         self.accessnumber = accessnumber

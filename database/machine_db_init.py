@@ -10,7 +10,7 @@ Base = declarative_base()
 
 class Machine(Base):
     __tablename__ = "machine"
-    idnumber = Column("ID", Integer, ForeignKey(user_db_init.Person.__tablename__)) # user_db_init.Person.__tablename__
+    idnumber = Column("ID", Integer, ForeignKey(user_db_init.Person.__tablename__))
     trained = Column("Trained", Boolean)
     
     def __init__(self, idnumber, trained):
