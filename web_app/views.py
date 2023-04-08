@@ -2,14 +2,6 @@ from flask import Flask, render_template, request, redirect, escape
 from .models import User
 from . import db
 from . import app
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google.oauth2 import service_account
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-
-
 
 
 @app.route("/")
@@ -101,23 +93,4 @@ def permissions():
 
 @ app.route("/waiver/")
 def waiver():
-    # Set up API access to a test document.
-    # Document ID copied from the URL of the document.
-    DOCUMENT_ID = '1VkvEXv8xn6kL020lkKkh4saBXiQYkxBgPNdGWnN6b_w'
-    SECRET = 'credentials.json' # Better way to handle this? Creds for the drive w/ waiver?
-    SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
-    credentials = service_account.Credentials.from_service_account_file(
-        SECRET, scopes=SCOPES)
-    # Source: https://developers.google.com/identity/protocols/oauth2/scopes#docs
-    html = ''
-    try:
-        # Get the document from the API.
-        service = build('drive', 'v3', credentials=credentials)
-        export_links = service.files().get(fileId=DOCUMENT_ID, fields='exportLinks').execute()
-        export_link = export_links['exportLinks']['text/html']
-        # Export the document to html.
-        html = service.files().export(fileId=DOCUMENT_ID, mimeType='text/html').execute()
-    except HttpError as e:
-        print(e) 
-    # So close.  I need to strip the header info out - BeautifulSoup, maybe?
-    return render_template('waiver.html', html=html)
+    return render_template('waiver.html')

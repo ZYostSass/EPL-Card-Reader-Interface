@@ -1,5 +1,15 @@
 {% extends "index.html" %} {% block content %}
-<div class="waiver-content px-3 pt-4">
+<div class="waiver-content px-3 pt-4 text-center">
   <h2 class="fs-5 pe-2">Waiver</h2>
-  <div>{{ html.decode('utf-8')|safe }}</div> 
+  <div class="container" id="waiver">
+    <iframe class="responsive-iframe shadow" 
+            src="https://docs.google.com/forms/d/e/1FAIpQLSfxIUOoJnwgw2woPsUDmwpgH4uHPu-xNtaJN9nRBLdbHWztlA/viewform" 
+            width=75%
+            height=1000 
+            frameborder="0" 
+            marginheight="0"
+            marginwidth="0">
+          Loading…
+    </iframe>
+  </div>
 {% endblock %}
