@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, Blueprint, g
+from flask import Flask, render_template, request, redirect, Blueprint, g, session
+from web_app.admin import login_required
 from .models import User
 from .db import db
 
@@ -16,9 +17,38 @@ def test_read(id):
     return render_template('read_user.html', user=user)
 
 
+@bp.route("/login")
+def login(id):
+  if request.method == "POST":
+      user_email = request.form['email']
+      password = request.form['password']
+
+      # Verify password
+      user = db.session.get(User, id) #STUB< NEEDS TO BE REPLACED WITH A PASSWORD CHECK
+
+      if user is None:
+          return render_template("login.html", error="Failed to verify username or password") #STUB< Page needs to be implemented
+      else:
+          session["user_id"] = user.id
+          redirect_arg = request.args.get('next')
+          if redirect_arg is None:
+              return redirect("/", code=302)
+          else:
+              return redirect(redirect_arg, code=302)
+
+
+  return render_template("login.html")
+
+  @bp.route("/logout")
+  def login(id):
+      session.pop('username', None)
+      return redirect(url_for('index'))
+
+
 # Adding new user into database from form
 # TODO: Only allow access to this page when logged in as an Admin or Manager
 @bp.route("/add-user-form/", methods=['POST', 'GET'])
+@login_required
 def add_user_form():
     if request.method == "POST":
         user_id = request.form['id']
