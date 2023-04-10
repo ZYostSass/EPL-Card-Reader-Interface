@@ -6,11 +6,12 @@ import user_db_init
 from sqlalchemy import ForeignKey, Column, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 
+# Depreciated - TODO: Replace
 Base = declarative_base()
 
 class Machine(Base):
     __tablename__ = "machine"
-    idnumber = Column("ID", Integer, ForeignKey(user_db_init.Person.__tablename__))
+    idnumber = Column("ID", Integer, ForeignKey(user_db_init.User.__tablename__), primary_key = True)
     trained = Column("Trained", Boolean)
     
     def __init__(self, idnumber, trained):

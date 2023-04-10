@@ -9,10 +9,11 @@
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 
+# Depreciated - TODO: Replace
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = "people"
+class User(Base):
+    __tablename__ = "users"
     idnumber = Column("ID", Integer, primary_key = True)
     accessnumber = Column("Access ID", Integer)   
     role = Column("role", String)

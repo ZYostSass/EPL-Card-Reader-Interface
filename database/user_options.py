@@ -9,20 +9,28 @@
 	# Change a user's access level
 
 import database_init
+# from flask import Flask
+# app = Flask(__name__)
 
 # Universal Commands
 
 # Takes parsed card data and inputs it into the database
+# @app.route('/checkin_user/<idnumber>')
 def checkin_user(idnumber):
     print("Hello")
     
 # Manager Commands
     
-def add_new_user(idnumber, accesnumber, firstname, lastname):
-    print("Hello")
+def add_new_user(idnumber, accessnumber, role, firstname, lastname):
+    user = database_init.user_db_init.User(idnumber, accessnumber, role, firstname, lastname)
+    database_init.session.add(user)
+    # Set trainning values
+    # TODO ^
+    database_init.session.commit()
     
 def user_check(firstname, lastname):
-    print("Hello")
+    results = database_init.session.query(database_init.user_db_init.User).all()
+    print(results)
     
 def change_user_training(idnumber, machine, trained_status):
     print("Hello")
