@@ -6,7 +6,7 @@
 }
 
 body {
-  background-color: white;
+  background-color: #f8f9fa;
 }
 
 /* Sidebar */
@@ -88,7 +88,7 @@ hr.h-color {
   width: 25%;
   flex-grow: 4;
   margin: 10px;
-  background: gainsboro;
+  background: white;
   text-align: center;
   padding: 0.5em;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
@@ -126,7 +126,10 @@ hr.h-color {
 }
 
 .daily-user-log {
-  margin-top: 20px;
+  background: white;
+  margin: 20px 0px;
+  padding: 0.5em 1em;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
   width: 100%;
 }
 
