@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, escape
 from .models import User
 from . import db
 from . import app
@@ -9,6 +9,8 @@ def index():
     return render_template('index.html')
 
 # Pulling from the database
+
+
 @app.route('/read-user/', defaults={'id': 1})
 @app.route("/read-user/<id>")
 def test_read(id):
@@ -29,6 +31,8 @@ def test_write(name):
 
 # Adding new user into database from form
 # TODO: Only allow access to this page when logged in as an Admin or Manager
+
+
 @app.route("/add-user-form/", methods=['POST', 'GET'])
 def add_user_form():
 
@@ -89,4 +93,4 @@ def permissions():
 
 @ app.route("/waiver/")
 def waiver():
-    return render_template("waiver.html")
+    return render_template('waiver.html')
