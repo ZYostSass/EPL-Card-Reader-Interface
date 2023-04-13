@@ -9,6 +9,7 @@
 	# Change a user's access level
 
 import database_init
+import class_models
 # from flask import Flask
 # app = Flask(__name__)
 
@@ -22,14 +23,15 @@ def checkin_user(idnumber):
 # Manager Commands
     
 def add_new_user(idnumber, accessnumber, role, firstname, lastname):
-    user = database_init.user_db_init.User(idnumber, accessnumber, role, firstname, lastname)
+    user = class_models.User(idnumber, accessnumber, role, firstname, lastname)
     database_init.session.add(user)
     # Set trainning values
     # TODO ^
     database_init.session.commit()
     
 def user_check(firstname, lastname):
-    results = database_init.session.query(database_init.user_db_init.User).all()
+    results = database_init.session.query(class_models.User).all()
+    results.extend(database_init.session.query(class_models.Machine).all())
     print(results)
     
 def change_user_training(idnumber, machine, trained_status):

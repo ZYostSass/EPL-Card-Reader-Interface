@@ -1,12 +1,11 @@
 import os.path
-import user_db_init
-import machine_db_init
+import class_models
 
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 path = os.getcwd
+# print(path)
 check_file = os.path.isfile("users.db") #path + 
 if not (check_file):
     # If database files don't exist
@@ -14,22 +13,39 @@ if not (check_file):
     # Create the first entry as an Admin
 
     # Initialize Session
-    
-    # Depreciated - TODO: Replace
-    user_base = declarative_base()
 
-    users_engine = create_engine("sqlite:///users.db")
-    user_base.metadata.create_all(bind = users_engine)
-    Session = sessionmaker(bind = users_engine)
+    # Users
+    
+    engine = create_engine("sqlite:///users.db")
+    class_models.Base.metadata.create_all(engine)
+    Session = sessionmaker(engine)
     session = Session()
 
     # Create Base Admin
-    base_admin = user_db_init.User(0, 0, "Admin", "John", "Doe")
+    # TODO - Fill in correct info
+    base_admin = class_models.User(0, 0, "Admin", "John", "Doe")
     session.add(base_admin)
     session.commit()
+
+    # Machines
+
+    # Cycle through machine names
+    #machine_engine = create_engine("sqlite:///MACHINE_NAME.db")
+    class_models.Base.metadata.create_all(engine)
+    #Machine_Session = sessionmaker(bind = machine_engine)
+    #machine_session = Machine_Session()
+
+    # Set Base Admin Machines to False
+    machine_admin = class_models.Machine(0, 0)
+    session.add(machine_admin)
+    session.commit()
+    
 else:
     # Otherwise
     # Load the files into memory
+    engine = create_engine("sqlite:///users.db")
+    Session = sessionmaker(engine)
+    session = Session()
     print("Files Found")
 
 # TODO - Format for Flask
