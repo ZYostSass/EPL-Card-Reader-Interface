@@ -10,6 +10,7 @@
 
 import database_init
 import class_models
+from sqlalchemy import select
 # from flask import Flask
 # app = Flask(__name__)
 
@@ -30,10 +31,15 @@ def add_new_user(idnumber, accessnumber, role, firstname, lastname):
     database_init.session.commit()
     
 def user_check(firstname, lastname):
-    results = database_init.session.query(class_models.User).all()
-    results.extend(database_init.session.query(class_models.Machine).all())
+    results = select(class_models.User).where(class_models.User.firstname.in_(firstname))
+    for class_models.User in database_init.session.scalars(results):
+        print(results)
+
+def read_all():
+    results = database_init.session.query(class_models.User).all()#.join(class_models.Machine.idnumber == class_models.User.idnumber)
+    # results.extend(database_init.session.query(class_models.Machine).all())
     print(results)
-    
+
 def change_user_training(idnumber, machine, trained_status):
     print("Hello")
 
