@@ -1,13 +1,15 @@
 :root {
-  --PSUgreen: #3c4c0c;
-  --lightGrey: #bebebe;
-  --red: #b22222;
   --green: #228b22;
+  --lightGrey: #bebebe;
+  --PSUgreen: #3c4c0c;
+  --red: #b22222;
 }
 
 body {
-  background-color: white;
+  background-color: #f8f9fa;
 }
+
+/* Sidebar */
 
 #side_nav {
   background: var(--PSUgreen);
@@ -43,6 +45,7 @@ hr.h-color {
   background: var(--PSUgreen);
 }
 
+/* Student's Equipment Overview */
 .container .equipStudent-content {
   display: flex;
   justify-content: center;
@@ -67,6 +70,105 @@ hr.h-color {
 .form-content .btn-primary {
   background-color: var(--PSUgreen);
   border: solid var(--PSUgreen);
+}
+
+/* Dashboard */
+.dashboard {
+  position: relative;
+  padding: 20px;
+  width: 100%;
+}
+
+.dashboard-menu {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dashboard-menu .card {
+  width: 25%;
+  flex-grow: 4;
+  margin: 10px;
+  background: white;
+  text-align: center;
+  padding: 0.5em;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-menu .card i {
+  padding: 5px;
+  font-size: 2.5em;
+}
+.dashboard-menu .card h3 {
+  margin: 10px;
+  text-transform: capitalize;
+  font-size: 100%;
+}
+
+.dashboard-menu .card p {
+  font-size: 10px;
+  margin-bottom: 0;
+}
+
+.dashboard-menu .card .card-buttons {
+  width: 100%;
+  text-align: center;
+}
+
+.dashboard-menu .card button {
+  display: inline-block;
+  background: #6e7d3c;
+  color: white;
+  font-size: 75%;
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.daily-user-log {
+  background: white;
+  margin: 20px 0px;
+  padding: 0.5em 1em;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.daily-user-log .title {
+  display: flex;
+  padding: 5px;
+  align-items: center;
+}
+
+.daily-user-log .title i {
+  margin-right: 10px;
+  font-size: 1.25em;
+}
+
+.daily-user-log .title h3 {
+  margin: 0;
+}
+
+.daily-user-log .daily-user-log-data {
+  display: flex;
+  justify-content: space-between;
+}
+
+.daily-user-log-data .data {
+  display: flex;
+  flex-direction: column;
+  margin: 0 15px;
+}
+
+.daily-user-log-data .data .data-list {
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 10px;
+  white-space: nowrap;
+}
+
+.daily-user-log-data .data-title {
+  font-size: 16px;
+  font-weight: 500;
 }
 
 @media (max-width: 767px) {

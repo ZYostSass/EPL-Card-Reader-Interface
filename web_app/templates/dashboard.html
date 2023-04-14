@@ -1,21 +1,56 @@
 {% extends "index.html" %} {% block content %}
-<div class="dashboard-content px-3 pt-4">
-  <h2 class="fs-5 pe-2">Dashboard</h2>
-  <p>
-    This is where general overview content would go. Some ideas for what could
-    go on here:
-  </p>
-  <ul>
-    <li>
-      Have the most recent student's equipment permissions displayed to the
-      screen
-    </li>
-    <li>
-      List of the most recent students to check into the lab that day. From this
-      list, we could link to each student's equipment permissions, waiver, and
-      emergency contact information, so they wouldn't need to tap their card
-      twice in one lab session.
-    </li>
-  </ul>
-</div>
+<section class="dashboard">
+  <div class="dashboard-menu">
+    <div class="col-4 card">
+      <i class="fa-solid fa-user-large"></i>
+      <h3>Student</h3>
+      <p>Add and edit users</p>
+      <div class="card-buttons">
+        <a href="{{ url_for('add_user_form')}}"><button>Add</button></a>
+        <button>Edit</button>
+      </div>
+    </div>
+    <div class="col-4 card">
+      <i class="fa-solid fa-bolt"></i>
+      <h3>Equipment</h3>
+      <p>Add and edit equipment</p>
+      <div class="card-buttons">
+        <button>Add</button>
+        <button>Edit</button>
+      </div>
+    </div>
+    <div class="col-4 card">
+      <i class="fa-solid fa-pen-to-square"></i>
+      <h3>Training</h3>
+      <p>Update training for users</p>
+      <div class="card-buttons">
+        <button>Update</button>
+      </div>
+    </div>
+    <div class="daily-user-log">
+      <div class="title">
+        <i class="fa-solid fa-clock"></i>
+        <h3>Recent Users</h3>
+      </div>
+      <div class="daily-user-log-data">
+        <div class="data access-id">
+          <span class="data-title">Access Badge ID</span>
+          <!-- TODO: Implement way to insert user ID here at scan in -->
+          <span class="data-list">123456</span>
+        </div>
+        <div class="data names">
+          <span class="data-title">Name</span>
+          <!-- TODO: Implement way to insert user names here at scan in -->
+          <span class="data-list">John Doe</span>
+        </div>
+        <div class="data check-in-time">
+          <span class="data-title">Check-in Time</span>
+          <!-- TODO: Implement way to insert user check-in times here at scan in -->
+          <span class="data-list">10:00AM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% endblock %}
