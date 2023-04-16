@@ -11,8 +11,6 @@
 import database_init
 import class_models
 from sqlalchemy import select
-# from flask import Flask
-# app = Flask(__name__)
 
 # Universal Commands
 
@@ -24,10 +22,10 @@ def checkin_user(idnumber):
 # Manager Commands
     
 def add_new_user(idnumber, accessnumber, role, firstname, lastname):
+    # TODO - Check to make sure user is not already in the database
     user = class_models.User(idnumber, accessnumber, role, firstname, lastname)
+    # TODO - Set trainning values
     database_init.session.add(user)
-    # Set trainning values
-    # TODO ^
     database_init.session.commit()
     
 def user_check(firstname, lastname):
@@ -41,7 +39,10 @@ def read_all():
     print(results)
 
 def change_user_training(idnumber, machine, trained_status):
-    print("Hello")
+    result = select(class_models.User).where(class_models.User.idnumber == idnumber) #join(class_models.Machine).where
+    user_to_change = database_init.session.scalars(result).one()
+    #user_to_change.firstname = "hi"
+    database_init.session.commit()
 
 # Admin Commands
 

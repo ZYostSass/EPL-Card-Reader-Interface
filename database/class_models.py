@@ -7,7 +7,7 @@
 	# User Level (Admin, Manager, Student)
 
 from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
-from sqlalchemy.orm import DeclarativeBase #, Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, relationship #, Mapped, mapped_column
 
 # Replaced depreciated 'Base = declarative_base()'
 class Base(DeclarativeBase):
