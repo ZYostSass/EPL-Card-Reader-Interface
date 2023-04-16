@@ -92,5 +92,5 @@ def waiver():
     return render_template("waiver.html")
 
 @app.route("/account_creation_form/")
-def createAccount():
-    return render_template("account_creation_from.html")
+def account_creation_form():
+    return render_template("account_creation_form.html")
