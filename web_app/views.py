@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, escape
 from .models import User
 from . import db
 from . import app
-from . import serial_data
+
 
 
 
