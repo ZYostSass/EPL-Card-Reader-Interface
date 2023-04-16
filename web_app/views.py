@@ -91,6 +91,6 @@ def permissions():
 def waiver():
     return render_template("waiver.html")
 
-@app.route("/addAccount/")
-def login():
-    return render_template("addAccount.html")
+@app.route("/account_creation_form/")
+def createAccount():
+    return render_template("account_creation_from.html")
