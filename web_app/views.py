@@ -90,3 +90,7 @@ def permissions():
 @ app.route("/waiver/")
 def waiver():
     return render_template("waiver.html")
+
+@app.route("/addAccount/")
+def login():
+    return render_template("addAccount.html")

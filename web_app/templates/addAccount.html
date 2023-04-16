@@ -1,0 +1,43 @@
+{% extends "index.html" %} {% block content %}
+<div class="form-content px-3 pt-4">
+  <h2 class="fs-5 pe-2">User Sign-on</h2>
+  {% if error_statement %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ error_statement }}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  {% endif %}
+  <form action="/add-user-form/" method="POST" class="m-5">
+    <div class="mb-3">
+      <label for="id" class="form-label">Access badge ID</label>
+      <input
+        type="id"
+        maxlength="6"
+        class="form-control"
+        name="id"
+        value="{{ id }}"
+      />
+      <div id="idHelp" class="form-text">Must be a 6 digit number</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input
+        type="email"
+        class="form-control"
+        placeholder="user@pdx.edu"
+        name="email"
+        value="{{ email }}"
+        aria-describedby="emailHelp"
+      />
+    </div>
+    <button type="login" class="btn-primary" id="login-btn">Submit</button>
+  </form>
+</div>
+
+{% endblock %}
