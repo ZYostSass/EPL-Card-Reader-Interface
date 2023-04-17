@@ -131,7 +131,7 @@ hr.h-color {
 .daily-user-log {
   width: 100%;
   background: var(--white);
-  margin: 10px;
+  margin: 40px 10px;
   padding: 0.5em 1em;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
@@ -176,6 +176,7 @@ hr.h-color {
 
 /* Media Queries */
 @media (max-width: 767px) {
+  /* Sidebar */
   #side_nav {
     margin-left: -250px;
     position: fixed;
@@ -187,6 +188,7 @@ hr.h-color {
     margin-left: 0;
   }
 
+  /* Dashboard */
   .dashboard-menu {
     display: flex;
     flex-direction: column;
@@ -205,5 +207,16 @@ hr.h-color {
 
   .daily-user-log-data .data .data-list {
     font-size: 75%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .dashboard-menu {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .daily-user-log {
+    width: 65%;
   }
 }
