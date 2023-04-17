@@ -1,12 +1,15 @@
 :root {
+  --bootstrapLight: #f8f9fa;
   --green: #228b22;
   --lightGrey: #bebebe;
+  --lightPSUgreen: #6e7d3c;
   --PSUgreen: #3c4c0c;
   --red: #b22222;
+  --white: #ffffff;
 }
 
 body {
-  background-color: #f8f9fa;
+  background-color: var(--bootstrapLight);
 }
 
 /* Sidebar */
@@ -24,11 +27,11 @@ body {
 }
 
 hr.h-color {
-  background: white;
+  background: var(--white);
 }
 
 .sidebar li.active {
-  background: white;
+  background: var(--white);
   border-radius: 8px;
 }
 
@@ -38,7 +41,7 @@ hr.h-color {
 }
 
 .sidebar li a {
-  color: white;
+  color: var(--white);
 }
 
 .navbar-brand span {
@@ -88,7 +91,7 @@ hr.h-color {
   width: 25%;
   flex-grow: 4;
   margin: 10px;
-  background: white;
+  background: var(--white);
   text-align: center;
   padding: 0.5em;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
@@ -116,8 +119,8 @@ hr.h-color {
 
 .dashboard-menu .card button {
   display: inline-block;
-  background: #6e7d3c;
-  color: white;
+  background: var(--lightPSUgreen);
+  color: var(--white);
   font-size: 75%;
   padding: 0.5em 1em;
   border-radius: 10px;
@@ -126,11 +129,11 @@ hr.h-color {
 }
 
 .daily-user-log {
-  background: white;
-  margin: 20px 0px;
+  width: 100%;
+  background: var(--white);
+  margin: 10px;
   padding: 0.5em 1em;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-  width: 100%;
 }
 
 .daily-user-log .title {
@@ -171,6 +174,7 @@ hr.h-color {
   font-weight: 500;
 }
 
+/* Media Queries */
 @media (max-width: 767px) {
   #side_nav {
     margin-left: -250px;
@@ -181,5 +185,25 @@ hr.h-color {
 
   #side_nav.active {
     margin-left: 0;
+  }
+
+  .dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dashboard-menu .card {
+    width: 70%;
+    flex-grow: 4;
+  }
+
+  .daily-user-log-data .data-title {
+    font-size: 80%;
+  }
+
+  .daily-user-log-data .data .data-list {
+    font-size: 75%;
   }
 }
