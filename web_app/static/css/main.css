@@ -44,8 +44,14 @@ hr.h-color {
   color: var(--white);
 }
 
+/* Navbar */
+
 .navbar-brand span {
   background: var(--PSUgreen);
+}
+
+.nav-item {
+  text-align: right;
 }
 
 /* Student's Equipment Overview */
@@ -87,6 +93,11 @@ hr.h-color {
   flex-wrap: wrap;
 }
 
+.dashboard-menu h1 {
+  font-size: 1.75rem;
+  text-transform: capitalize;
+}
+
 .dashboard-menu .card {
   width: 25%;
   flex-grow: 4;
@@ -101,14 +112,13 @@ hr.h-color {
   padding: 5px;
   font-size: 2.5em;
 }
-.dashboard-menu .card h3 {
+.dashboard-menu .card h1 {
   margin: 10px;
-  text-transform: capitalize;
   font-size: 100%;
 }
 
 .dashboard-menu .card p {
-  font-size: 10px;
+  font-size: 12px;
   margin-bottom: 0;
 }
 
@@ -139,7 +149,8 @@ hr.h-color {
 .daily-user-log .title {
   display: flex;
   padding: 5px;
-  align-items: center;
+  margin-bottom: 15px;
+  align-items: baseline;
 }
 
 .daily-user-log .title i {
@@ -147,7 +158,8 @@ hr.h-color {
   font-size: 1.25em;
 }
 
-.daily-user-log .title h3 {
+.daily-user-log .title h1 {
+  font-size: 125%;
   margin: 0;
 }
 

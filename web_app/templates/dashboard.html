@@ -1,27 +1,27 @@
 {% extends "index.html" %} {% block content %}
 <section class="dashboard">
   <div class="dashboard-menu">
-    <div class="col-4 card">
+    <div class="card col-4">
       <i class="fa-solid fa-user-large"></i>
-      <h3>Student</h3>
+      <h1>Student</h1>
       <p>Add and edit users</p>
       <div class="card-buttons">
         <a href="{{ url_for('add_user_form')}}"><button>Add</button></a>
         <button>Edit</button>
       </div>
     </div>
-    <div class="col-4 card">
+    <div class="card col-4">
       <i class="fa-solid fa-bolt"></i>
-      <h3>Equipment</h3>
+      <h1>Equipment</h1>
       <p>Add and edit equipment</p>
       <div class="card-buttons">
         <button>Add</button>
         <button>Edit</button>
       </div>
     </div>
-    <div class="col-4 card">
+    <div class="card col-4">
       <i class="fa-solid fa-pen-to-square"></i>
-      <h3>Training</h3>
+      <h1>Training</h1>
       <p>Update training for users</p>
       <div class="card-buttons">
         <button>Update</button>
@@ -30,7 +30,7 @@
     <div class="daily-user-log">
       <div class="title">
         <i class="fa-solid fa-clock"></i>
-        <h3>Recent Users</h3>
+        <h1>Recent users</h1>
       </div>
       <div class="daily-user-log-data">
         <div class="data access-id">
