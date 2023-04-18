@@ -54,6 +54,10 @@ hr.h-color {
   text-align: right;
 }
 
+.navbar i {
+  color: var(--white);
+}
+
 /* Student's Equipment Overview */
 .container .equipStudent-content {
   display: flex;
