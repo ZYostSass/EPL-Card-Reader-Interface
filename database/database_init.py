@@ -24,6 +24,7 @@ if not (check_file):
     session.add(base_admin)
     session.commit()
     # Set Base Admin Machines to False
+    # TODO - Fill in correct info
     machine_admin = class_models.Machine(0, 0)
     session.add(machine_admin)
     session.commit()
