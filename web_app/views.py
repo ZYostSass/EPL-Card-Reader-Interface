@@ -1,8 +1,14 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 from .models import User
+from .models import Admin
 from . import db
 from . import app
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
+from sqlalchemy import Select
 
+app.config['SECRET_KEY'] = "asdfghjkl"
 
 @app.route("/")
 def index():
@@ -66,6 +72,39 @@ def add_user_form():
     else:
         return render_template("add_user_form.html")
 
+#Creating a form for promoting a user
+class PromoteForm(FlaskForm):
+    id = StringField("Enter PSU ID", validators=[DataRequired()])
+    submit = SubmitField("Update")
+
+#Create a Promote Page
+@app.route("/promote", methods = ["POST", "GET"])
+def PromoteUser():
+    id = None
+    form = PromoteForm()
+    #Validate Form
+    if form.validate_on_submit():
+        id = form.id.data
+        #Based on the input, search in the database
+        user_to_update = db.session.query(User).filter(User.PSU_id == id)
+        if user_to_update:
+            user_to_update.role = "Admin"
+            db.session.commit()
+            flash("Successfully Updated")
+            redirect("index.htlm")    
+        else:  
+             flash("Can't find any match with provided PSU ID number")
+             return render_template("promoteUser.html", id = id, form = form)
+    
+    
+    return render_template("promoteUser.html",id = id, form = form)
+    
+            
+    
+
+
+
+
 
 @ app.route("/dashboard/")
 def dashboard():
@@ -90,3 +129,40 @@ def permissions():
 @ app.route("/waiver/")
 def waiver():
     return render_template("waiver.html")
+
+#Copy function in from add
+def add_user():
+
+    if request.method == "POST":
+        user_id = request.form['id']
+        user_fname = request.form['fname']
+        user_lname = request.form['lname']
+        user_email = request.form['email']
+
+        # Check for all form fields
+        if not user_id or not user_fname or not user_lname or not user_email:
+            error_statement = "All form fields are required"
+            return render_template("add_user_form.html",
+                                   error_statement=error_statement,
+                                   id=user_id,
+                                   firstname=user_fname,
+                                   lastname=user_lname,
+                                   email=user_email)
+
+        new_user = User(
+            id=user_id,
+            firstname=user_fname,
+            lastname=user_lname,
+            email=user_email
+        )
+
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect('/add-user-form/')
+        except:
+            # TODO: Add a fail html page to handle error outputs
+            return f"(Error adding {new_user.firstname} {new_user.lastname} to the database)"
+
+    else:
+        return render_template("add_user_form.html")
