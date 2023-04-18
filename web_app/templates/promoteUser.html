@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+<form method = "POST">
+    {{form.hidden_tag()}}
+
+    {{form.id.label}}
+    {{form.id()}}
+    
+    <br/>
+    {{form.submit}}
+</form>
+
+
+{% endblock %}

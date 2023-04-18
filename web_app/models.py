@@ -2,6 +2,7 @@ from . import db
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    PSU_id = db.Column(db.String)
     firstname = db.Column(db.String)
     lastname = db.Column(db.String)
     email = db.Column(db.String)
