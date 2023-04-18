@@ -61,7 +61,7 @@ def change_user_training(idnumber, machine, trained_status):
 
 # Admin Commands
 
-def chance_user_access_level(idnumber, new_access_level):
+def change_user_access_level(idnumber, new_access_level):
     result = select(class_models.User).where(class_models.User.idnumber == idnumber)
     to_change = database_init.session.scalars(result).one()
     to_change.role = new_access_level
