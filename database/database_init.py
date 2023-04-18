@@ -39,7 +39,6 @@ else:
     print("Files Found")
 
 # TODO - Format for Flask
-# "sqlite:///mydb.db"
 # New user has all training set to False
 # Admins can edit info as needed
 # Check to see if table file is present
