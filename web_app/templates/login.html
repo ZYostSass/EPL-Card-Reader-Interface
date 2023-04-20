@@ -20,7 +20,7 @@
     <!-- CSS stylesheet-->
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/main.css')}}"
+      href="{{ url_for('static', filename='css/login_styles.css')}}"
     />
     <!-- Icon stylesheets -->
     <link
@@ -40,15 +40,19 @@
     <title>EPL Card Reader</title>
   </head>
   <body>
-    <div class="main-container d-flex">
-      <!-- Sidebar -->
-      {% include 'sidebar.html' %}
-      <!-- Nav Bar-->
-      <div class="content">
-        {% include 'navbar.html' %}
-        <!-- Content -->
-        {% block content %} {% endblock %}
-      </div>
+    <div class="center">
+      <h1>Login</h1>
+      <form method="post">
+        <div class="input-field">
+          <input type="text" required />
+          <label for="username">Username</label>
+        </div>
+        <div class="input-field">
+          <input type="password" required />
+          <label for="password">Password</label>
+        </div>
+        <input type="submit" value="Login" />
+      </form>
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
