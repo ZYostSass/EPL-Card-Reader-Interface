@@ -25,11 +25,6 @@ def read_serial(q):
 
 
 thread = Thread(target=read_serial, args=(q,))
+thread.daemon = True
 thread.start()
 
-while True:
-    try:
-        card_number, facility_code = q.get(timeout=1)
-        print(f"Card Number: {card_number}, Facility Code: {facility_code}")
-    except queue.Empty:
-        continue

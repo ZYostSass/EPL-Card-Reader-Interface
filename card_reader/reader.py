@@ -11,6 +11,7 @@ class CardReader:
     def read_serial(self):
         print("read_serial started!")
         try:
+            test_ct = 0
             self.ser = serial.Serial(port=self.port, baudrate=self.baud_rate, timeout=1)
             while True:
                 try:
@@ -19,6 +20,8 @@ class CardReader:
                         data = self.ser.readline().decode().strip()
                     if not data:
                         print("No data read!")
+                        test_ct += 1 # Added this to verify loop is actually executing each turn
+                        print(test_ct)
                         continue
                     clean = data[:2]
                     clean_int = int(clean, 16)
@@ -32,3 +35,6 @@ class CardReader:
 
         except Exception as e:
             print("Error opening port: " + str(e))
+        finally:
+            if self.ser:
+                self.ser.close()
