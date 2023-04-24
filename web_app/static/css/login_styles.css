@@ -20,18 +20,23 @@ body {
   overflow: hidden;
 }
 
+.heading {
+  display: inline-block;
+  vertical-align: middle;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -225px);
+}
+
 .heading i {
   font-size: 30px;
   color: var(--white);
-  position: absolute;
-  top: 33%;
-  left: 37%;
+  margin: 0 4px 0 0;
 }
 
 .heading h1 {
-  position: absolute;
-  top: 32%;
-  left: 40%;
+  display: inline-block;
   text-align: center;
   color: var(--white);
 }
