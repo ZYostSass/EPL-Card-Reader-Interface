@@ -1,7 +1,7 @@
 :root {
   --bootstrapLight: #f8f9fa;
-  --grey: #869ab8;
-  --lightGrey: #bebebe;
+  --dimGray: #696969;
+  --lightGray: #bebebe;
   --lightPSUgreen: #6e7d3c;
   --PSUgreen: #3c4c0c;
   --white: #ffffff;
@@ -50,7 +50,7 @@ body {
 .center h2 {
   text-align: center;
   padding: 20px 0px;
-  border-bottom: 1px solid var(--lightGrey);
+  border-bottom: 1px solid var(--lightGray);
 }
 
 .center form {
@@ -60,7 +60,7 @@ body {
 
 .center form .input-field {
   position: relative;
-  border-bottom: 2px solid var(--grey);
+  border-bottom: 2px solid var(--dimGray);
   margin: 40px 0;
 }
 
@@ -77,7 +77,7 @@ body {
   position: absolute;
   top: 50%;
   left: 2px;
-  color: var(--grey);
+  color: var(--dimGray);
   transform: translateY(-50%);
   font-size: 18px;
   pointer-events: none;
