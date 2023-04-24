@@ -1,27 +1,64 @@
-from flask import Flask, render_template, request, redirect, escape
+from flask import Flask, render_template, request, redirect, escape, Blueprint, session
 from .models import User
+from .admin import login_required
 from . import db
-from . import app
 
 
 
+bp = Blueprint('views', __name__)
 
-@app.route("/")
+@bp.route("/")
 def index():
     return render_template('index.html')
+
+
+@bp.route("/read-user/<id>")
+def test_read(id):
+    user = db.get_or_404(User, id)
+    return render_template('read_user.html', user=user)
+
+
+@bp.route("/login")
+def login(id):
+  if request.method == "POST":
+      user_email = request.form['email']
+      password = request.form['password']
+
+      # Verify password
+      user = db.session.get(User, id) #STUB< NEEDS TO BE REPLACED WITH A PASSWORD CHECK
+
+      if user is None:
+          return render_template("login.html", error="Failed to verify username or password") #STUB< Page needs to be implemented
+      else:
+          session["user_id"] = user.id
+          redirect_arg = request.args.get('next')
+          if redirect_arg is None:
+              return redirect("/", code=302)
+          else:
+              return redirect(redirect_arg, code=302)
+
+
+  return render_template("login.html")
+
+  @bp.route("/logout")
+  def login(id):
+      session.pop('username', None)
+      return redirect(url_for('index'))
+
 
 # Pulling from the database
 
 
-@app.route('/read-user/', defaults={'id': 1})
-@app.route("/read-user/<id>")
+@bp.route('/read-user/', defaults={'id': 1})
+@bp.route("/read-user/<id>")
 def test_read(id):
     user = db.get_or_404(User, id)
     return render_template('read_user.html', user=user)
 
 
 # Inserting into the database
-@app.route("/add-user/<name>")
+@bp.route("/add-user/<name>")
+@login_required
 def test_write(name):
     user = User(
         firstname=name,
@@ -35,7 +72,7 @@ def test_write(name):
 # TODO: Only allow access to this page when logged in as an Admin or Manager
 
 
-@app.route("/add-user-form/", methods=['POST', 'GET'])
+@bp.route("/add-user-form/", methods=['POST', 'GET'])
 def add_user_form():
 
     if request.method == "POST":
@@ -56,8 +93,8 @@ def add_user_form():
 
         new_user = User(
             id=user_id,
-            firstname=user_fname,
-            lastname=user_lname,
+            fname=user_fname,
+            lname=user_lname,
             email=user_email
         )
 
@@ -73,27 +110,26 @@ def add_user_form():
         return render_template("add_user_form.html")
 
 
-@ app.route("/dashboard/")
+@bp.route("/dashboard/")
 def dashboard():
     return render_template("dashboard.html")
 
 
-@ app.route("/equipOverview/")
+@bp.route("/equipOverview/")
 def equipOverview():
     return render_template("equipOverview.html")
 
 
-@ app.route("/equipOverview/student/")
+@bp.route("/equipOverview/student/")
 def equipStudent():
     return render_template("equipStudent.html")
 
 
-@ app.route("/permissions/")
+@bp.route("/permissions/")
 def permissions():
     return render_template("permissions.html")
 
 
-@ app.route("/waiver/")
+@bp.route("/waiver/")
 def waiver():
     return render_template('waiver.html')
-
