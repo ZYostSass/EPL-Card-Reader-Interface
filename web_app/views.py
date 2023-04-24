@@ -4,6 +4,8 @@ from . import db
 from . import app
 
 
+
+
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -94,3 +96,4 @@ def permissions():
 @ app.route("/waiver/")
 def waiver():
     return render_template('waiver.html')
+
