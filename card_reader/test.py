@@ -13,6 +13,7 @@ def read_test():
                     print("No data read!")
                     continue
                 if data:
+                    print(f"Data read: {data}")
                     clean = data[2:]
                     clean_int = int(clean, 16)
                     card_number = (clean_int >> 1)  & 0x7FFFF # Bitshift to remove parity and mask to isolate 19 bits

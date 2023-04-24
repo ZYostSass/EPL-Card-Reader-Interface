@@ -1,40 +1,42 @@
 import serial
 import threading
+import traceback
+import time
 
 class CardReader:
-    def __init__(self, port, baud_rate):
+    def __init__(self, port, baud_rate, callback):
         self.port = port
         self.baud_rate = baud_rate
         self.ser_lock = threading.Lock()
         self.ser = None
+        self.callback = callback
 
     def read_serial(self):
         print("read_serial started!")
         try:
-            test_ct = 0
             self.ser = serial.Serial(port=self.port, baudrate=self.baud_rate, timeout=1)
+            # self.ser.reset_input_buffer()
             while True:
                 try:
-                    with self.ser_lock:
-                        print("Locked!")
+                    if self.ser.in_waiting > 0:
                         data = self.ser.readline().decode().strip()
-                    if not data:
-                        print("No data read!")
-                        test_ct += 1 # Added this to verify loop is actually executing each turn
-                        print(test_ct)
-                        continue
-                    clean = data[2:]
-                    clean_int = int(clean, 16)
-                    card_number = (clean_int >> 1)  & 0x7FFFF # Bitshift to remove parity and mask to isolate 19 bits
-                    facility_code = (clean_int >> 20)  & 0xFFFF # Same for facility code
-                   # print(card_number) # Verified when tested with my badge
-                   # print(facility_code) # Not verified - No idea what my facility code should be
+                        if len(data) > 0:
+                            print(f"Data sent to main thread: {data}")
+                            self.callback(data) # Return data to main thread
+                            continue
+                        else:
+                            continue
+                        # self.ser.reset_output_buffer()
+                    else:
+                        time.sleep(0.1)
                 except Exception as e:
                     print(f"Error reading data from serial port: {str(e)}")
+                    traceback.print_exc()
                     continue
 
         except Exception as e:
             print("Error opening port: " + str(e))
+            traceback.print_exc()
         finally:
             if self.ser:
                 self.ser.close()
