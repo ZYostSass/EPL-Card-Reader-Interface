@@ -11,13 +11,6 @@ bp = Blueprint('views', __name__)
 def index():
     return render_template('index.html')
 
-
-@bp.route("/read-user/<id>")
-def test_read(id):
-    user = db.get_or_404(User, id)
-    return render_template('read_user.html', user=user)
-
-
 @bp.route("/login")
 def login(id):
   if request.method == "POST":

@@ -2,7 +2,7 @@ from . import db
 
 from flask import g
 
-from .db import db
+from . import db
 
 MANAGER = "manager"
 ADMIN = "manager"

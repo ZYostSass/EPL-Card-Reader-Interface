@@ -1,15 +1,16 @@
-from flask import Flask, render_template, request, redirect, Blueprint, g, url_for, session, current_app
+from flask import Flask, render_template, request, redirect, Blueprint, g, url_for, session
 from .models import User
-from .db import db
+from . import db
+from . import app
 
 from functools import wraps
 
 
 bp = Blueprint('admin_views', __name__, url_prefix='/admin')
 
-@current_app.before_request
+@app.before_request
 def set_user_global():
-    user_id = session["user_id"]
+    user_id = session.get("user_id")
     user = db.session.get(User, user_id)
     if user_id is None:
         g.user = None
