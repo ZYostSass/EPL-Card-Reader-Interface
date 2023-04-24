@@ -1,12 +1,15 @@
 :root {
+  --bootstrapLight: #f8f9fa;
   --green: #228b22;
   --lightGrey: #bebebe;
+  --lightPSUgreen: #6e7d3c;
   --PSUgreen: #3c4c0c;
   --red: #b22222;
+  --white: #ffffff;
 }
 
 body {
-  background-color: #f8f9fa;
+  background-color: var(--bootstrapLight);
 }
 
 /* Sidebar */
@@ -24,11 +27,11 @@ body {
 }
 
 hr.h-color {
-  background: white;
+  background: var(--white);
 }
 
 .sidebar li.active {
-  background: white;
+  background: var(--white);
   border-radius: 8px;
 }
 
@@ -38,11 +41,21 @@ hr.h-color {
 }
 
 .sidebar li a {
-  color: white;
+  color: var(--white);
 }
+
+/* Navbar */
 
 .navbar-brand span {
   background: var(--PSUgreen);
+}
+
+.nav-item {
+  text-align: right;
+}
+
+.navbar i {
+  color: var(--white);
 }
 
 /* Student's Equipment Overview */
@@ -84,11 +97,16 @@ hr.h-color {
   flex-wrap: wrap;
 }
 
+.dashboard-menu h1 {
+  font-size: 1.75rem;
+  text-transform: capitalize;
+}
+
 .dashboard-menu .card {
   width: 25%;
   flex-grow: 4;
   margin: 10px;
-  background: white;
+  background: var(--white);
   text-align: center;
   padding: 0.5em;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
@@ -98,14 +116,13 @@ hr.h-color {
   padding: 5px;
   font-size: 2.5em;
 }
-.dashboard-menu .card h3 {
+.dashboard-menu .card h1 {
   margin: 10px;
-  text-transform: capitalize;
   font-size: 100%;
 }
 
 .dashboard-menu .card p {
-  font-size: 10px;
+  font-size: 12px;
   margin-bottom: 0;
 }
 
@@ -116,8 +133,8 @@ hr.h-color {
 
 .dashboard-menu .card button {
   display: inline-block;
-  background: #6e7d3c;
-  color: white;
+  background: var(--lightPSUgreen);
+  color: var(--white);
   font-size: 75%;
   padding: 0.5em 1em;
   border-radius: 10px;
@@ -126,17 +143,18 @@ hr.h-color {
 }
 
 .daily-user-log {
-  background: white;
-  margin: 20px 0px;
+  width: 100%;
+  background: var(--white);
+  margin: 40px 10px;
   padding: 0.5em 1em;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-  width: 100%;
 }
 
 .daily-user-log .title {
   display: flex;
   padding: 5px;
-  align-items: center;
+  margin-bottom: 15px;
+  align-items: baseline;
 }
 
 .daily-user-log .title i {
@@ -144,7 +162,8 @@ hr.h-color {
   font-size: 1.25em;
 }
 
-.daily-user-log .title h3 {
+.daily-user-log .title h1 {
+  font-size: 125%;
   margin: 0;
 }
 
@@ -171,7 +190,9 @@ hr.h-color {
   font-weight: 500;
 }
 
+/* Media Queries */
 @media (max-width: 767px) {
+  /* Sidebar */
   #side_nav {
     margin-left: -250px;
     position: fixed;
@@ -181,5 +202,37 @@ hr.h-color {
 
   #side_nav.active {
     margin-left: 0;
+  }
+
+  /* Dashboard */
+  .dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dashboard-menu .card {
+    width: 70%;
+    flex-grow: 4;
+  }
+
+  .daily-user-log-data .data-title {
+    font-size: 80%;
+  }
+
+  .daily-user-log-data .data .data-list {
+    font-size: 75%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .dashboard-menu {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .daily-user-log {
+    width: 65%;
   }
 }
