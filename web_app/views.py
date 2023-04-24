@@ -3,6 +3,8 @@ from .models import User
 from . import db
 from . import app
 
+# TODO: Properly route this page to login functionality.
+
 
 @app.route("/login")
 def login():
