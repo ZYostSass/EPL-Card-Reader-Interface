@@ -15,7 +15,7 @@ class CardReader:
         print("read_serial started!")
         try:
             self.ser = serial.Serial(port=self.port, baudrate=self.baud_rate, timeout=1)
-            # self.ser.reset_input_buffer()
+            self.ser.reset_input_buffer()
             while True:
                 try:
                     if self.ser.in_waiting > 0:
@@ -23,10 +23,10 @@ class CardReader:
                         if len(data) > 0:
                             print(f"Data sent to main thread: {data}")
                             self.callback(data) # Return data to main thread
+                            self.ser.reset_output_buffer()
                             continue
                         else:
-                            continue
-                        # self.ser.reset_output_buffer()
+                            continue                 
                     else:
                         time.sleep(0.1)
                 except Exception as e:

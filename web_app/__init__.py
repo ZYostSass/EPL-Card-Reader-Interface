@@ -15,7 +15,7 @@ db.init_app(app)
 
 # Callback function for reader thread
 # Still doesn't execute correctly
-
+# Input is correctly interpreted in test.py
 def card_input(data):
     print(f"Data received: {data}")
     clean = data[2:]
@@ -34,7 +34,8 @@ def read_serial(q):
     while True:
         card_number, facility_code = ser.read_serial()
         if card_number and facility_code:
-            q.put((card_number, facility_code))
+            card_data = (card_number, facility_code)
+            q.put(card_data)
 
 
 thread = Thread(target=read_serial, args=(q,))

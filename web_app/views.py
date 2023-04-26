@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, escape
 from .models import User
 from . import db
 from . import app
+from . import q
 
 
 
@@ -97,3 +98,7 @@ def permissions():
 def waiver():
     return render_template('waiver.html')
 
+@ app.route("/card_test/", methods=['GET'])
+def card_test():
+    # card_data = q.get() , card_number = card_data[0], facility_code = card_data[1])
+    return render_template('card_test.html') # My current idea is blocking loading this - more research needed.
