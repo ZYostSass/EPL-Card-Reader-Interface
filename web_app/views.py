@@ -85,21 +85,37 @@ def PromoteUser():
     #Validate Form
     if form.validate_on_submit():
         id = form.id.data
-        #Based on the input, search in the database
-        user_to_update = db.session.query(User).filter(User.PSU_id == id)
-        if user_to_update:
-            user_to_update.role = "Admin"
-            db.session.commit()
-            flash("Successfully Updated")
-            redirect("index.htlm")    
+        #Based on the input, update in the database
+        index = db.session.query(User).filter(User.PSU_id == id).update(dict(role = 'Admin'))
+        db.session.commit()
+        if index:
+            flash("Successfully updated")
+            return redirect('/promote')    
         else:  
              flash("Can't find any match with provided PSU ID number")
-             return render_template("promoteUser.html", id = id, form = form)
+             return redirect('/promote')
     
     
     return render_template("promoteUser.html",id = id, form = form)
     
-            
+# @app.route("/promote-dummy", methods =["GET","POST"])
+# def add_promote_dummy_data():
+#     for x in range(3):
+#         new_user = User(
+#             id = x,
+#             PSU_id = str(x),
+#             role = 'student',
+#             firstname= "A",
+#             lastname= "Nguyen",
+#             email = '123@pdx.edu',
+#             active = True
+#         )
+#         db.session.add(new_user)
+#         db.session.commit()
+#     return render_template("dashboard.html")
+
+
+
     
 
 

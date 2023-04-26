@@ -6,16 +6,19 @@ class User(db.Model):
     firstname = db.Column(db.String)
     lastname = db.Column(db.String)
     email = db.Column(db.String)
+    role = db.Column(db.String)
     can_edit = db.Column(db.Boolean)
     can_add = db.Column(db.Boolean)
     can_delete = db.Column(db.Boolean)
     is_active = db.Column(db.Boolean)
     
-    def __init__(self, id, fname, lname, email, active):
+    def __init__(self, id, PSU_id,role, firstname, lastname, email, active):
         self.id = id
-        self.fname = fname
-        self.lname = lname
+        self.PSU_id = PSU_id
+        self.firstname = firstname
+        self.lastname = lastname
         self.email = email
+        self.role = role
         self.is_active = active
         self.can_edit = False
         self.can_add = False
