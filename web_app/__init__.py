@@ -1,8 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from card_reader.reader import CardReader
-from threading import Thread
 import queue
 
 
