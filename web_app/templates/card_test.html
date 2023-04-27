@@ -1,5 +1,22 @@
 {% extends "index.html" %} {% block content %}
 <h1>Card Reader Test</h1>
-<p>Card Number: {{ card_number }}</p>
-<p>Facility Code:  {{ facility_code }}</p>
+<p>Card Number: <span id="card-number"></span></p>
+<p>Facility Code:  <span id="facility-code"></span></p>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        setInterval(getData, 5000); //Refresh data every 5 secs
+    });
+    function getData() {
+        console.log("getData called!");
+        $.get('/card_data/', function(data) {
+            console.log(data)
+            if (data.card_number) {
+                $('#card-number').text(data.card_number);
+                $('#facility-code').text(data.facility_code);
+            }
+            console.log()
+        });
+    }
+</script>
 {% endblock %}

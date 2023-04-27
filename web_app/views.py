@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, escape
+from flask import Flask, render_template, request, redirect, escape, jsonify, make_response
 from .models import User
 from . import db
 from . import app
 from . import q
+import queue
 
 
 
@@ -98,7 +99,28 @@ def permissions():
 def waiver():
     return render_template('waiver.html')
 
+# Route for the card reader test page
 @ app.route("/card_test/", methods=['GET'])
 def card_test():
-    # card_data = q.get() , card_number = card_data[0], facility_code = card_data[1])
     return render_template('card_test.html') # My current idea is blocking loading this - more research needed.
+
+# Route for checking the queue where card data gets read to
+# Using flask.make_response and flask.jsonify to create an http response header.
+# https://tedboy.github.io/flask/generated/flask.make_response.html
+# https://tedboy.github.io/flask/generated/flask.jsonify.html
+# https://api.jquery.com/ (Used in card_test.html to update page)
+@ app.route("/card_data/", methods=['GET'])
+def card_data():
+    response_data = None
+    try:
+        card_data = q.get(block=False)
+    except queue.Empty:
+        response_data = {}
+        pass
+    else:
+        print(f"Q: {list(q.queue)}")
+        response_data = {'card_number': card_data[0], 'facility_code': card_data[1]}
+        with q.mutex:
+            q.queue.clear()
+        print(f"Queue: {list(q.queue)}")
+    return make_response(jsonify(response_data))
