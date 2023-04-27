@@ -39,8 +39,8 @@ def add_user_form():
     if request.method == "POST":
         user_idnumber = request.form['idnumber']
         user_accessnumber = request.form['accessnumber']
-        user_fname = request.form['firstname']
-        user_lname = request.form['lastname']
+        user_fname = request.form['fname']
+        user_lname = request.form['lname']
         user_email = request.form['email']
 
         # Check for all form fields
@@ -50,17 +50,17 @@ def add_user_form():
                                    error_statement=error_statement,
                                    idnumber=user_idnumber,
                                    accessnumber=user_accessnumber,
-                                   firstname=user_fname,
-                                   lastname=user_lname,
+                                   fname=user_fname,
+                                   lname=user_lname,
                                    email=user_email)
 
         new_user = User(
             idnumber=user_idnumber,
             accessnumber=user_accessnumber,
-            role="Student",
-            firstname=user_fname,
-            lastname=user_lname,
-            email=user_email
+            fname=user_fname,
+            lname=user_lname,
+            email=user_email,
+            active=True
         )
 
         try:
