@@ -1,6 +1,6 @@
 {% extends "index.html" %} {% block content %}
 <div class="form-content px-3 pt-4">
-  <h2 class="fs-5 pe-2">Add New User</h2>
+  <h2 class="fs-2 pe-2">Add New User</h2>
   {% if error_statement %}
   <div class="alert alert-warning alert-dismissible fade show" role="alert">
     {{ error_statement }}
@@ -12,7 +12,12 @@
     ></button>
   </div>
   {% endif %}
+  <div class="card-prompt">
+    <h3>Scan PSU ID card</h3>
+    <h4><span>OR</span></h4>
+  </div>
   <form action="/add-user-form/" method="POST" class="m-5">
+    <h3>Enter Manually</h3>
     <div class="mb-3">
       <label for="idnumber" class="form-label">PSU ID</label>
       <input
