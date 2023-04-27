@@ -235,7 +235,7 @@ hr.h-color {
   color: var(--dimGray);
 }
 
-.form-content button {
+.form-content form button {
   width: 100%;
   background: var(--lightPSUgreen);
   color: var(--white);
@@ -243,11 +243,6 @@ hr.h-color {
   border-radius: 10px;
   margin-top: 15px;
   cursor: pointer;
-}
-
-.form-content input:focus {
-  border: 1px solid var(--PSUgreen);
-  box-shadow: 0 0 10px var(--lightPSUgreen);
 }
 
 /* Media Queries */

@@ -4,8 +4,6 @@ from . import db
 from . import app
 
 
-
-
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -39,23 +37,27 @@ def test_write(name):
 def add_user_form():
 
     if request.method == "POST":
-        user_id = request.form['id']
-        user_fname = request.form['fname']
-        user_lname = request.form['lname']
+        user_idnumber = request.form['idnumber']
+        user_accessnumber = request.form['accessnumber']
+        user_fname = request.form['firstname']
+        user_lname = request.form['lastname']
         user_email = request.form['email']
 
         # Check for all form fields
-        if not user_id or not user_fname or not user_lname or not user_email:
+        if not user_idnumber or not user_accessnumber or not user_fname or not user_lname or not user_email:
             error_statement = "All form fields are required"
             return render_template("add_user_form.html",
                                    error_statement=error_statement,
-                                   id=user_id,
+                                   idnumber=user_idnumber,
+                                   accessnumber=user_accessnumber,
                                    firstname=user_fname,
                                    lastname=user_lname,
                                    email=user_email)
 
         new_user = User(
-            id=user_id,
+            idnumber=user_idnumber,
+            accessnumber=user_accessnumber,
+            role="Student",
             firstname=user_fname,
             lastname=user_lname,
             email=user_email
@@ -64,7 +66,8 @@ def add_user_form():
         try:
             db.session.add(new_user)
             db.session.commit()
-            return redirect('/add-user-form/')
+            success_statement = "User added successfully"
+            return redirect('/add-user-form/', success_statement=success_statement)
         except:
             # TODO: Add a fail html page to handle error outputs
             return f"(Error adding {new_user.firstname} {new_user.lastname} to the database)"
@@ -96,4 +99,3 @@ def permissions():
 @ app.route("/waiver/")
 def waiver():
     return render_template('waiver.html')
-
