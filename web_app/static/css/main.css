@@ -1,5 +1,6 @@
 :root {
   --bootstrapLight: #f8f9fa;
+  --dimGray: #696969;
   --green: #228b22;
   --lightGrey: #bebebe;
   --lightPSUgreen: #6e7d3c;
@@ -188,6 +189,34 @@ hr.h-color {
 .daily-user-log-data .data-title {
   font-size: 16px;
   font-weight: 500;
+}
+
+/* Add User Form */
+.form-content form {
+  width: 50%;
+  background: var(--white);
+  padding: 1em;
+
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.form-content #idHelp {
+  color: var(--dimGray);
+}
+
+.form-content button {
+  width: 100%;
+  background: var(--lightPSUgreen);
+  color: var(--white);
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.form-content input:focus {
+  border: 1px solid var(--PSUgreen);
+  box-shadow: 0 0 10px var(--lightPSUgreen);
 }
 
 /* Media Queries */
