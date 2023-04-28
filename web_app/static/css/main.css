@@ -1,13 +1,18 @@
 :root {
-  --PSUgreen: #3c4c0c;
-  --lightGrey: #bebebe;
-  --red: #b22222;
+  --bootstrapLight: #f8f9fa;
   --green: #228b22;
+  --lightGrey: #bebebe;
+  --lightPSUgreen: #6e7d3c;
+  --PSUgreen: #3c4c0c;
+  --red: #b22222;
+  --white: #ffffff;
 }
 
 body {
-  background-color: white;
+  background-color: var(--bootstrapLight);
 }
+
+/* Sidebar */
 
 #side_nav {
   background: var(--PSUgreen);
@@ -22,11 +27,11 @@ body {
 }
 
 hr.h-color {
-  background: white;
+  background: var(--white);
 }
 
 .sidebar li.active {
-  background: white;
+  background: var(--white);
   border-radius: 8px;
 }
 
@@ -36,13 +41,24 @@ hr.h-color {
 }
 
 .sidebar li a {
-  color: white;
+  color: var(--white);
 }
+
+/* Navbar */
 
 .navbar-brand span {
   background: var(--PSUgreen);
 }
 
+.nav-item {
+  text-align: right;
+}
+
+.navbar i {
+  color: var(--white);
+}
+
+/* Student's Equipment Overview */
 .container .equipStudent-content {
   display: flex;
   justify-content: center;
@@ -69,7 +85,114 @@ hr.h-color {
   border: solid var(--PSUgreen);
 }
 
+/* Dashboard */
+.dashboard {
+  position: relative;
+  padding: 20px;
+  width: 100%;
+}
+
+.dashboard-menu {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dashboard-menu h1 {
+  font-size: 1.75rem;
+  text-transform: capitalize;
+}
+
+.dashboard-menu .card {
+  width: 25%;
+  flex-grow: 4;
+  margin: 10px;
+  background: var(--white);
+  text-align: center;
+  padding: 0.5em;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-menu .card i {
+  padding: 5px;
+  font-size: 2.5em;
+}
+.dashboard-menu .card h1 {
+  margin: 10px;
+  font-size: 100%;
+}
+
+.dashboard-menu .card p {
+  font-size: 12px;
+  margin-bottom: 0;
+}
+
+.dashboard-menu .card .card-buttons {
+  width: 100%;
+  text-align: center;
+}
+
+.dashboard-menu .card button {
+  display: inline-block;
+  background: var(--lightPSUgreen);
+  color: var(--white);
+  font-size: 75%;
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.daily-user-log {
+  width: 100%;
+  background: var(--white);
+  margin: 40px 10px;
+  padding: 0.5em 1em;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.daily-user-log .title {
+  display: flex;
+  padding: 5px;
+  margin-bottom: 15px;
+  align-items: baseline;
+}
+
+.daily-user-log .title i {
+  margin-right: 10px;
+  font-size: 1.25em;
+}
+
+.daily-user-log .title h1 {
+  font-size: 125%;
+  margin: 0;
+}
+
+.daily-user-log .daily-user-log-data {
+  display: flex;
+  justify-content: space-between;
+}
+
+.daily-user-log-data .data {
+  display: flex;
+  flex-direction: column;
+  margin: 0 15px;
+}
+
+.daily-user-log-data .data .data-list {
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 10px;
+  white-space: nowrap;
+}
+
+.daily-user-log-data .data-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Media Queries */
 @media (max-width: 767px) {
+  /* Sidebar */
   #side_nav {
     margin-left: -250px;
     position: fixed;
@@ -79,5 +202,37 @@ hr.h-color {
 
   #side_nav.active {
     margin-left: 0;
+  }
+
+  /* Dashboard */
+  .dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dashboard-menu .card {
+    width: 70%;
+    flex-grow: 4;
+  }
+
+  .daily-user-log-data .data-title {
+    font-size: 80%;
+  }
+
+  .daily-user-log-data .data .data-list {
+    font-size: 75%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .dashboard-menu {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .daily-user-log {
+    width: 65%;
   }
 }
