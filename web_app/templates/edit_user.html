@@ -1,0 +1,32 @@
+{% extends "index.html" %} {% block content %}
+<section class="dashboard">
+  <div class="dashboard-menu">
+    <div class="card col-4">
+      <i class="fa-solid fa-user-large"></i>
+      <h1>Student</h1>
+      <p>Remove users</p>
+      <div class="card-buttons">
+        <a href="{{ url_for('remove_user')}}"><button>Remove</button></a>
+      </div>
+    </div>
+    <div class="card col-4">
+      <i class="fa-solid fa-bolt"></i>
+      <h1>Promote User</h1>
+      <p>change user permissions</p>
+      <div class="card-buttons">
+        <button>Promote</button>
+      </div>
+    </div>
+    <div class="card col-4">
+      <i class="fa-solid fa-pen-to-square"></i>
+      <h1>User Data</h1>
+      <p>Update data for users</p>
+      <div class="card-buttons">
+        <button>Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+{% endblock %}
