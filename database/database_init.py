@@ -20,14 +20,14 @@ if not (check_file):
 
     # Create Base Admin
     # TODO - Fill in correct info
-    base_admin = class_models.User(0, 0, "Admin", "John", "Doe")
+    base_admin = class_models.User(0, "John", "Doe", "jdoe@pdx.edu")
     session.add(base_admin)
     session.commit()
     # Set Base Admin Machines to False
     # TODO - Fill in correct info
-    machine_admin = class_models.Machine(0, 0)
-    session.add(machine_admin)
-    session.commit()
+    #machine_admin = class_models.Machine(0, 0)
+    #session.add(machine_admin)
+    #session.commit()
     
 else:
     # Otherwise

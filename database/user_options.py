@@ -21,13 +21,13 @@ def checkin_user(idnumber):
     
 # Manager Commands
     
-def add_new_user(idnumber, accessnumber, role, firstname, lastname):
+def add_new_user(idnumber, firstname, lastname):
     # Check if user already exists
     # Return if they do
     #to_check = select(class_models.User).where(class_models.User.idnumber == idnumber)
     to_check = database_init.session.query(class_models.User).where(class_models.User.idnumber == idnumber)
     print(to_check)
-    user = class_models.User(idnumber, accessnumber, role, firstname, lastname)
+    user = class_models.User(idnumber, firstname, lastname)
     # TODO - Set trainning values
     database_init.session.add(user)
     database_init.session.commit()
