@@ -22,7 +22,7 @@ class User(Base):
     lastname: Mapped[str]
     email: Mapped[str]
     role: Mapped[str]
-    machines: Mapped[Optional[list["Machine"]]] = relationship(back_populates="user")
+    #machines: Mapped[Optional[list["Machine"]]] = relationship(back_populates="user")
     #trainings: Mapped[Optional[list["trainings"]]] = relationship(back_populates="user")
 
     # Imperative Form, legacy since SQLAlchemy 1.4
@@ -48,7 +48,7 @@ class Machine(Base):
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
-    trainings: Mapped[list["trainings"]] = relationship(back_populates="machine")
+    #trainings: Mapped[list["trainings"]] = relationship(back_populates="machine")
 
     # Imperative Form, legacy since SQLAlchemy 1.4
     #id = Column(Integer, primary_key=True)
