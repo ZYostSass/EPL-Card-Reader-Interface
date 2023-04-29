@@ -11,7 +11,8 @@ bp = Blueprint('admin_views', __name__, url_prefix='/admin')
 @app.before_request
 def set_user_global():
     user_id = session.get("user_id")
-    user = db.session.get(User, user_id)
+    # TODO: Fix-- following line breaks program
+    # user = db.session.get(User, user_id)
     if user_id is None:
         g.user = None
     else:
