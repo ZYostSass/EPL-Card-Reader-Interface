@@ -22,7 +22,8 @@ class User(Base):
     lastname: Mapped[str]
     email: Mapped[str]
     role: Mapped[str]
-    #machines: Mapped[Optional[list["Machine"]]] = relationship(back_populates="user")
+    # List of machines the user is trained on
+    #machines: Mapped[Optional[list["UserMachine"]]] = relationship(back_populates="user.id")
     #trainings: Mapped[Optional[list["trainings"]]] = relationship(back_populates="user")
 
     # Imperative Form, legacy since SQLAlchemy 1.4
@@ -42,13 +43,14 @@ class User(Base):
     
     def __repr__(self):
         return f"{self.firstname} {self.lastname}"
-  
+"""  
 class Machine(Base):
     __tablename__ = "machine"
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
-    #trainings: Mapped[list["trainings"]] = relationship(back_populates="machine")
+    # List of Users that are trained on this machine
+    trainings: Mapped[list["UserMachine"]] = relationship(back_populates="machine.id")
 
     # Imperative Form, legacy since SQLAlchemy 1.4
     #id = Column(Integer, primary_key=True)
@@ -61,7 +63,7 @@ class Machine(Base):
     
     def __repr__(self):
         return self.name
-"""    
+    
 class UserMachine(Base):
     __tablename__ = "usermachine"
     # Declarative Form, prefered as of SQLAlchemy 2.0

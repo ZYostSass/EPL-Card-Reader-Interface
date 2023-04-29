@@ -28,7 +28,7 @@ def add_new_user(idnumber, firstname, lastname, email, role):
     # Check if user already exists
     # Return if they do
     to_check = database_init.session.execute(select(class_models.User)
-        .where(class_models.User.id == idnumber)).scalar_one()
+        .where(class_models.User.id == idnumber)).scalar_one_or_none()
     if to_check != None:
         print("User", to_check, "- ID (", to_check.id, ") is already in the database")
         return
