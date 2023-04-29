@@ -100,8 +100,9 @@ def waiver():
     return render_template('waiver.html')
 
 
-@app.route("/account_creation_form/", methods=['POST', 'GET'])
+@app.route("/account-creation-form/", methods=['POST', 'GET'])
 def account_creation_form():
+   #for some reason I'm not getting a post call on submit.  
    if request.method == "POST":
         user_id = request.form['id']
         user_fname = request.form['fname']
@@ -110,10 +111,14 @@ def account_creation_form():
         #grab data from radio button for promote user automatically
         
         # Check for all form fields
-        add_new_user(user_id, 0, user_fname, user_lname)            
+        #method from user_options.py no intial reaction, but this may
+        #be from some other error in the route. tbd...
+        add_new_user(user_id, 0,"Admin",  user_fname, user_lname)            
+        return("User data: is" + user_id + user_fname)
 
    else: 
     return render_template("account_creation_form.html")
+
 
 @ app.route("/edit_user/")
 def edit_user():

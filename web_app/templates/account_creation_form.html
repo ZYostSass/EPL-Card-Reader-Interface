@@ -12,7 +12,7 @@
     ></button>
   </div>
   {% endif %}
-  <form action="/create_user_form/" method="POST" class="m-5">
+  <form action="/account-creation-form/" method="POST" class="m-5">
     <div class="mb-3">
       <label for="id" class="form-label">Access badge ID</label>
       <input
@@ -53,14 +53,7 @@
         aria-describedby="emailHelp"
       />
     </div>
-    <form action="/action_page.php">
-      <p>Select account type:</p>
-        <input type="radio" id="admin" name="user_type" value="Admin" />  
-      <label for="admin">Admin</label><br />
-        <input type="radio" id="manager" name="user_type" value="Manager" />
-      <label for="manager">Manager</label><br />
-    </form>
-    <button type="login" class="btn-primary" id="login-btn">Submit</button>
+    <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
   </form>
 </div>
 
