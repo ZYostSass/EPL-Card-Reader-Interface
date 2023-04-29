@@ -17,18 +17,21 @@ from sqlalchemy import select
 # Takes parsed card data and inputs it into the database
 # @app.route('/checkin_user/<idnumber>')
 def checkin_user(idnumber):
+    to_checkin = database_init.session.execute(select(class_models.User).filter_by(id = idnumber)).scalar_one()
     print("Hello")
     
 # Manager Commands
     
-def add_new_user(idnumber, firstname, lastname):
+def add_new_user(idnumber, firstname, lastname, email, role):
     # Check if user already exists
     # Return if they do
-    #to_check = select(class_models.User).where(class_models.User.idnumber == idnumber)
-    to_check = database_init.session.query(class_models.User).where(class_models.User.idnumber == idnumber)
-    print(to_check)
-    user = class_models.User(idnumber, firstname, lastname)
-    # TODO - Set trainning values
+    to_check = database_init.session.execute(select(class_models.User).filter_by(id = idnumber)).scalar_one()
+    if to_check.id == idnumber:
+        print("User", to_check, "ID: (", to_check.id, ") is already in the database")
+        return
+    # Otherwise, add the user to the database
+    user = class_models.User(idnumber, firstname, lastname, email, role)
+    #user_training = class_models
     database_init.session.add(user)
     database_init.session.commit()
 
@@ -42,16 +45,18 @@ def user_check(firstname, lastname):
         print(results)
 
 def read_all():
-    #results = select(class_models.User).join(class_models.Machine).where(class_models.User.idnumber == class_models.Machine.idnumber)
-    #results = database_init.session.query(class_models.User).select_from(class_models.User).join(class_models.Machine).filter(class_models.User.idnumber == class_models.Machine.idnumber)
-    
-    # Legacy 1.4 - TODO: Update?
-    results = database_init.session.query(class_models.User).all()#.join(class_models.Machine.idnumber == class_models.User.idnumber)
+    # Current as of SQLAlchemy 2.0
+    results = database_init.session.scalars(select(class_models.User)).all()
 
-    # results.extend(database_init.session.query(class_models.Machine).all())
+    # Legacy 1.4
+    #results = database_init.session.query(class_models.User).all()#.join(class_models.Machine.idnumber == class_models.User.idnumber)
+
     print(results)
-    #for class_models.User in database_init.session.scalars(results):
-        #print(results)
+
+# Function to see who is currently in the lab
+def read_all_online():
+    results = database_init.session.scalars(select(class_models.User)).all()
+    print(results)
 
 def change_user_training(idnumber, machine, trained_status):
     result = select(class_models.User).where(class_models.User.idnumber == idnumber) #join(class_models.Machine).where

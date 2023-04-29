@@ -7,9 +7,12 @@ import user_options
 #def hello_world():
 #    return "<p>Hellow, World!</p>"
 
-# user_options.checkin_user()
+#user_options.checkin_user(0)
 user_options.read_all()
-#user_options.add_new_user(2,2,"Student","a","a")
+# Duplicate user check
+user_options.add_new_user(0, "John", "Doe", "jdoe@pdx.edu", "Admin")
+# New User Addition
+user_options.add_new_user(1, "Jane", "Jackson", "jjack@pdx.edu", "Student")
 #user_options.user_check("John", "Doe")
 #user_options.change_user_training(1,1,1)
 # user_options.chance_user_access_level()

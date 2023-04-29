@@ -12,6 +12,7 @@ class Base(DeclarativeBase):
 	# First Name
 	# Last Name
     # Email
+    # Role
 
 class User(Base):
     __tablename__ = "user"
@@ -20,7 +21,8 @@ class User(Base):
     firstname: Mapped[str]
     lastname: Mapped[str]
     email: Mapped[str]
-    #machines: Mapped[Optional[list["Machine"]]] = relationship(back_populates="user")
+    role: Mapped[str]
+    machines: Mapped[Optional[list["Machine"]]] = relationship(back_populates="user")
     #trainings: Mapped[Optional[list["trainings"]]] = relationship(back_populates="user")
 
     # Imperative Form, legacy since SQLAlchemy 1.4
@@ -31,15 +33,16 @@ class User(Base):
     #machines = relationship('Machine', secondary=students_machines, backref=backref('students', lazy='dynamic'))
     #trainings = relationship.back_populates('StudentMachine', lazy='dynamic')
     
-    def __init__(self, id, fname, lname, email):
+    def __init__(self, id, fname, lname, email, role):
         self.id = id
         self.firstname = fname
         self.lastname = lname
         self.email = email
+        self.role = role
     
     def __repr__(self):
         return f"{self.firstname} {self.lastname}"
-"""    
+  
 class Machine(Base):
     __tablename__ = "machine"
     # Declarative Form, prefered as of SQLAlchemy 2.0
@@ -58,7 +61,7 @@ class Machine(Base):
     
     def __repr__(self):
         return self.name
-    
+"""    
 class UserMachine(Base):
     __tablename__ = "usermachine"
     # Declarative Form, prefered as of SQLAlchemy 2.0
