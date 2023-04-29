@@ -7,9 +7,8 @@
 # Admins can:
 	# Do everything a Manager can do
 	# Change a user's access level
-
-import database_init
-import class_models
+from database import database_init
+from database import class_models
 from sqlalchemy import select
 
 # Universal Commands

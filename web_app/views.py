@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, escape
+
+from database.user_options import add_new_user
 from .models import User
 from . import db
 from . import app
@@ -107,31 +109,9 @@ def account_creation_form():
         user_email = request.form['email']
         #grab data from radio button for promote user automatically
         
-
         # Check for all form fields
-        if not user_id or not user_fname or not user_lname or not user_email:
-            error_statement = "All form fields are required"
-            return render_template("add_user_form.html",
-                                   error_statement=error_statement,
-                                   id=user_id,
-                                   firstname=user_fname,
-                                   lastname=user_lname,
-                                   email=user_email)
+        add_new_user(user_id, 0, user_fname, user_lname)            
 
-        new_user = User(
-            id=user_id,
-            firstname=user_fname,
-            lastname=user_lname,
-            email=user_email
-        )
-
-        try:
-            db.session.add(new_user)
-            db.session.commit()
-            return redirect('/add-user-form/')
-        except:
-            # TODO: Add a fail html page to handle error outputs
-            return f"(Error adding {new_user.firstname} {new_user.lastname} to the database)"
    else: 
     return render_template("account_creation_form.html")
 

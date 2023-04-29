@@ -1,5 +1,5 @@
 import os.path
-import class_models
+from database import class_models
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -20,7 +20,7 @@ if not (check_file):
 
     # Create Base Admin
     # TODO - Fill in correct info
-    base_admin = class_models.User(0, 0, "Admin", "John", "Doe")
+    base_admin = class_models.User(0, 0, "Admin", "John", "Smith")
     session.add(base_admin)
     session.commit()
     # Set Base Admin Machines to False
