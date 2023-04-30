@@ -18,13 +18,14 @@ class User(Base):
     __tablename__ = "user"
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True)
+    badge: Mapped[int]
     firstname: Mapped[str]
     lastname: Mapped[str]
     email: Mapped[str]
     role: Mapped[str]
     # List of machines the user is trained on
     #machines: Mapped[Optional[list["UserMachine"]]] = relationship(back_populates="user.id")
-    #trainings: Mapped[Optional[list["trainings"]]] = relationship(back_populates="user")
+    #trainings: Mapped[Optional[list["Machine"]]] = relationship(back_populates="trained_on")
 
     # Imperative Form, legacy since SQLAlchemy 1.4, may need some tweaking
     #id = Column(Integer, primary_key=True)
@@ -34,8 +35,9 @@ class User(Base):
     #machines = relationship('Machine', secondary=students_machines, backref=backref('students', lazy='dynamic'))
     #trainings = relationship.back_populates('StudentMachine', lazy='dynamic')
     
-    def __init__(self, id, fname, lname, email, role):
+    def __init__(self, id, access, fname, lname, email, role):
         self.id = id
+        self.badge = access
         self.firstname = fname
         self.lastname = lname
         self.email = email
@@ -50,7 +52,7 @@ class Machine(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     # List of Users that are trained on this machine
-    #trainings: Mapped[list["UserMachine"]] = relationship(back_populates="machine.id")
+    #trained_on: Mapped[Optional[User[list["UserMachine"]]]] = relationship(back_populates="machine.id")
 
     # Imperative Form, legacy since SQLAlchemy 1.4
     #id = Column(Integer, primary_key=True)
@@ -63,7 +65,8 @@ class Machine(Base):
     
     def __repr__(self):
         return self.name
-"""    
+"""
+# Join table for many-to-many relationships    
 class UserMachine(Base):
     __tablename__ = "usermachine"
     # Declarative Form, prefered as of SQLAlchemy 2.0

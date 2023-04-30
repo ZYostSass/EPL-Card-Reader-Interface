@@ -18,10 +18,10 @@ print("Outputting all users in the table")
 user_options.read_all()
 # Duplicate user check
 print("Adding duplicate Base Admin: John Doe")
-user_options.add_new_user(0, "John", "Doe", "jdoe@pdx.edu", "Admin")
+user_options.add_new_user(0, 0, "John", "Doe", "jdoe@pdx.edu", "Admin")
 # New User Addition
 print("Adding new user: Jane Jackson")
-user_options.add_new_user(1, "Jane", "Jackson", "jjack@pdx.edu", "Student")
+user_options.add_new_user(1, 1, "Jane", "Jackson", "jjack@pdx.edu", "Student")
 user_options.read_all()
 # Remove added user
 print("Removing new user: Jane Jackson")
