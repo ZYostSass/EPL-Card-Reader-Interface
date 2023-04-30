@@ -18,7 +18,7 @@ class User(Base):
     __tablename__ = "user"
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True)
-    access_id: Mapped[int]
+    badge: Mapped[int]
     firstname: Mapped[str]
     lastname: Mapped[str]
     email: Mapped[str]
@@ -37,7 +37,7 @@ class User(Base):
     
     def __init__(self, id, access, fname, lname, email, role):
         self.id = id
-        self.access_id = access
+        self.badge = access
         self.firstname = fname
         self.lastname = lname
         self.email = email

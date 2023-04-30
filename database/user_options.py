@@ -15,9 +15,9 @@ from sqlalchemy import select
 # Universal Commands
 
 # Takes parsed card data and inputs it into the database
-def checkin_user(idnumber):
+def checkin_user(badge):
     to_checkin = database_init.session.execute(select(class_models.User)
-        .where(class_models.User.id == idnumber)).scalar_one_or_none()
+        .where(class_models.User.badge == badge)).scalar_one_or_none()
     if to_checkin == None:
         print("User is not in the database")
         return
