@@ -5,6 +5,7 @@
     <h2>John Doe</h2>
   </div>
   <!-- Circuit Board Manufacturing Equipment -->
+  <!-- TODO: dynamically add class true or false class to images -->
   <div class="circuit-board">
     <h3>Circuit Board Manufacturing</h3>
     <div class="container mx-0 overflow-hidden">
@@ -24,7 +25,7 @@
             <h4>LPKF S63 PCB Router</h4>
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/lpkf_s63_pcb_router.jpg')}}"
-              alt="LPKF multipress S"
+              alt="LPKF S63 PCB Router"
               class="true"
             />
           </div>
@@ -34,7 +35,7 @@
             <h4>LPKF S104 PCB Router</h4>
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/lpkf_s104_pcb_router.jpg')}}"
-              alt="LPKF multipress S"
+              alt="LPKF S104 PCB Router"
               class="true"
             />
           </div>
@@ -44,7 +45,7 @@
             <h4>Pick and Place</h4>
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/pick_and_place.jpg')}}"
-              alt="LPKF multipress S"
+              alt="Pick and Place"
               class="false"
             />
           </div>
@@ -54,7 +55,7 @@
             <h4>Soldering Equipment</h4>
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/soldering_equipment.jpg')}}"
-              alt="LPKF multipress S"
+              alt="Soldering Equipment"
               class="true"
             />
           </div>
@@ -64,7 +65,7 @@
             <h4>T200N Desktop Solder Oven</h4>
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/t200n_desktop_solder_oven.jpg')}}"
-              alt="LPKF multipress S"
+              alt="T200N Desktop Solder Oven"
               class="true"
             />
           </div>
@@ -74,7 +75,7 @@
             <h4>Test and Measurement</h4>
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/test_and_measurement.jpg')}}"
-              alt="LPKF multipress S"
+              alt="Test and Measurement"
               class="true"
             />
           </div>
@@ -109,6 +110,110 @@
         </div>
       </div>
     </div>
+    <!-- Machining Equipment -->
+    <div class="machining-equipment">
+      <h3>Machining Equipment</h3>
+      <div class="container mx-0 overflow-hidden">
+        <div class="row row-cols-2 row-cols-md-4 g-4">
+          <div class="col equipment">
+            <div class="card">
+              <h4>Drill Press</h4>
+              <img
+                src="{{url_for('static', filename='equipment_images/machining_equipment/drill_press.jpg')}}"
+                alt="Drill Press"
+                class="true"
+              />
+            </div>
+          </div>
+          <div class="col equipment">
+            <div class="card">
+              <h4>Little Machine Shop Lathe</h4>
+              <img
+                src="{{url_for('static', filename='equipment_images/machining_equipment/little_machine_shop_lathe.jpg')}}"
+                alt="Little Machine Shop Lathe"
+                class="true"
+              />
+            </div>
+          </div>
+          <div class="col equipment">
+            <div class="card">
+              <h4>Little Machine Shop Mill</h4>
+              <img
+                src="{{url_for('static', filename='equipment_images/machining_equipment/little_machine_shop_mill.jpg')}}"
+                alt="Little Machine Shop Mill"
+                class="true"
+              />
+            </div>
+          </div>
+          <div class="col equipment">
+            <div class="card">
+              <h4>WAZER</h4>
+              <img
+                src="{{url_for('static', filename='equipment_images/machining_equipment/wazer.jpg')}}"
+                alt="WAZER"
+                class="true"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Laser Cutters Equipment -->
+    <div class="laser-cutters">
+      <h3>Laser Cutters</h3>
+      <div class="container mx-0 overflow-hidden">
+        <div class="row row-cols-2 row-cols-md-4 g-4">
+          <div class="col equipment">
+            <div class="card">
+              <h4>QD-1390 Laser Cutter</h4>
+              <img
+                src="{{url_for('static', filename='equipment_images/laser_cutters/qd-1390_laser_cutter.jpg')}}"
+                alt="QD-1390 Laser Cutter"
+                class="true"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Miscellaneous Equipment -->
+    <div class="miscellaneous-equipment">
+      <h3>Miscellaneous</h3>
+      <div class="container mx-0 overflow-hidden">
+        <div class="row row-cols-2 row-cols-md-4 g-4">
+          <div class="col equipment">
+            <div class="card">
+              <h4>EZFORM SV 1217</h4>
+              <img
+                src="{{url_for('static', filename='equipment_images/miscellaneous/ezform_sv_1217.jpg')}}"
+                alt="EZFORM SV 1217"
+                class="false"
+              />
+            </div>
+          </div>
+          <div class="col equipment">
+            <div class="card">
+              <h4>Silhouette Cameo</h4>
+              <img
+                src="{{url_for('static', filename='equipment_images/miscellaneous/silhouette_cameo.jpg')}}"
+                alt="Silhouette Cameo"
+                class="false"
+              />
+            </div>
+          </div>
+          <div class="col equipment">
+            <div class="card">
+              <h4>Thermocut 115/E</h4>
+              <img
+                src="{{url_for('static', filename='equipment_images/miscellaneous/thermocut_115e.jpg')}}"
+                alt="Thermocut 115/E"
+                class="true"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  {% endblock %}
 </div>
+{% endblock %}

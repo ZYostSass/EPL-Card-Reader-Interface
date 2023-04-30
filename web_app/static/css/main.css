@@ -225,9 +225,15 @@ hr.h-color {
 }
 
 /* Permissions Student */
+.permissionsStudent-content {
+  margin: 20px 0;
+}
+
 .permissionsStudent-content .student-info {
+  position: relative;
+  top: -20px;
   background: var(--white);
-  padding: 12px;
+  padding: 20px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 .permissionsStudent-content h3 {
