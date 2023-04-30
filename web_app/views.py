@@ -3,15 +3,6 @@ from .models import User
 from .admin import login_required
 from . import db
 
-# TODO: Properly route this page to login functionality.
-
-
-@app.route("/login")
-def login():
-    return render_template('login.html')
-
-
-
 bp = Blueprint('views', __name__)
 
 @bp.route("/")
