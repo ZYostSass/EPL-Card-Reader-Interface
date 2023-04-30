@@ -60,30 +60,12 @@ hr.h-color {
 }
 
 /* Student's Equipment Overview */
-.container .equipStudent-content {
-  display: flex;
-  justify-content: center;
-}
-
-.equipStudent-content img {
-  max-width: 75%;
-  height: auto;
-  border: 2px solid;
-  border-radius: 5px;
-  border-color: var(--lightGrey);
-}
-
 .equipStudent-content img.true {
   filter: opacity(0.5) drop-shadow(0 0 0 green);
 }
 
 .equipStudent-content img.false {
   filter: opacity(0.5) drop-shadow(0 0 0 red);
-}
-
-.form-content .btn-primary {
-  background-color: var(--PSUgreen);
-  border: solid var(--PSUgreen);
 }
 
 /* Dashboard */
@@ -249,6 +231,27 @@ hr.h-color {
 .permissions-content form button:hover {
   background: var(--lightPSUgreen);
   border-color: var(--lightPSUgreen);
+}
+
+/* Permissions Student */
+.permissionsStudent-content .col.equipment .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  padding: 1em;
+}
+
+.permissionsStudent-content img {
+  width: 100%;
+  max-width: 200px;
+  height: 200px;
+}
+
+.permissionsStudent-content h4 {
+  font-size: 1em;
 }
 
 /* Media Queries */

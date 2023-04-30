@@ -124,3 +124,7 @@ def permissions():
 @bp.route("/waiver/")
 def waiver():
     return render_template('waiver.html')
+
+@bp.route("/permissions/student/")
+def permissionsStudent():
+    return render_template("permissionsStudent.html")

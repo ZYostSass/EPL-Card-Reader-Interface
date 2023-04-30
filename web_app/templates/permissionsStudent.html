@@ -1,0 +1,84 @@
+{% extends "index.html" %} {% block content %}
+<div class="permissionsStudent-content">
+  <div class="student-info mb-2 ps-2">
+    <h2>John Doe</h2>
+  </div>
+  <div class="circuit-board">
+    <h3>Circuit Board Manufacturing</h3>
+    <div class="container mx-0 overflow-hidden">
+      <div class="row row-cols-2 row-cols-md-4 g-4">
+        <div class="col equipment">
+          <div class="card">
+            <h4>LPKF Multipress S</h4>
+            <img
+              src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/lpkf_multipress_s.jpg')}}"
+              alt="LPKF multipress S"
+              class="true"
+            />
+          </div>
+        </div>
+        <div class="col equipment">
+          <div class="card">
+            <h4>LPKF S63 PCB Router</h4>
+            <img
+              src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/lpkf_s63_pcb_router.jpg')}}"
+              alt="LPKF multipress S"
+              class="true"
+            />
+          </div>
+        </div>
+        <div class="col equipment">
+          <div class="card">
+            <h4>LPKF S104 PCB Router</h4>
+            <img
+              src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/lpkf_s104_pcb_router.jpg')}}"
+              alt="LPKF multipress S"
+              class="true"
+            />
+          </div>
+        </div>
+        <div class="col equipment">
+          <div class="card">
+            <h4>Pick and Place</h4>
+            <img
+              src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/pick_and_place.jpg')}}"
+              alt="LPKF multipress S"
+              class="true"
+            />
+          </div>
+        </div>
+        <div class="col equipment">
+          <div class="card">
+            <h4>Soldering Equipment</h4>
+            <img
+              src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/soldering_equipment.jpg')}}"
+              alt="LPKF multipress S"
+              class="true"
+            />
+          </div>
+        </div>
+        <div class="col equipment">
+          <div class="card">
+            <h4>T200N Desktop Solder Oven</h4>
+            <img
+              src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/t200n_desktop_solder_oven.jpg')}}"
+              alt="LPKF multipress S"
+              class="true"
+            />
+          </div>
+        </div>
+        <div class="col equipment">
+          <div class="card">
+            <h4>Test and Measurement</h4>
+            <img
+              src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/test_and_measurement.jpg')}}"
+              alt="LPKF multipress S"
+              class="true"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
