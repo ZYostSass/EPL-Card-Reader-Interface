@@ -27,7 +27,7 @@ def checkin_user(idnumber):
 # Manager Commands
 
 # Addes a new user, if the ID is not currently present    
-def add_new_user(idnumber, firstname, lastname, email, role):
+def add_new_user(idnumber, access, firstname, lastname, email, role):
     # Check if user already exists
     to_check = database_init.session.execute(select(class_models.User)
         .where(class_models.User.id == idnumber)).scalar_one_or_none()
@@ -36,7 +36,7 @@ def add_new_user(idnumber, firstname, lastname, email, role):
         print("User", to_check, "- ID (", to_check.id, ") is already in the database")
         return
     # Otherwise, add the user to the database
-    user = class_models.User(idnumber, firstname, lastname, email, role)
+    user = class_models.User(idnumber, access, firstname, lastname, email, role)
     #user_training = class_models
     database_init.session.add(user)
     database_init.session.commit()
