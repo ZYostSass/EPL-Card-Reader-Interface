@@ -1,8 +1,10 @@
 {% extends "index.html" %} {% block content %}
 <div class="permissionsStudent-content">
-  <div class="student-info mb-2 ps-2">
+  <div class="student-info">
+    <!-- TODO: Dynamically add student information -->
     <h2>John Doe</h2>
   </div>
+  <!-- Circuit Board Manufacturing Equipment -->
   <div class="circuit-board">
     <h3>Circuit Board Manufacturing</h3>
     <div class="container mx-0 overflow-hidden">
@@ -13,7 +15,7 @@
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/lpkf_multipress_s.jpg')}}"
               alt="LPKF multipress S"
-              class="true"
+              class="false"
             />
           </div>
         </div>
@@ -43,7 +45,7 @@
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/pick_and_place.jpg')}}"
               alt="LPKF multipress S"
-              class="true"
+              class="false"
             />
           </div>
         </div>
@@ -79,6 +81,34 @@
         </div>
       </div>
     </div>
+    <!-- 3D Printers Equipment -->
+    <div class="3d-printer">
+      <h3>3D Printers</h3>
+      <div class="container mx-0 overflow-hidden">
+        <div class="row row-cols-2 row-cols-md-4 g-4">
+          <div class="col equipment">
+            <div class="card">
+              <h4>Form 3 SLA Printer</h4>
+              <img
+                src="{{url_for('static', filename='equipment_images/3d_printers/form_3_sla_printer.jpg')}}"
+                alt="Form 3 SLA Printer"
+                class="true"
+              />
+            </div>
+          </div>
+          <div class="col equipment">
+            <div class="card">
+              <h4>Ultimaker3 Extended 3D Printer</h4>
+              <img
+                src="{{url_for('static', filename='equipment_images/3d_printers/ultimaker3_extended_3d_printer.jpg')}}"
+                alt="Ultimaker 3 Extended 3D Printer"
+                class="false"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+  {% endblock %}
 </div>
-{% endblock %}
