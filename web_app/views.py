@@ -9,8 +9,6 @@ def index():
     return render_template('index.html')
 
 # Pulling from the database
-
-
 @app.route('/read-user/', defaults={'id': 1})
 @app.route("/read-user/<id>")
 def test_read(id):
@@ -30,37 +28,32 @@ def test_write(name):
     return render_template('added_user.html', user=user)
 
 # Adding new user into database from form
-# TODO: Only allow access to this page when logged in as an Admin or Manager
-
-
+# TODO: Adjust this route once finalized schema is merged
 @app.route("/add-user-form/", methods=['POST', 'GET'])
 def add_user_form():
 
     if request.method == "POST":
         user_idnumber = request.form['idnumber']
-        user_accessnumber = request.form['accessnumber']
         user_fname = request.form['fname']
         user_lname = request.form['lname']
         user_email = request.form['email']
 
         # Check for all form fields
-        if not user_idnumber or not user_accessnumber or not user_fname or not user_lname or not user_email:
+        if not user_idnumber or not user_fname or not user_lname or not user_email:
             error_statement = "All form fields are required"
             return render_template("add_user_form.html",
                                    error_statement=error_statement,
                                    idnumber=user_idnumber,
-                                   accessnumber=user_accessnumber,
                                    fname=user_fname,
                                    lname=user_lname,
                                    email=user_email)
 
         new_user = User(
             idnumber=user_idnumber,
-            accessnumber=user_accessnumber,
             fname=user_fname,
             lname=user_lname,
             email=user_email,
-            active=True
+            role="Student"
         )
 
         try:
