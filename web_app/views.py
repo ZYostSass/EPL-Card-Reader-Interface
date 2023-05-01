@@ -125,6 +125,9 @@ def permissions():
 def waiver():
     return render_template('waiver.html')
 
+@bp.route("/permissions/student/")
+def permissionsStudent():
+    return render_template("permissionsStudent.html")
 
 @bp.route("/account-creation-form/", methods=['POST', 'GET'])
 def account_creation_form():
