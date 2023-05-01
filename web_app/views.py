@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, escape, Blueprint, session
 from database.class_models import *
+from database.user_options import add_new_user
 from .admin import login_required
+
 from . import db
 
 bp = Blueprint('views', __name__)
@@ -130,3 +132,32 @@ def permissions():
 @bp.route("/waiver/")
 def waiver():
     return render_template('waiver.html')
+
+
+@bp.route("/account-creation-form/", methods=['POST', 'GET'])
+def account_creation_form():
+   #for some reason I'm not getting a post call on submit.  
+   if request.method == "POST":
+        user_id = request.form['id']
+        user_fname = request.form['fname']
+        user_lname = request.form['lname']
+        user_email = request.form['email']
+        #grab data from radio button for promote user automatically
+        
+        # Check for all form fields
+        #method from user_options.py no intial reaction, but this may
+        #be from some other error in the route. tbd...
+        add_new_user(user_id, 0, user_fname, user_lname, user_email, "Admin")            
+        return("User data: is" + user_id + user_fname)
+
+   else: 
+    return render_template("account_creation_form.html")
+
+
+@bp.route("/edit_user/")
+def edit_user():
+    return render_template('edit_user.html')
+
+@bp.route("/remove_user/")
+def remove_user():
+    return render_template('remove_user.html')
