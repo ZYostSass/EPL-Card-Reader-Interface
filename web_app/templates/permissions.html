@@ -1,6 +1,25 @@
 {% extends "index.html" %} {% block content %}
 <div class="permissions-content px-3 pt-4">
-  <h2 class="fs-5 pe-2">Permissions</h2>
-  <p>This is where permissions content would go.</p>
+  <h2 class="fs-5 pe-2">View Student Permissions</h2>
+  <div class="card-prompt">
+    <h3>Scan PSU ID card</h3>
+    <h4><span>OR</span></h4>
+  </div>
+  <form action="/permissions/" method="POST" class="m-5">
+    <h3>Enter Manually</h3>
+    <div class="mb-3">
+      <label for="idnumber" class="form-label">PSU ID</label>
+      <input
+        type="id"
+        maxlength="9"
+        class="form-control"
+        name="idnumber"
+        id="idnumber"
+        value="{{ idnumber }}"
+      />
+      <div id="idHelp" class="form-text">Must be a 9 digit number</div>
+    </div>
+    <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
+  </form>
 </div>
 {% endblock %}
