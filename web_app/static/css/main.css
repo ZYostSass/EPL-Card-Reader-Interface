@@ -1,4 +1,5 @@
 :root {
+  --black: #000000;
   --bootstrapLight: #f8f9fa;
   --dimGray: #696969;
   --green: #228b22;
@@ -267,6 +268,55 @@ hr.h-color {
 
 .permissionsStudent-content img.false {
   filter: opacity(0.5) drop-shadow(0 0 0 red);
+}
+
+/* Equipment Overview */
+.equipOverview-content {
+  margin: 20px 0;
+}
+
+.equipOverview-content .header {
+  position: relative;
+  top: -20px;
+  background: var(--white);
+  padding: 20px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.equipOverview-content h3 {
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 20px;
+}
+.equipOverview-content .col.equipment .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--white);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  padding: 1em;
+}
+
+.equipOverview-content img {
+  width: 100%;
+  max-width: 200px;
+  height: 200px;
+}
+
+.equipOverview-content a {
+  text-decoration: none;
+  color: var(--black);
+}
+
+.equipOverview-content a:hover {
+  color: var(--lightPSUgreen);
+}
+
+.equipOverview-content h4 {
+  font-size: 0.75em;
+  font-weight: 700;
 }
 
 /* Media Queries */
