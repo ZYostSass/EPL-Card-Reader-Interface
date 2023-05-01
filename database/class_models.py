@@ -35,7 +35,7 @@ class User(Base):
     #machines = relationship('Machine', secondary=students_machines, backref=backref('students', lazy='dynamic'))
     #trainings = relationship.back_populates('StudentMachine', lazy='dynamic')
     
-    def __init__(self, id, access, fname, lname, email, role):
+    def __init__(self, id, access, fname, lname, email, role ="student"):
         self.id = id
         self.badge = access
         self.firstname = fname

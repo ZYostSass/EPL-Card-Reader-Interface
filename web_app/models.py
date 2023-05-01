@@ -1,3 +1,4 @@
+"""
 from . import db
 
 from flask import g
@@ -41,3 +42,4 @@ class User(db.Model): # type: ignore
 
     def is_user(self):
       return self.role == USER
+"""
