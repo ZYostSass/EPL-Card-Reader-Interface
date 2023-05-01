@@ -147,7 +147,7 @@ def account_creation_form():
         # Check for all form fields
         #method from user_options.py no intial reaction, but this may
         #be from some other error in the route. tbd...
-        add_new_user(user_id, 0,"Admin",  user_fname, user_lname)            
+        add_new_user(user_id, 0, user_fname, user_lname, user_email, "Admin")            
         return("User data: is" + user_id + user_fname)
 
    else: 
