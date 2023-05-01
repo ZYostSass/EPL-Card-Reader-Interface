@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, escape, Blueprint, session
 from database.class_models import *
-from database.user_options import add_new_user
+from database.user_options import add_new_user, remove_user
 from .admin import login_required
+from sqlalchemy.orm.exc import NoResultFound
 
 from . import db
 
@@ -12,7 +13,7 @@ def index():
     return render_template('index.html')
 
 @bp.route("/login")
-def login(id):
+def login():
   if request.method == "POST":
       user_email = request.form['email']
       password = request.form['password']
@@ -68,7 +69,7 @@ def test_write(name):
 
 @bp.route("/add-user-form/", methods=['POST', 'GET'])
 def add_user_form():
-
+    
     if request.method == "POST":
         user_id = request.form['id']
         user_badge = request.form['access']
@@ -89,21 +90,12 @@ def add_user_form():
                                    email=user_email)
        #                            role = user_role)
 
-        new_user = User(
-            id=user_id,
-            access=user_badge,
-            fname=user_fname,
-            lname=user_lname,
-            email=user_email)
-       #     role=user_role)
-
         try:
-            db.session.add(new_user)
-            db.session.commit()
+            add_new_user(user_id, user_badge, user_fname, user_lname, user_email, "Admin")
             return redirect('/add-user-form/')
         except:
             # TODO: Add a fail html page to handle error outputs
-            return f"(Error adding {new_user.firstname} {new_user.lastname} to the database)"
+            return f"(Error adding {user_fname} {user_lname} to the database)"
 
     else:
         return render_template("add_user_form.html")
@@ -158,6 +150,14 @@ def account_creation_form():
 def edit_user():
     return render_template('edit_user.html')
 
-@bp.route("/remove_user/")
-def remove_user():
-    return render_template('remove_user.html')
+@bp.route('/remove-user/', methods=['GET', 'POST'])
+def remove_user_form():
+    if request.method == "POST":
+        user_id = request.form['id']
+        try:
+            remove_user(user_id)
+            return redirect('/remove-user/')
+        except:
+            return f"(Error; not in database.)"
+    else:
+        return render_template("remove_user_form.html")

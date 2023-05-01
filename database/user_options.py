@@ -30,10 +30,9 @@ def add_new_user(idnumber, access, firstname, lastname, email, role):
     # Check if user already exists
     to_check = database_init.session.execute(select(class_models.User)
         .where(class_models.User.id == idnumber)).scalar_one_or_none()
-    # Return if they do
+    # Raise an exception if they do
     if to_check != None:
-        print("User", to_check, "- ID (", to_check.id, ") is already in the database")
-        return
+        raise ValueError(f"User with ID {idnumber} is already in the database")
     # Otherwise, add the user to the database
     user = class_models.User(idnumber, access, firstname, lastname, email, role)
     #user_training = class_models
@@ -47,11 +46,11 @@ def remove_user(idnumber):
         .where(class_models.User.id == idnumber)).scalar_one_or_none()
     # If not found, return
     if to_delete == None:
-        print("User is not in the database")
-        return
+        raise LookupError(f"User with ID {idnumber} does not exist")
     # Else, remove from the database
-    database_init.session.delete(to_delete)
-    database_init.session.commit()
+    else:
+        database_init.session.delete(to_delete)
+        database_init.session.commit()
 
 # Currently unused
 def user_check(firstname, lastname):
