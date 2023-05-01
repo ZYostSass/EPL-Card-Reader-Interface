@@ -1,70 +1,102 @@
-# User Table:
-	# Primary Key: ID Number
-	# Badge Number
-	# First Name
-	# Last Name
-	# Emergency Contact Info
-	# User Level (Admin, Manager, Student)
-
+import datetime
+from typing import Optional
 from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
-from sqlalchemy.orm import DeclarativeBase, relationship #, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
 
 # Replaced depreciated 'Base = declarative_base()'
 class Base(DeclarativeBase):
     pass
 
-# -- User Base Class --
+# User Table:
+	# Primary Key: ID Number
+	# First Name
+	# Last Name
+    # Email
+    # Role
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "user"
+    # Declarative Form, prefered as of SQLAlchemy 2.0
+    id: Mapped[int] = mapped_column(primary_key=True)
+    badge: Mapped[int]
+    firstname: Mapped[str]
+    lastname: Mapped[str]
+    email: Mapped[str]
+    role: Mapped[str]
+    # List of machines the user is trained on
+    #machines: Mapped[Optional[list["UserMachine"]]] = relationship(back_populates="user.id")
+    #trainings: Mapped[Optional[list["Machine"]]] = relationship(back_populates="trained_on")
 
-    # Imperative Approach
-    idnumber = Column("ID", Integer, primary_key = True)
-    accessnumber = Column("Access ID", Integer)
-    # Strings corispond to VARCHARS from SQL, thus a size is needed
-    # Characters: Admin(5), Manager(7), Student(7)
-    role = Column("role", String(7))
-    # 50 characters seemded ample, but may be expanded if needed
-    firstname = Column("firstname", String(50))
-    lastname = Column("lastname", String(50))
-
-    # Declarative Approach
-    #idnumber: Mapped[int] = mapped_column(primary_key=True)
-    #accessnumber: Mapped[int] = mapped_column(int)
-    #role: Mapped[str] = mapped_column(String(7))
-    #firstname: Mapped[str] = mapped_column(String(50))
-    #lastname: Mapped[str] = mapped_column(String(50))
-
-    def __init__(self, idnumber, accessnumber, role, firstname, lastname):
-        self.idnumber = idnumber
-        self.accessnumber = accessnumber
+    # Imperative Form, legacy since SQLAlchemy 1.4, may need some tweaking
+    #id = Column(Integer, primary_key=True)
+    #firstname = Column(String)
+    #lastname = Column(String)
+    #email = Column(String)
+    #machines = relationship('Machine', secondary=students_machines, backref=backref('students', lazy='dynamic'))
+    #trainings = relationship.back_populates('StudentMachine', lazy='dynamic')
+    
+    def __init__(self, id, access, fname, lname, email, role ="student"):
+        self.id = id
+        self.badge = access
+        self.firstname = fname
+        self.lastname = lname
+        self.email = email
         self.role = role
-        self.firstname = firstname
-        self.lastname = lastname
-
-    def __repr__(self) -> str:
-        return f"User(idnumber={self.idnumber!r}, accessnumer={self.accessnumber!r}, role={self.role!r}, firstname={self.firstname!r}, lastname={self.lastname!r})"
-
-# -- Machine Base Class --
-
-# Equipment Table (Named after each piece of equipment
-	# Foreign Key(User.idnumber): ID Number
-	# Trained Boolean
-
+    
+    def __repr__(self):
+        return f"{self.firstname} {self.lastname}"
+  
 class Machine(Base):
     __tablename__ = "machine"
+    # Declarative Form, prefered as of SQLAlchemy 2.0
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    # List of Users that are trained on this machine
+    #trained_on: Mapped[Optional[User[list["UserMachine"]]]] = relationship(back_populates="machine.id")
 
-    # Imperative Approach
-    idnumber = Column("ID", Integer, ForeignKey(User.idnumber), primary_key = True)
-    trained = Column("Trained", Boolean)
+    # Imperative Form, legacy since SQLAlchemy 1.4
+    #id = Column(Integer, primary_key=True)
+    #name = Column(String)
+    #trainings = relationship('StudentMachine', backref='machine', lazy='dynamic')
+    
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+    
+    def __repr__(self):
+        return self.name
+"""
+# Join table for many-to-many relationships    
+class UserMachine(Base):
+    __tablename__ = "usermachine"
+    # Declarative Form, prefered as of SQLAlchemy 2.0
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    machine_id: Mapped[int] = mapped_column(ForeignKey("machine.id"))
+    last_trained: Mapped[datetime.datetime]
 
-    # Declarative Approach
-    #idnumber: Mapped[int] = mapped_column(ForeignKey(User.idnumber), primary_key=True)
-    #trained: Mapped[Boolean] = mapped_column(bool)
+    # Imperative Form, legacy since SQLAlchemy 1.4
+    #id = Column(Integer, primary_key=True)
+    #student_id = Column(Integer, ForeignKey('student.id'))
+    #machine_id = Column(Integer, ForeignKey('machine.id'))
+    #last_trained = Column(datetime.datetime)
+    
+    def __init__(self, student, machine, date):
+        self.student = student
+        self.machine = machine
+        self.last_trained = date
+    
+    def __repr__(self):
+        return f"{self.student} was last trained on {self.machine} on {self.last_trained}"
+    
+# Define the association table for the many-to-many relationship between Student and Machine
+# This is equivalent to defining the UserMachine class
+#students_machines = Table('students_machines',
+    #Column('student_id', Integer, ForeignKey('student.id'), primary_key=True),
+    #Column('machine_id', Integer, ForeignKey('machine.id'), primary_key=True)
+#)
 
-    def __init__(self, idnumber, trained):
-        self.idnumber = idnumber
-        self.trained = trained
-        
-    def __repr__(self) -> str:
-        return f"Machine(idnumber={self.idnumber!r}, trained={self.trained!r})"
+#training = StudentMachine(student=student1, machine=machine2, date=datetime.now())
+#student1.trainings.append(training)
+#machine2.trainings.append(training)
+"""
