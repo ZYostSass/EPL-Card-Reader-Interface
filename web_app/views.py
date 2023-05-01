@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, escape, Blueprint, session
-from .models import User
+from database.class_models import *
 from .admin import login_required
 from . import db
 
@@ -62,15 +62,18 @@ def test_write(name):
 # Adding new user into database from form
 # TODO: Only allow access to this page when logged in as an Admin or Manager
 
+#Zach: Set default role to always be student at this time.
 
 @bp.route("/add-user-form/", methods=['POST', 'GET'])
 def add_user_form():
 
     if request.method == "POST":
         user_id = request.form['id']
+        user_badge = request.form['access']
         user_fname = request.form['fname']
         user_lname = request.form['lname']
         user_email = request.form['email']
+     #   user_role = request.form['role']
 
         # Check for all form fields
         if not user_id or not user_fname or not user_lname or not user_email:
@@ -78,16 +81,19 @@ def add_user_form():
             return render_template("add_user_form.html",
                                    error_statement=error_statement,
                                    id=user_id,
+                                   badge = user_badge,
                                    firstname=user_fname,
                                    lastname=user_lname,
                                    email=user_email)
+       #                            role = user_role)
 
         new_user = User(
             id=user_id,
+            access=user_badge,
             fname=user_fname,
             lname=user_lname,
-            email=user_email
-        )
+            email=user_email)
+       #     role=user_role)
 
         try:
             db.session.add(new_user)
