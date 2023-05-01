@@ -1,5 +1,5 @@
 import os.path
-import class_models
+from database import class_models
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

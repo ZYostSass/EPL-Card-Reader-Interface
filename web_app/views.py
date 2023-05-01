@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, escape, Blueprint, session
-from .models import User
+from database.class_models import *
+from database.user_options import add_new_user, remove_user
 from .admin import login_required
+from sqlalchemy.orm.exc import NoResultFound
+
 from . import db
 
 bp = Blueprint('views', __name__)
@@ -10,7 +13,7 @@ def index():
     return render_template('index.html')
 
 @bp.route("/login")
-def login(id):
+def login():
   if request.method == "POST":
       user_email = request.form['email']
       password = request.form['password']
@@ -62,15 +65,18 @@ def test_write(name):
 # Adding new user into database from form
 # TODO: Only allow access to this page when logged in as an Admin or Manager
 
+#Zach: Set default role to always be student at this time.
 
 @bp.route("/add-user-form/", methods=['POST', 'GET'])
 def add_user_form():
-
+    
     if request.method == "POST":
         user_id = request.form['id']
+        user_badge = request.form['access']
         user_fname = request.form['fname']
         user_lname = request.form['lname']
         user_email = request.form['email']
+     #   user_role = request.form['role']
 
         # Check for all form fields
         if not user_id or not user_fname or not user_lname or not user_email:
@@ -78,24 +84,18 @@ def add_user_form():
             return render_template("add_user_form.html",
                                    error_statement=error_statement,
                                    id=user_id,
+                                   badge = user_badge,
                                    firstname=user_fname,
                                    lastname=user_lname,
                                    email=user_email)
-
-        new_user = User(
-            id=user_id,
-            fname=user_fname,
-            lname=user_lname,
-            email=user_email
-        )
+       #                            role = user_role)
 
         try:
-            db.session.add(new_user)
-            db.session.commit()
+            add_new_user(user_id, user_badge, user_fname, user_lname, user_email, "Admin")
             return redirect('/add-user-form/')
         except:
             # TODO: Add a fail html page to handle error outputs
-            return f"(Error adding {new_user.firstname} {new_user.lastname} to the database)"
+            return f"(Error adding {user_fname} {user_lname} to the database)"
 
     else:
         return render_template("add_user_form.html")
@@ -128,3 +128,39 @@ def waiver():
 @bp.route("/permissions/student/")
 def permissionsStudent():
     return render_template("permissionsStudent.html")
+
+@bp.route("/account-creation-form/", methods=['POST', 'GET'])
+def account_creation_form():
+   #for some reason I'm not getting a post call on submit.  
+   if request.method == "POST":
+        user_id = request.form['id']
+        user_fname = request.form['fname']
+        user_lname = request.form['lname']
+        user_email = request.form['email']
+        #grab data from radio button for promote user automatically
+        
+        # Check for all form fields
+        #method from user_options.py no intial reaction, but this may
+        #be from some other error in the route. tbd...
+        add_new_user(user_id, 0, user_fname, user_lname, user_email, "Admin")            
+        return("User data: is" + user_id + user_fname)
+
+   else: 
+    return render_template("account_creation_form.html")
+
+
+@bp.route("/edit_user/")
+def edit_user():
+    return render_template('edit_user.html')
+
+@bp.route('/remove-user/', methods=['GET', 'POST'])
+def remove_user_form():
+    if request.method == "POST":
+        user_id = request.form['id']
+        try:
+            remove_user(user_id)
+            return redirect('/remove-user/')
+        except:
+            return f"(Error; not in database.)"
+    else:
+        return render_template("remove_user_form.html")

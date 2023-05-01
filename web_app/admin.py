@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, Blueprint, g, url_for, session
-from .models import User
+from database.class_models import *
 from . import db
 from . import app
 
@@ -16,7 +16,7 @@ def set_user_global():
     if user_id is None:
         g.user = None
     else:
-        g.user = user
+        g.user = user_id
 
 
 def login_required(f):
