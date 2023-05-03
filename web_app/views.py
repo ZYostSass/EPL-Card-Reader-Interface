@@ -79,7 +79,7 @@ def add_user_form():
      #   user_role = request.form['role']
 
         # Check for all form fields
-        if not user_id or not user_fname or not user_lname or not user_email:
+        if not user_id or not user_badge or not user_fname or not user_lname or not user_email:
             error_statement = "All form fields are required"
             return render_template("add_user_form.html",
                                    error_statement=error_statement,
