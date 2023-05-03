@@ -2,12 +2,10 @@ from flask import Flask, render_template, request, redirect, escape, Blueprint, 
 from database.class_models import *
 from database.user_options import add_new_user, remove_user
 from .admin import login_required
-from .models import User
 from . import db
-from . import card_reader
+#from . import card_reader
 from sqlalchemy.orm.exc import NoResultFound
 
-from . import db
 
 bp = Blueprint('views', __name__)
 
@@ -128,9 +126,9 @@ def permissions():
 def waiver():
     return render_template('waiver.html')
 
-
+"""
 # Route for the card reader test page
-@ app.route("/card_test/", methods=['GET'])
+@bp.route("/card_test/", methods=['GET'])
 def card_test():
   return render_template('card_test.html')
 # Route for checking the queue where card data gets read to
@@ -138,7 +136,8 @@ def card_test():
 # https://tedboy.github.io/flask/generated/flask.make_response.html
 # https://tedboy.github.io/flask/generated/flask.jsonify.html
 # https://api.jquery.com/ (Used in card_test.html to update page)
-@ app.route("/card_data/")
+
+@bp.route("/card_data/")
 def card_data():
     card_data = card_reader.get_data()
     if card_data is not None:
@@ -147,6 +146,7 @@ def card_data():
         card_number, facility_code = None, None
 
     return jsonify(card_number=card_number, facility_code=facility_code)
+"""
     
 @bp.route("/permissions/student/")
 def permissionsStudent():
