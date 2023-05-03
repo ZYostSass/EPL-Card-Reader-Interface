@@ -1,42 +1,27 @@
 import serial
-import threading
-import traceback
 import time
 
 class CardReader:
-    def __init__(self, port, baud_rate, callback):
+    def __init__(self, port, baud_rate):
         self.port = port
         self.baud_rate = baud_rate
-        self.ser_lock = threading.Lock()
-        self.ser = None
-        self.callback = callback
+        self.ser = serial.Serial(port=self.port, baudrate=self.baud_rate, timeout=1)
+        
 
-    def read_serial(self):
-        print("read_serial started!")
-        try:
-            self.ser = serial.Serial(port=self.port, baudrate=self.baud_rate, timeout=1)
-            # self.ser.reset_input_buffer()
-            while True:
-                try:
-                    if self.ser.in_waiting > 0:
-                        data = self.ser.readline().decode().strip()
-                        if len(data) > 0:
-                            print(f"Data sent to main thread: {data}")
-                            self.callback(data) # Return data to main thread
-                            continue
-                        else:
-                            continue
-                        # self.ser.reset_output_buffer()
-                    else:
-                        time.sleep(0.1)
-                except Exception as e:
-                    print(f"Error reading data from serial port: {str(e)}")
-                    traceback.print_exc()
-                    continue
+    def get_data(self):
+      if self.ser.in_waiting > 0:
+        data = self.ser.readline().decode().strip()
+        clean = data[4:]
+        clean_int = int(clean, 16)
+        card_number = (clean_int >> 1)  & 0x7FFFF # Bitshift to remove parity and mask to isolate 19 bits
+        facility_code = (clean_int >> 20)
+        print(f"Card: " + str(card_number))
+        print(f"Fac: " + str(facility_code))
+        self.ser.reset_input_buffer()
+        return (card_number, facility_code)
+      else:
+        return None
 
-        except Exception as e:
-            print("Error opening port: " + str(e))
-            traceback.print_exc()
-        finally:
-            if self.ser:
-                self.ser.close()
+    def close(self):
+      self.ser.close()
+

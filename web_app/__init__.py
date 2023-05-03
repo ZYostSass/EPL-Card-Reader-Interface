@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from card_reader.reader import CardReader
 from flask_seeder import FlaskSeeder
 import os
 
@@ -16,6 +17,8 @@ except OSError:
   pass
 
 db = SQLAlchemy()
+
+card_reader = CardReader(port='/dev/ttyUSB0', baud_rate=9600) # Note- add option for timeout prefs?
 migrate = Migrate()
 seeder = FlaskSeeder()
 
