@@ -1,0 +1,131 @@
+:root {
+  --bootstrapLight: #f8f9fa;
+  --dimGray: #696969;
+  --lightGray: #bebebe;
+  --lightPSUgreen: #6e7d3c;
+  --PSUgreen: #3c4c0c;
+  --white: #ffffff;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-image: linear-gradient(
+    45deg,
+    hsl(210deg 11% 15%) 0%,
+    hsl(80deg 44% 18%) 47%,
+    hsl(75deg 45% 26%) 81%,
+    hsl(74deg 35% 36%) 100%
+  );
+  background-attachment: fixed;
+  overflow: hidden;
+}
+
+.heading {
+  display: inline-block;
+  vertical-align: middle;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -225px);
+}
+
+.heading i {
+  font-size: 30px;
+  color: var(--white);
+  margin: 0 4px 0 0;
+}
+
+.heading h1 {
+  display: inline-block;
+  text-align: center;
+  color: var(--white);
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background: var(--white);
+  padding-bottom: 20px;
+  border-radius: 40px;
+}
+
+.center h2 {
+  text-align: center;
+  padding: 20px 0px;
+  border-bottom: 1px solid var(--lightGray);
+}
+
+.center form {
+  padding: 0 50px;
+  box-sizing: border-box;
+}
+
+.center form .input-field {
+  position: relative;
+  border-bottom: 2px solid var(--dimGray);
+  margin: 40px 0;
+}
+
+.center form .input-field input {
+  width: 100%;
+  height: 25px;
+  border: none;
+  font-size: 18px;
+  background: none;
+  outline: none;
+}
+
+.center form .input-field label {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  color: var(--dimGray);
+  transform: translateY(-50%);
+  font-size: 18px;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.center form .input-field span::before {
+  content: '';
+  position: absolute;
+  top: 25px;
+  left: 0px;
+  width: 0%;
+  height: 2px;
+  background: var(--PSUgreen);
+  transition: 0.5s;
+}
+
+.center form .input-field input:focus ~ label,
+.center form .input-field input:valid ~ label {
+  top: -15px;
+  color: var(--PSUgreen);
+}
+
+.center form .input-field input:focus ~ span::before,
+.center form .input-field input:valid ~ span::before {
+  width: 100%;
+}
+
+input[type='submit'] {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 20px;
+  border: 1px solid;
+  background: var(--lightPSUgreen);
+  border-radius: 50px;
+  font-size: 20px;
+  color: var(--white);
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+input[type='submit']:hover {
+  border-color: var(--lightPSUgreen);
+  transition: 0.5s;
+}

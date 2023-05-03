@@ -1,6 +1,6 @@
 {% extends "index.html" %} {% block content %}
 <div class="form-content px-3 pt-4">
-  <h2 class="fs-2 pe-2">Add New User</h2>
+  <h2 class="fs-5 pe-2">New Account</h2>
   {% if error_statement %}
   <div class="alert alert-warning alert-dismissible fade show" role="alert">
     {{ error_statement }}
@@ -11,44 +11,27 @@
       aria-label="Close"
     ></button>
   </div>
-  {% endif %} {% if success_statement %}
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ success_statement }}
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
-  </div>
   {% endif %}
-  <div class="card-prompt">
-    <h3>Scan PSU ID card</h3>
-    <h4><span>OR</span></h4>
-  </div>
-  <form action="/add-user-form/" method="POST" class="m-5">
-    <h3>Enter Manually</h3>
+  <form action="/account-creation-form/" method="POST" class="m-5">
     <div class="mb-3">
-      <label for="idnumber" class="form-label">PSU ID</label>
+      <label for="id" class="form-label">PSU ID</label>
       <input
         type="id"
         maxlength="9"
         class="form-control"
-        name="idnumber"
-        id="idnumber"
-        value="{{ idnumber }}"
+        name="id"
+        value="{{ id }}"
       />
       <div id="idHelp" class="form-text">Must be a 9 digit number</div>
     </div>
     <div class="mb-3">
-      <label for="accessnumber" class="form-label">Access badge ID</label>
+      <label for="id" class="form-label">Access badge ID</label>
       <input
         type="id"
         maxlength="6"
         class="form-control"
-        name="accessnumber"
-        id="accessnumber"
-        value="{{ accessnumber }}"
+        name="id"
+        value="{{ id }}"
       />
       <div id="idHelp" class="form-text">Must be a 6 digit number</div>
     </div>
@@ -58,8 +41,7 @@
         type="text"
         class="form-control"
         name="fname"
-        id="fname"
-        value="{{ fname }}"
+        value="{{ firstname }}"
       />
     </div>
     <div class="mb-3">
@@ -68,8 +50,7 @@
         type="text"
         class="form-control"
         name="lname"
-        id="lname"
-        value="{{ lname }}"
+        value="{{ lastname }}"
       />
     </div>
     <div class="mb-3">
@@ -79,8 +60,8 @@
         class="form-control"
         placeholder="user@pdx.edu"
         name="email"
-        id="email"
         value="{{ email }}"
+        aria-describedby="emailHelp"
       />
     </div>
     <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
@@ -88,3 +69,7 @@
 </div>
 
 {% endblock %}
+
+<!--
+  *note this form need to redirect after submission to a completed form. more than likely we can just use the same infor from user creation or we can expand this form. tbd...
+-->
