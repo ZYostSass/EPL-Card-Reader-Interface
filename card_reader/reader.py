@@ -1,13 +1,34 @@
-import serial
-import time
+import serial, serial.tools.list_ports
+
 
 class CardReader:
-    def __init__(self, port, baud_rate):
-        self.port = port
+    # Constructor takes baud_rate and optionally a port path
+    # Instead of relying on input for the port path, it now 
+    # locates the card reader by either a passed in device name
+    # or the default value.
+    def __init__(self, baud_rate, device_name=None):
+        self.port = self.set_port(device_name)
         self.baud_rate = baud_rate
         self.ser = serial.Serial(port=self.port, baudrate=self.baud_rate, timeout=1)
-        
 
+    # Uses the serial tools library to get a list of ports and 
+    # searches for the name of the reader.
+    # If found, this is passed to the constructor and set
+    # Otherwise raises an Exception - validate the port name in use
+    def set_port(self, device_name=None):
+      if not device_name:
+        device_name= 'CP2102 USB to UART'  
+      ports = serial.tools.list_ports.comports()
+      for port in ports:
+        if device_name in port.name or device_name in port.description:
+          return port.device
+        raise Exception("No port found at " + device_name) 
+      
+    # When called, checks for data in serial buffer. If present, it 
+    # formats the hexadecimal string (See card reader documentation)
+    # and returns the card number and facility code as a tuple.
+    # A None response indicates no data in buffer
+    # TODO: add proper error handling
     def get_data(self):
       if self.ser.in_waiting > 0:
         data = self.ser.readline().decode().strip()
@@ -21,7 +42,20 @@ class CardReader:
         return (card_number, facility_code)
       else:
         return None
-
+    # See documentation here: https://pyserial.readthedocs.io/en/latest/tools.html
+    # Get a list of ports 
+    # port.device contains the full pathname of the port (eg '/dev/ttyUSB0')
+    # Return a list of open port names.
+    # May be removed later
+    def get_ports(self):
+      ports = serial.tools.list_ports.comports()
+      port_list = []
+      for port in ports:
+         print(port)
+         port_list.append(port.device)
+      print(port_list)
+      return port_list
+       
     def close(self):
       self.ser.close()
 
