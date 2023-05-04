@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, redirect, escape, Blueprint, 
 from database.class_models import *
 from database.user_options import add_new_user, remove_user
 from .admin import login_required
-from . import db
-#from . import card_reader
+from . import db, card_reader
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -126,7 +125,7 @@ def permissions():
 def waiver():
     return render_template('waiver.html')
 
-"""
+
 # Route for the card reader test page
 @bp.route("/card_test/", methods=['GET'])
 def card_test():
@@ -146,7 +145,7 @@ def card_data():
         card_number, facility_code = None, None
 
     return jsonify(card_number=card_number, facility_code=facility_code)
-"""
+
     
 @bp.route("/permissions/student/")
 def permissionsStudent():
