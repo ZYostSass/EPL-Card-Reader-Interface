@@ -1,15 +1,26 @@
 import serial, serial.tools.list_ports
 
-
+# Driver for Windows installed from here: https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads
 class CardReader:
     # Constructor takes baud_rate and optionally a port path
     # Instead of relying on input for the port path, it now 
     # locates the card reader by either a passed in device name
     # or the default value.
-    def __init__(self, baud_rate, device_name=None):
-        self.port = self.set_port(device_name)
-        self.baud_rate = baud_rate
-        self.ser = serial.Serial(port=self.port, baudrate=self.baud_rate, timeout=1)
+    def __init__(self, device_name=None):
+      self.port = self.set_port(device_name)
+      self.baudrate = 9600
+      self.bytesize = serial.EIGHTBITS
+      self.parity = serial.PARITY_NONE
+      self.stopbits = serial.STOPBITS_ONE
+      self.timeout = 1
+      self.ser = serial.Serial(
+          port=self.port,
+          baudrate=self.baudrate,
+          bytesize=self.bytesize,
+          parity=self.parity,
+          stopbits=self.stopbits,
+          timeout=self.timeout
+      )
 
     # Uses the serial tools library to get a list of ports and 
     # searches for the name of the reader.
@@ -17,12 +28,13 @@ class CardReader:
     # Otherwise raises an Exception - validate the port name in use
     def set_port(self, device_name=None):
       if not device_name:
-        device_name= 'CP2102 USB to UART'  
+          device_name = 'CP2102 USB to UART'
       ports = serial.tools.list_ports.comports()
       for port in ports:
-        if device_name in port.name or device_name in port.description:
-          return port.device
-        raise Exception("No port found at " + device_name) 
+          if device_name in port.name or device_name in port.description:
+              return port.device
+      raise Exception("No port found with the device name: " + port.device)
+
       
     # When called, checks for data in serial buffer. If present, it 
     # formats the hexadecimal string (See card reader documentation)

@@ -10,7 +10,7 @@ import os
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
-app.config["EXPLAIN_TEMPLATE_LOADING"] = True
+# app.config["EXPLAIN_TEMPLATE_LOADING"] = True
 
 try:
   os.makedirs(app.instance_path)
@@ -19,7 +19,7 @@ except OSError:
 
 db = SQLAlchemy()
 
-card_reader = CardReader(baud_rate=9600) # Note- add option for timeout prefs?
+card_reader = CardReader() # Note- add option for timeout prefs?
 migrate = Migrate()
 seeder = FlaskSeeder()
 
