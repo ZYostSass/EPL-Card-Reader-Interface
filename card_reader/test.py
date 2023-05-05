@@ -1,11 +1,12 @@
 import serial, serial.tools.list_ports
 import time
-from reader import CardReader
+
 
 
 
 def main():
     # Configure the serial port
+
     ser = serial.Serial(
         port="COM3",
         baudrate=9600,
@@ -14,9 +15,8 @@ def main():
         stopbits=serial.STOPBITS_ONE,
         timeout=1
     )
-
-    # Open the serial port
-    # ser.open()
+    
+    
 
     # Check if the serial port is open
     if ser.is_open:

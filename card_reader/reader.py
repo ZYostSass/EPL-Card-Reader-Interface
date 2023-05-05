@@ -28,9 +28,10 @@ class CardReader:
     # Otherwise raises an Exception - validate the port name in use
     def set_port(self, device_name=None):
       if not device_name:
-          device_name = 'CP2102 USB to UART'
+          device_name = 'USB to UART Bridge'
       ports = serial.tools.list_ports.comports()
       for port in ports:
+          print("Name: " + port.name + "  " + "Desc: " + port.description + "Device: " + port.device)
           if device_name in port.name or device_name in port.description:
               return port.device
       raise Exception("No port found with the device name: " + port.device)
@@ -43,13 +44,17 @@ class CardReader:
     # TODO: add proper error handling
     def get_data(self):
       if self.ser.in_waiting > 0:
-        data = self.ser.readline().decode().strip()
+        data = self.ser.readline().decode()
+        print("Data: ", data)
         clean = data[4:]
+        print("Clean: ", clean)
         clean_int = int(clean, 16)
         card_number = (clean_int >> 1)  & 0x7FFFF # Bitshift to remove parity and mask to isolate 19 bits
         facility_code = (clean_int >> 20)
         print(f"Card: " + str(card_number))
         print(f"Fac: " + str(facility_code))
+        while self.ser.in_waiting:
+          self.ser.readline()
         self.ser.reset_input_buffer()
         return (card_number, facility_code)
       else:
