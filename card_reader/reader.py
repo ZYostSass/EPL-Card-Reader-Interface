@@ -43,35 +43,60 @@ class CardReader:
     # A None response indicates no data in buffer
     # TODO: add proper error handling
     def get_data(self):
-      if self.ser.in_waiting > 0:
-        data = self.ser.readline().decode()
-        print("Data: ", data)
-        clean = data[4:]
-        print("Clean: ", clean)
-        clean_int = int(clean, 16)
-        card_number = (clean_int >> 1)  & 0x7FFFF # Bitshift to remove parity and mask to isolate 19 bits
-        facility_code = (clean_int >> 20)
-        print(f"Card: " + str(card_number))
-        print(f"Fac: " + str(facility_code))
-        while self.ser.in_waiting:
-          self.ser.readline()
-        self.ser.reset_input_buffer()
-        return (card_number, facility_code)
-      else:
-        return None
+      card_number = None
+      facility_code = None
+      try:
+        if self.ser.in_waiting > 0:
+          data = self.ser.readline().decode()
+          clean = data[4:]
+          if clean:
+            clean_int = int(clean, 16)
+            card_number = (clean_int >> 1) & 0x7FFFF # Bitshift to remove parity and mask to isolate 19 bits
+            facility_code = (clean_int >> 20)
+            print(card_number)
+          while self.ser.in_waiting:
+              self.ser.readline()
+          self.ser.reset_input_buffer()
+          return (card_number, facility_code)
+        else:
+            return None
+      except Exception as e:
+         print(f"An error occurred while reading badge data: {e}")
+         return None
     # See documentation here: https://pyserial.readthedocs.io/en/latest/tools.html
     # Get a list of ports 
     # port.device contains the full pathname of the port (eg '/dev/ttyUSB0')
     # Return a list of open port names.
     # May be removed later
     def get_ports(self):
-      ports = serial.tools.list_ports.comports()
-      port_list = []
-      for port in ports:
-         print(port)
-         port_list.append(port.device)
-      print(port_list)
-      return port_list
+      try:
+        ports = serial.tools.list_ports.comports()
+        port_list = []
+        for port in ports:
+          print(port)
+          port_list.append(port.device)
+        print(port_list)
+        return port_list
+      except Exception as e:
+         print(f"An error occurred while getting available serial ports: {e}")
+         return []
+    
+    # Reads cards in loop and adds each item to list
+    # Returns list on KeyboardInterrupt
+    # Can change this to a button on the Flask app
+    
+    def read_loop(self):
+      students = []
+      try:
+        while True:
+          data = self.get_data()
+          print(f"Data: {data}")
+          if data is not None: # Not correctly filtering empty reader data
+            students.append(data)
+      except KeyboardInterrupt:
+          return students
+      except Exception as e:
+         print(f"An error occurred while getting the list of students: {e}")
        
     def close(self):
       self.ser.close()

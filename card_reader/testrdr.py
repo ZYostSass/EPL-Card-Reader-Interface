@@ -5,21 +5,18 @@ from reader import CardReader
 reader = CardReader()
 
 try:
-    while True:
-        # Read data from the card reader
-        data = reader.get_data()
-        if data is not None:
-            # Print the card number and facility code
-            print("Card number:", data[0])
-            print("Facility code:", data[1])
-
-        # Wait for a short time before checking for more data
-        sleep(0.1)
+    print("Reading cards. Press Ctrl-C to stop.")
+    students = reader.read_loop()
 
 except KeyboardInterrupt:
     # If the user presses Ctrl-C, exit cleanly
-    pass
+    print("Stopped reading cards.")
 
 finally:
+    # Print the card number and facility code for each student
+    for student in students:
+        print("Card #:", student[0])
+        print("Facility #:", student[1])
+
     # Close the serial port before exiting
     reader.close()
