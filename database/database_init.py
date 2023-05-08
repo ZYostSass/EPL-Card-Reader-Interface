@@ -28,28 +28,28 @@ if not (check_file):
 
     # Circuit Board Manufacturing
 
-    # LPFK S63 PCB Router
-    machine0 = class_models.Machine(0, "LPFK S63 PCB Router")
+    # LPKF Multipress S
+    machine0 = class_models.Machine(0, "LPKF Multipress S")
     session.add(machine0)
     session.commit()
-    # LPKF S104 PCB Router
-    machine1 = class_models.Machine(1, "LPKF S104 PCB Router")
+    # LPFK S63 PCB Router
+    machine1 = class_models.Machine(1, "LPFK S63 PCB Router")
     session.add(machine1)
     session.commit()
-    # LPKF Multipress S
-    machine2 = class_models.Machine(2, "LPKF Multipress S")
+    # LPKF S104 PCB Router
+    machine2 = class_models.Machine(2, "LPKF S104 PCB Router")
     session.add(machine2)
     session.commit()
-    # T200N Desktop Solder Oven
-    machine3 = class_models.Machine(3, "T200N Desktop Solder Oven")
+    # Pick and Place
+    machine3 = class_models.Machine(3, "Pick and Place")
     session.add(machine3)
     session.commit()
-    # Pick and Place
-    machine4 = class_models.Machine(4, "Pick and Place")
+    # Soldering Equipment
+    machine4 = class_models.Machine(4, "Soldering Equipment")
     session.add(machine4)
     session.commit()
-    # Soldering Equipment
-    machine5 = class_models.Machine(5, "Soldering Equipment")
+    # T200N Desktop Solder Oven
+    machine5 = class_models.Machine(5, "T200N Desktop Solder Oven")
     session.add(machine5)
     session.commit()
     # Test and Measurement
@@ -59,27 +59,28 @@ if not (check_file):
 
     # 3D Printers
 
-    # Ultimaker3 Extended 3D Printer
-    machine7 = class_models.Machine(7, "Ultimaker3 Extended 3D Printer")
+    # Form 3 SLA Printer
+    machine7 = class_models.Machine(7, "Form 3 SLA Printer")
     session.add(machine7)
     session.commit()
-    # Form 3 SLA Printer
-    machine8 = class_models.Machine(8, "Form 3 SLA Printer")
+    # Ultimaker3 Extended 3D Printer
+    machine8 = class_models.Machine(8, "Ultimaker3 Extended 3D Printer")
     session.add(machine8)
     session.commit()
 
+
     # Machining Equipment
 
-    # Little Machine Shop Mill
-    machine9 = class_models.Machine(9, "Little Machine Shop Mill")
+    # Drill Press
+    machine9 = class_models.Machine(9, "Drill Press")
     session.add(machine9)
     session.commit()
     # Little Machine Shop Lathe
     machine10 = class_models.Machine(10, "Little Machine Shop Lathe")
     session.add(machine10)
     session.commit()
-    # Drill Press
-    machine11 = class_models.Machine(11, "Drill Press")
+    # Little Machine Shop Mill
+    machine11 = class_models.Machine(11, "Little Machine Shop Mill")
     session.add(machine11)
     session.commit()
     # WAZER
@@ -97,18 +98,20 @@ if not (check_file):
 
     # Miscellaneous
 
-    # Thermocut 115/E
-    machine13 = class_models.Machine(13, "Thermocut 115/E")
-    session.add(machine13)
-    session.commit()
-    # Silhouette Cameo
-    machine14 = class_models.Machine(14, "Silhouette Cameo")
+    # EZFORM SV 1217
+    machine14 = class_models.Machine(14, "EZFORM SV 1217")
     session.add(machine14)
     session.commit()
-    # EZFORM SV 1217
-    machine15 = class_models.Machine(15, "EZFORM SV 1217")
+    # Silhouette Cameo
+    machine15 = class_models.Machine(15, "Silhouette Cameo")
     session.add(machine15)
     session.commit()
+    # Thermocut 115/E
+    machine16 = class_models.Machine(16, "Thermocut 115/E")
+    session.add(machine16)
+    session.commit()
+
+
     
 
     
