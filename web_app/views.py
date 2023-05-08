@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response
+from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, url_for
 from database.class_models import *
 from database.user_options import add_new_user, remove_user
 from .admin import login_required
@@ -190,3 +190,13 @@ def remove_user_form():
 @bp.route('/manage-equipment/')
 def manage_equipment():
     return render_template("manage_equipment.html")
+
+@bp.route('/insert-equipment/', methods= ['POST'])
+def insert_equipment():
+    if request.method == 'POST':
+        equipment_name = request.form['equipment_name']
+
+        #TODO: connect functionality to appropriate user_options function
+        # functionality needs to include way to assign next available number as ID
+
+        return redirect('/manage-equipment/')

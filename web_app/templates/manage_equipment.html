@@ -97,7 +97,10 @@
                 <h4 class="modal-title">Add Equipment</h4>
               </div>
               <div class="modal-body">
-                <form action="" method="POST">
+                <form
+                  action="{{url_for('views.insert_equipment')}}"
+                  method="POST"
+                >
                   <div class="form-group">
                     <label for="equipment_name" class="mb-1"
                       >Equipment name:</label
