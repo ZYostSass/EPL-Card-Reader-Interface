@@ -32,8 +32,8 @@
                   <a
                     href=""
                     class="btn edit"
-                    data-toggle="modal"
-                    data-target="#modal_edit"
+                    data-bs-toggle="modal"
+                    data-bs-target="#edit_modal"
                     ><i class="fa-solid fa-pen-to-square"></i
                   ></a>
                   <a
@@ -44,6 +44,47 @@
                   ></a>
                 </td>
               </tr>
+              <!-- Edit Equipment Modal -->
+              <div id="edit_modal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Edit Equipment</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form action="" method="POST">
+                        <div class="form-group">
+                          <label for="new_equipment_name" class="mb-1"
+                            >New equipment name:</label
+                          >
+                          <input type="hidden" name="id" value="id" />
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="new_equipment_name"
+                            value="Machine1"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <button class="btn" type="submit">
+                            Update Equipment
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Edit Equipment Modal -->
             </tbody>
           </table>
           <!-- End Equipment/Machine table -->
