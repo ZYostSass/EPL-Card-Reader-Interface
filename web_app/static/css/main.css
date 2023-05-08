@@ -403,6 +403,32 @@ hr.h-color {
   color: var(--red);
 }
 
+.manage-equipment-content .modal.fade .form-group {
+  margin: 0 0 20px 0;
+}
+
+.manage-equipment-content .modal.fade .form-group button {
+  width: 100%;
+  background: var(--lightPSUgreen);
+  border: 1px solid var(--PSUgreen);
+  color: var(--white);
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.manage-equipment-content .modal.fade .form-group button:hover {
+  background: var(--lightPSUgreen);
+  border: 1px solid var(--PSUgreen);
+  box-shadow: 0 0 4px var(--PSUgreen);
+}
+
+.manage-equipment-content .modal.fade .form-group input:focus {
+  border: 1px solid var(--lightPSUgreen);
+  box-shadow: 0 0 10px var(--lightPSUgreen);
+}
+
 /* Media Queries */
 @media (max-width: 767px) {
   /* Sidebar */
