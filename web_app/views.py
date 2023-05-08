@@ -186,3 +186,7 @@ def remove_user_form():
             return f"(Error; not in database.)"
     else:
         return render_template("remove_user_form.html")
+    
+@bp.route("/add-machine/")
+def add_machine():
+    return render_template('add_machine.html')
