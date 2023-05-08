@@ -2,6 +2,7 @@
   --black: #000000;
   --bootstrapLight: #f8f9fa;
   --dimGray: #696969;
+  --gold: #ffd700;
   --green: #228b22;
   --lightGrey: #bebebe;
   --lightPSUgreen: #6e7d3c;
@@ -383,6 +384,23 @@ hr.h-color {
 .form-content input:focus {
   border: 1px solid var(--lightPSUgreen);
   box-shadow: 0 0 10px var(--lightPSUgreen);
+}
+
+/* Manage Equipment */
+.manage-equipment-content h3 {
+  padding: 10px 0;
+}
+
+.manage-equipment-content .btn.edit {
+  padding: 0 5px 0 0;
+}
+
+.manage-equipment-content .btn.edit i {
+  color: var(--gold);
+}
+
+.manage-equipment-content .btn.delete i {
+  color: var(--red);
 }
 
 /* Media Queries */

@@ -187,3 +187,6 @@ def remove_user_form():
     else:
         return render_template("remove_user_form.html")
     
+@bp.route('/manage-equipment/')
+def manage_equipment():
+    return render_template("manage_equipment.html")
