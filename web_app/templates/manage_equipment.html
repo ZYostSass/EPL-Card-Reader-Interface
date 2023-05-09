@@ -18,16 +18,17 @@
           <!-- Flash messages -->
           {% with messages = get_flashed_messages() %} {% if messages %} {% for
           message in messages %}
-          <div class="alert alert-success alert-dismissable" role="alert">
+          <div
+            class="alert alert-success alert-dismissable fade show"
+            role="alert"
+          >
+            {{message}}
             <button
               type="button"
-              class="close"
+              class="btn-close"
               data-bs-dismiss="alert"
-              aria-label="close"
-            >
-              <span aria-hidden="true">x</span>
-            </button>
-            {{message}}
+              aria-label="Close"
+            ></button>
           </div>
           {% endfor %} {% endif %} {% endwith %}
           <!-- End Flash messages -->
