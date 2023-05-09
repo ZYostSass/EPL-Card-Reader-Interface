@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash
 from database.class_models import *
-from database.user_options import add_new_user, remove_user
+from database.user_options import add_new_user, remove_user, read_all_machines
 from .admin import login_required
 from . import db#, card_reader
 from sqlalchemy.orm.exc import NoResultFound
@@ -10,7 +10,13 @@ bp = Blueprint('views', __name__)
 
 @bp.route("/")
 def index():
+
+    #TODO: test functionality after machine db issue gets fixed,
+    #      currently showing there are no machines in Machine db
+    # all_machine_data = read_all_machines()
+
     return render_template('index.html')
+    #return render_template('index.html', machines=all_machine_data)
 
 @bp.route("/login")
 def login():
