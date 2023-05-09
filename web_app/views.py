@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, url_for
+from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash
 from database.class_models import *
 from database.user_options import add_new_user, remove_user
 from .admin import login_required
@@ -198,5 +198,8 @@ def insert_equipment():
 
         #TODO: connect functionality to appropriate user_options function
         # functionality needs to include way to assign next available number as ID
+        
+        # Message displayed upon success
+        flash("Equipment Added Successfully")
 
         return redirect('/manage-equipment/')
