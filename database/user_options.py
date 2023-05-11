@@ -21,7 +21,6 @@ def checkin_user(badge):
     if to_checkin == None:
         print("User is not in the database")
         return
-    #database_init.session.execute(select(class_models.User).filter_by(id = idnumber)).scalar_one()
     print("Welcome", to_checkin)
     
 # Manager Commands
@@ -37,7 +36,6 @@ def add_new_user(idnumber, access, firstname, lastname, email, role):
         return
     # Otherwise, add the user to the database
     user = class_models.User(idnumber, access, firstname, lastname, email, role)
-    #user_training = class_models
     database_init.session.add(user)
     database_init.session.commit()
 
@@ -53,6 +51,50 @@ def remove_user(idnumber):
     # Else, remove from the database
     database_init.session.delete(to_delete)
     database_init.session.commit()
+
+# Add trainings to a passed User
+def add_training(user_id, machine_id):
+    # Check to see if the user is in the database
+    to_train = database_init.session.execute(select(class_models.User)
+        .where(class_models.User.id == user_id)).scalar_one_or_none()
+    # If they aren't, leave
+    if to_train == None:
+        print("User is not in the database")
+        return
+    # Check to see if the machine is in the database
+    machine = database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.id == machine_id)).scalar_one_or_none()
+    # If is isn't, leave
+    if machine == None:
+        print("Machine is not in the database")
+        return
+    to_train.machines.append(machine)
+    database_init.session.commit()
+
+# Remove trainings to a passed User
+def remove_training(user_id, machine_id):
+    # Check to see if the user is in the database
+    to_train = database_init.session.execute(select(class_models.User)
+        .where(class_models.User.id == user_id)).scalar_one_or_none()
+    # If they aren't, leave
+    if to_train == None:
+        print("User is not in the database")
+        return
+    # Check to see if the machine is in the database
+    machine = database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.id == machine_id)).scalar_one_or_none()
+    # If is isn't, leave
+    if machine == None:
+        print("Machine is not in the database")
+        return
+    to_train.machines.remove(machine)
+    database_init.session.commit()
+
+# Output all Machines and user trained on them
+def read_all_machines():
+    # Current as of SQLAlchemy 2.0
+    results = database_init.session.scalars(select(class_models.Machine)).all()
+    print(results)
 
 # Currently unused
 def user_check(firstname, lastname):

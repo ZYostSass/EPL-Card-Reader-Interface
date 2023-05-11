@@ -37,60 +37,60 @@ if not (check_file):
     session.add(machine1)
     session.commit()
     #JLCPCB
-    machine2 = class_models.Machine(2, "OSH Park")
+    machine2 = class_models.Machine(2, "JLCPCB")
     session.add(machine2)
     session.commit()
     # 4PCB
-    machine3 = class_models.Machine(3, "OSH Park")
+    machine3 = class_models.Machine(3, "4PCB")
     session.add(machine3)
     session.commit()
     
     # Electronic Comnponents
 
     # Digikey
-    machine4 = class_models.Machine(4, "OSH Park")
+    machine4 = class_models.Machine(4, "Digikey")
     session.add(machine4)
     session.commit()
     # Mouser
-    machine5 = class_models.Machine(5, "OSH Park")
+    machine5 = class_models.Machine(5, "Mouser")
     session.add(machine5)
     session.commit()
 
     # 3D Parts
     
     # Rapidmade
-    machine6 = class_models.Machine(6, "OSH Park")
+    machine6 = class_models.Machine(6, "Rapidmade")
     session.add(machine6)
     session.commit()
     # Protolabs
-    machine7 = class_models.Machine(7, "OSH Park")
+    machine7 = class_models.Machine(7, "Protolabs")
     session.add(machine7)
     session.commit()
     # 3D Hubs
-    machine8 = class_models.Machine(8, "OSH Park")
+    machine8 = class_models.Machine(8, "3D Hubs")
     session.add(machine8)
     session.commit()
     # Xometry
-    machine9 = class_models.Machine(9, "OSH Park")
+    machine9 = class_models.Machine(9, "Xometry")
     session.add(machine9)
     session.commit()
 
     # Mechanical Components
     
     # McCaster-Carr
-    machine10 = class_models.Machine(10, "OSH Park")
+    machine10 = class_models.Machine(10, "McCaster-Carr")
     session.add(machine10)
     session.commit()
     # MSC Direct
-    machine11 = class_models.Machine(11, "OSH Park")
+    machine11 = class_models.Machine(11, "MSC Direct")
     session.add(machine11)
     session.commit()
     # Metal Supermarkets
-    machine12 = class_models.Machine(12, "OSH Park")
+    machine12 = class_models.Machine(12, "Metal Supermarkets")
     session.add(machine12)
     session.commit()
     # TAP Plastics
-    machine13 = class_models.Machine(13, "OSH Park")
+    machine13 = class_models.Machine(13, "TAP Plastics")
     session.add(machine13)
     session.commit()
     
