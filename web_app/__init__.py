@@ -4,13 +4,13 @@ from flask_sqlalchemy import SQLAlchemy
 from card_reader.reader import CardReader
 from flask_seeder import FlaskSeeder
 import os
-
+import serial, serial.tools.list_ports
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
-# app.config["EXPLAIN_TEMPLATE_LOADING"] = True
+
 
 try:
   os.makedirs(app.instance_path)
@@ -19,7 +19,13 @@ except OSError:
 
 db = SQLAlchemy()
 
-card_reader = CardReader() # Note- add option for timeout prefs?
+port = None
+try:
+  port = serial.Serial('COM3', 9600, timeout=1)
+except Exception as e:
+  print(f"An error occurred: {e}") # Fails here too.  Does not fail
+
+card_reader = CardReader(serial_port=port) 
 migrate = Migrate()
 seeder = FlaskSeeder()
 

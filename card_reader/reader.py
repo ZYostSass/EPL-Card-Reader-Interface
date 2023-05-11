@@ -1,4 +1,5 @@
 import serial, serial.tools.list_ports
+from threading import Lock
 
 # Driver for Windows installed from here: https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads
 class CardReader:
@@ -6,21 +7,36 @@ class CardReader:
     # Instead of relying on input for the port path, it now 
     # locates the card reader by either a passed in device name
     # or the default value.
-    def __init__(self, device_name=None):
-      self.port = self.set_port(device_name)
-      self.baudrate = 9600
-      self.bytesize = serial.EIGHTBITS
-      self.parity = serial.PARITY_NONE
-      self.stopbits = serial.STOPBITS_ONE
-      self.timeout = 1
-      self.ser = serial.Serial(
-          port=self.port,
-          baudrate=self.baudrate,
-          bytesize=self.bytesize,
-          parity=self.parity,
-          stopbits=self.stopbits,
-          timeout=self.timeout
-      )
+    _lock = Lock()
+    def __init__(self, device_name=None, port=None, serial_port=None):
+      self._lock.acquire()
+      if not self._lock.locked():
+         print("Failed to acquire lock") # This does not execute, so lock acquired?
+      try:
+        if port:
+          self.port = port
+        else:
+          self.port = self.set_port(device_name)
+        if serial_port:
+           self.ser = serial_port
+        else:
+          self.baudrate = 9600
+          self.bytesize = serial.EIGHTBITS
+          self.parity = serial.PARITY_NONE
+          self.stopbits = serial.STOPBITS_ONE
+          self.timeout = 1
+          self.ser = serial.Serial(
+              port=self.port,
+              baudrate=self.baudrate,
+              bytesize=self.bytesize,
+              parity=self.parity,
+              stopbits=self.stopbits,
+              timeout=self.timeout
+          )
+      except Exception as e:
+         print(f"An error occurred while initializing the card reader: {e}") # Fails here
+      finally:
+         self._lock.release()
 
     # Uses the serial tools library to get a list of ports and 
     # searches for the name of the reader.
