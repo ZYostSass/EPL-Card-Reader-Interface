@@ -1,29 +1,46 @@
 <div class="sidebar" id="side_nav">
   <div class="header-box px-2 pt-3 pb-4 d-flex justify-content-between">
     <h1 class="fs-4">
-      <span class="bg-white text-dark rounded shadow px-2 me-2">EPL</span><span class="text-white">Card Reader</span>
+      <span class="bg-white text-dark rounded shadow px-2 me-2">EPL</span
+      ><span class="text-white">Card Reader</span>
     </h1>
-    <button class="btn d-md-none d-block close-btn px-1 py-0 text-white" aria-expanded="false" aria-controls="side_nav">
+    <button
+      class="btn d-md-none d-block close-btn px-1 py-0 text-white"
+      aria-expanded="false"
+      aria-controls="side_nav"
+    >
       <i class="fa-solid fa-bars"></i>
       <span class="sr-only">Toggle navigation menu</span>
     </button>
   </div>
   <ul class="list-unstyled px-2">
     <li class="sidebar-item">
-      <a href="{{ url_for('views.dashboard')}}" class="sidebar-link text-decoration-none px-3 py-2 d-block"><i
-          class="fa-solid fa-house pe-2"></i>Dashboard</a>
+      <a
+        href="{{ url_for('views.dashboard')}}"
+        class="sidebar-link text-decoration-none px-3 py-2 d-block"
+        ><i class="fa-solid fa-house pe-2"></i>Dashboard</a
+      >
     </li>
     <li class="sidebar-item">
-      <a href="{{ url_for('views.equipOverview')}}" class="sidebar-link text-decoration-none px-3 py-2 d-block"><i
-          class="fa-solid fa-plug mx-1 pe-2"></i>Equipment Overview</a>
+      <a
+        href="{{ url_for('views.equipOverview')}}"
+        class="sidebar-link text-decoration-none px-3 py-2 d-block"
+        ><i class="fa-solid fa-plug mx-1 pe-2"></i>Equipment Overview</a
+      >
     </li>
     <li class="sidebar-item">
-      <a href="{{url_for('views.permissions')}}" class="sidebar-link text-decoration-none px-3 py-2 d-block"><i
-          class="fa-regular fa-square-check mx-1 pe-2"></i>Permissions</a>
+      <a
+        href="{{url_for('views.permissions')}}"
+        class="sidebar-link text-decoration-none px-3 py-2 d-block"
+        ><i class="fa-regular fa-square-check mx-1 pe-2"></i>Permissions</a
+      >
     </li>
     <li class="sidebar-item">
-      <a href="{{ url_for('views.waiver')}}" class="sidebar-link text-decoration-none px-3 py-2 d-block"><i
-          class="fa-solid fa-clipboard-check mx-1 pe-2"></i>Waiver</a>
+      <a
+        href="{{ url_for('views.waiver')}}"
+        class="sidebar-link text-decoration-none px-3 py-2 d-block"
+        ><i class="fa-solid fa-clipboard-check mx-1 pe-2"></i>Waiver</a
+      >
     </li>
     <li class="sidebar-item">
       <a
@@ -32,12 +49,21 @@
         ><i class="fa-solid fa-clipboard-check mx-1 pe-2"></i> Create Account</a
       >
     </li>
-  </ul>
+    <!-- Commented out and removed hyper link ref until carder reader inconsistencies are fixed for other OS
+    <li class="sidebar-item">
+      <a
+        href=#
+        class="sidebar-link text-decoration-none px-3 py-2 d-block"
+        ><i class="fa-solid fa-clipboard-check mx-1 pe-2"></i>Card Test</a
+      >
+    </li>
+  --></ul>
   <hr class="h-color mx-2" />
   <ul class="list-unstyled px-2">
     <li class="sidebar-item">
-      <a href="#" class="sidebar-link text-decoration-none px-3 d-block"><i
-          class="fa-solid fa-right-from-bracket mx-1 pe-2"></i>Logout</a>
+      <a href="#" class="sidebar-link text-decoration-none px-3 d-block"
+        ><i class="fa-solid fa-right-from-bracket mx-1 pe-2"></i>Logout</a
+      >
     </li>
   </ul>
 </div>
