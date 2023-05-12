@@ -10,7 +10,7 @@
 
 import database_init
 import class_models
-from sqlalchemy import select
+from sqlalchemy import select, func
 
 # Universal Commands
 
@@ -50,6 +50,44 @@ def remove_user(idnumber):
         return
     # Else, remove from the database
     database_init.session.delete(to_delete)
+    database_init.session.commit()
+
+# Add new machines to the database
+def add_machine (name):
+    # Check to see if the machine is already in the database
+    machine = database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.name == name)).scalar_one_or_none()
+    # If it is, leave
+    if machine != None:
+        print("Machine is already in the database")
+        return
+    # Otherwise, add it to the end of the database
+
+    # Prime the pump
+    # TODO - See if there is a better fix
+    i = 0
+    result = database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.id == i)).scalar_one_or_none()
+    # Cycle through the database to place the new entry at the end
+    while(result):
+        i += 1
+        result = database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.id == i)).scalar_one_or_none()
+
+    to_add = class_models.Machine(i, name)
+    database_init.session.add(to_add)
+    database_init.session.commit()
+
+# Remove a machine from the database
+def remove_machine(name):
+    # Check to see if the machine is already in the database
+    machine = database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.name == name)).scalar_one_or_none()
+    # If it is, leave
+    if machine == None:
+        print("Machine is not in the database")
+        return
+    database_init.session.delete(machine)
     database_init.session.commit()
 
 # Add trainings to a passed User
@@ -93,6 +131,7 @@ def remove_training(user_id, machine_id):
 # Output all Machines and user trained on them
 def read_all_machines():
     # Current as of SQLAlchemy 2.0
+    # TODO - Display all users trained
     results = database_init.session.scalars(select(class_models.Machine)).all()
     print(results)
 
@@ -117,6 +156,7 @@ def read_all_online():
     results = database_init.session.scalars(select(class_models.User)).all()
     print(results)
 
+# Unused and an artifact from prior development
 def change_user_training(idnumber, machine, trained_status):
     result = select(class_models.User).where(class_models.User.id == idnumber) #join(class_models.Machine).where
     user_to_change = database_init.session.scalars(result).one()

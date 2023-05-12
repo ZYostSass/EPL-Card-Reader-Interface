@@ -45,6 +45,20 @@ print("Revmoving OSH Park training to Base Admin")
 print("Outputting all machines and trained users")
 user_options.read_all_machines()
 
+# Add new machine to the database
+print("Adding new machine 'New_One' to the table")
+user_options.add_machine("New_One")
+user_options.read_all_machines()
+
+# Remove non-existant machine from the database
+print("Remove non-existant machine 'Old_One' from the table")
+user_options.remove_machine("Old_One")
+
+# Remove non-existant machine from the database
+print("Remove  machine 'New_One' from the table")
+user_options.remove_machine("New_One")
+user_options.read_all_machines()
+
 #user_options.user_check("John", "Doe")
 #user_options.change_user_training(1,1,1)
 # user_options.chance_user_access_level()
