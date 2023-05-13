@@ -4,18 +4,19 @@
   <script>
     function fetchData() {
       $.getJSON('/card_data', function(data) {
-          if (data.card_number && data.facility_code) {
-            $('#card-number').text(data.card_number);
-            $('#facility-code').text(data.facility_code);
-          } else {
-            $('#card-number').text('No data received.');
-            $('#facility-code').text('');
-          }
+          $('#facility-code').text(data.facility_code !== null ? data.facility_code : 'No data received.');
+          $('#card-number').text(data.card_number !== null ? data.card_number : 'No data received.');
+          $('#timestamp').text(data.timestamp !== null ? data.timestamp : 'No data received.');
+      }).fail(function() {
+          $('#facility-code').text('No data received.');
+          $('#card-number').text('No data received.');
+          $('#timestamp').text('No data received.');
       });
     }
     </script>
 <body>
   <h1>Card Reader Data</h1>
+  <p>Timestamp: <span id="timestamp"></span></p>
   <p>Card Number: <span id="card-number"></span></p>
   <p>Facility Code: <span id="facility-code"></span></p>
   <button onclick="fetchData()">Get Data</button>

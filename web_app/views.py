@@ -2,9 +2,10 @@ from flask import Flask, render_template, request, redirect, escape, Blueprint, 
 from database.class_models import *
 from database.user_options import add_new_user, remove_user
 from .admin import login_required
-from . import db, card_reader
+from . import db
 from sqlalchemy.orm.exc import NoResultFound
-import serial, serial.tools.list_ports
+import json
+import os
 
 
 bp = Blueprint('views', __name__)
@@ -140,15 +141,18 @@ def card_test():
 
 @bp.route("/card_data/")
 def card_data():
-    card_data = card_reader.get_data()
-    print(card_data)
-    if card_data is not None:
-        card_number, facility_code = card_data
-    else:
-        card_number, facility_code = None, None
-
-    return jsonify(card_number=card_number, facility_code=facility_code)
-
+    card_data_file = os.path.join(os.path.dirname(__file__), "..", "card_reader", "card_data.json")
+    try:
+        with open(card_data_file, 'r') as f:
+            data = json.load(f)
+            timestamp = data.get('timestamp')
+            card_number = data.get('card_number')
+            facility_code = data.get('facility_code')
+            return jsonify(timestamp=timestamp, card_number=card_number, facility_code=facility_code)
+    except (FileNotFoundError, json.JSONDecodeError):
+        pass
+    return jsonify(timestamp=None, card_number=None, facility_code=None)
+    
     
 @bp.route("/permissions/student/")
 def permissionsStudent():
