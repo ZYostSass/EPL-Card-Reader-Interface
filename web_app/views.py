@@ -140,7 +140,8 @@ def card_test():
 
 @bp.route("/card_data/")
 def card_data():
-    card_data = card_reader.get_data(port='COM3')
+    card_data = card_reader.get_data()
+    print(card_data)
     if card_data is not None:
         card_number, facility_code = card_data
     else:

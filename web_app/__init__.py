@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from card_reader.reader import CardReader
 from flask_seeder import FlaskSeeder
 import os
-import serial, serial.tools.list_ports
+
 
 
 app = Flask(__name__)
@@ -19,13 +19,8 @@ except OSError:
 
 db = SQLAlchemy()
 
-port = None
-try:
-  port = serial.Serial('COM3', 9600, timeout=1)
-except Exception as e:
-  print(f"An error occurred: {e}") # Fails here too.  Does not fail
 
-card_reader = CardReader(serial_port=port) 
+card_reader = CardReader() 
 migrate = Migrate()
 seeder = FlaskSeeder()
 

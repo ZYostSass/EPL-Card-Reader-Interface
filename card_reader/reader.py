@@ -1,5 +1,8 @@
 import serial, serial.tools.list_ports
-from threading import Lock
+import multiprocessing
+import time
+import json
+
 
 # Driver for Windows installed from here: https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads
 class CardReader:
@@ -9,9 +12,7 @@ class CardReader:
     # or the default value.
     _lock = Lock()
     def __init__(self, device_name=None, port=None, serial_port=None):
-      self._lock.acquire()
-      if not self._lock.locked():
-         print("Failed to acquire lock") # This does not execute, so lock acquired?
+     
       try:
         if port:
           self.port = port
@@ -25,18 +26,10 @@ class CardReader:
           self.parity = serial.PARITY_NONE
           self.stopbits = serial.STOPBITS_ONE
           self.timeout = 1
-          self.ser = serial.Serial(
-              port=self.port,
-              baudrate=self.baudrate,
-              bytesize=self.bytesize,
-              parity=self.parity,
-              stopbits=self.stopbits,
-              timeout=self.timeout
-          )
+          
       except Exception as e:
          print(f"An error occurred while initializing the card reader: {e}") # Fails here
-      finally:
-         self._lock.release()
+     
 
     # Uses the serial tools library to get a list of ports and 
     # searches for the name of the reader.
@@ -59,26 +52,71 @@ class CardReader:
     # A None response indicates no data in buffer
     # TODO: add proper error handling
     def get_data(self):
-      card_number = None
-      facility_code = None
+        self._lock.acquire()
+        card_number = None
+        facility_code = None
+        try:
+            with serial.Serial(
+                    port=self.port,
+                    baudrate=self.baudrate,
+                    bytesize=self.bytesize,
+                    parity=self.parity,
+                    stopbits=self.stopbits,
+                    timeout=self.timeout
+                ) as self.ser:
+                time.sleep(2)
+                if self.ser.in_waiting > 0:
+                    data = self.ser.readline().decode()
+                    clean = data[4:]
+                    if clean:
+                        clean_int = int(clean, 16)
+                        card_number = (clean_int >> 1) & 0x7FFFF 
+                        facility_code = (clean_int >> 20)
+                    while self.ser.in_waiting:
+                        self.ser.readline()
+                    self.ser.reset_input_buffer()
+
+                # Save the data to a file
+                with open('card_data.json', 'w') as f:
+                    json.dump({
+                        'card_number': card_number,
+                        'facility_code': facility_code
+                    }, f)
+                time.sleep(1)
+        except Exception as e:
+            print(f"An error occurred while reading badge data: {e}")
+        finally:
+            self.ser.close()
+            self._lock.release()
+
+        return (card_number, facility_code) if card_number and facility_code else None
+
+    def start_reading_loop(self):
+        def read_loop(card_reader):
+            while True:
+                card_reader.get_data()
+                time.sleep(1)
+
+        self.read_process = multiprocessing.Process(target=read_loop, args=(self,))
+        self.read_process.start()   
+
+    # See documentation here: https://pyserial.readthedocs.io/en/latest/tools.html
+    # Get a list of ports 
+    # port.device contains the full pathname of the port (eg '/dev/ttyUSB0')
+    # Return a list of open port names.
+    # May be removed later
+    def get_ports(self):
       try:
-        if self.ser.in_waiting > 0:
-          data = self.ser.readline().decode()
-          clean = data[4:]
-          if clean:
-            clean_int = int(clean, 16)
-            card_number = (clean_int >> 1) & 0x7FFFF # Bitshift to remove parity and mask to isolate 19 bits
-            facility_code = (clean_int >> 20)
-            print(card_number)
-          while self.ser.in_waiting:
-              self.ser.readline()
-          self.ser.reset_input_buffer()
-          return (card_number, facility_code)
-        else:
-            return None
+        ports = serial.tools.list_ports.comports()
+        port_list = []
+        for port in ports:
+          print(port)
+          port_list.append(port.device)
+        print(port_list)
+        return port_list
       except Exception as e:
-         print(f"An error occurred while reading badge data: {e}")
-         return None
+         print(f"An error occurred while getting available serial ports: {e}")
+         return []
     # See documentation here: https://pyserial.readthedocs.io/en/latest/tools.html
     # Get a list of ports 
     # port.device contains the full pathname of the port (eg '/dev/ttyUSB0')
