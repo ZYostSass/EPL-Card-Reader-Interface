@@ -1,11 +1,20 @@
 import datetime
 from typing import Optional
-from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
+from sqlalchemy import Column, Table, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
 
 # Replaced depreciated 'Base = declarative_base()'
 class Base(DeclarativeBase):
     pass
+
+# Bi-directional join table for many-to-many relationships
+# using sqlalchemy.Column construct
+user_machine_join_table = Table(
+    "user_machine_table",
+    Base.metadata,
+    Column("user_id", ForeignKey("user.id"), primary_key=True),
+    Column("machine_id", ForeignKey("machine.id"), primary_key=True),
+)
 
 # User Table:
 	# Primary Key: ID Number
@@ -24,7 +33,7 @@ class User(Base):
     email: Mapped[str]
     role: Mapped[str]
     # List of machines the user is trained on
-    #machines: Mapped[Optional[list["UserMachine"]]] = relationship(back_populates="user.id")
+    machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
     #trainings: Mapped[Optional[list["Machine"]]] = relationship(back_populates="trained_on")
 
     # Imperative Form, legacy since SQLAlchemy 1.4, may need some tweaking
@@ -52,7 +61,7 @@ class Machine(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     # List of Users that are trained on this machine
-    #trained_on: Mapped[Optional[User[list["UserMachine"]]]] = relationship(back_populates="machine.id")
+    trained_users: Mapped[Optional[list["User"]]] = relationship(secondary = user_machine_join_table, back_populates="machines")
 
     # Imperative Form, legacy since SQLAlchemy 1.4
     #id = Column(Integer, primary_key=True)
@@ -65,14 +74,15 @@ class Machine(Base):
     
     def __repr__(self):
         return self.name
-"""
-# Join table for many-to-many relationships    
+
+
+"""    
 class UserMachine(Base):
     __tablename__ = "usermachine"
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    machine_id: Mapped[int] = mapped_column(ForeignKey("machine.id"))
+    user_id: Mapped["User"] = mapped_column(ForeignKey("user.id")), relationship(back_populates="user.id")
+    #machine_id: Mapped[int] = mapped_column(ForeignKey("machine.id"))
     last_trained: Mapped[datetime.datetime]
 
     # Imperative Form, legacy since SQLAlchemy 1.4
