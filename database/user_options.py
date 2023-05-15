@@ -8,8 +8,8 @@
 	# Do everything a Manager can do
 	# Change a user's access level
 
-import database_init
-import class_models
+from . import database_init
+from . import class_models
 from sqlalchemy import select, func
 
 # Universal Commands
