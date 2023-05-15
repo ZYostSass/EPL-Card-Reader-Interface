@@ -19,6 +19,8 @@ except OSError:
 
 db = SQLAlchemy()
 
+
+# Commented out until card reader fix for other OS
 #card_reader = CardReader(baud_rate=9600) # Note- add option for timeout prefs?
 migrate = Migrate()
 seeder = FlaskSeeder()

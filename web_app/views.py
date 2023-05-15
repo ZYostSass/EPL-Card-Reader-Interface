@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response
+from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash
 from database.class_models import *
-from database.user_options import add_new_user, remove_user
+from database.user_options import add_new_user, remove_user, read_all_machines
 from .admin import login_required
-from . import db #card_reader
+from . import db#, card_reader
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -10,7 +10,13 @@ bp = Blueprint('views', __name__)
 
 @bp.route("/")
 def index():
+
+    #TODO: test functionality after machine db issue gets fixed,
+    #      currently showing there are no machines in Machine db
+    # all_machine_data = read_all_machines()
+
     return render_template('index.html')
+    #return render_template('index.html', machines=all_machine_data)
 
 @bp.route("/login")
 def login():
@@ -127,24 +133,24 @@ def waiver():
 
 
 # Route for the card reader test page
-@bp.route("/card_test/", methods=['GET'])
-def card_test():
-  return render_template('card_test.html')
+#@bp.route("/card_test/", methods=['GET'])
+#def card_test():
+#  return render_template('card_test.html')
 # Route for checking the queue where card data gets read to
 # Using flask.make_response and flask.jsonify to create an http response header.
 # https://tedboy.github.io/flask/generated/flask.make_response.html
 # https://tedboy.github.io/flask/generated/flask.jsonify.html
 # https://api.jquery.com/ (Used in card_test.html to update page)
 
-@bp.route("/card_data/")
-def card_data():
-    card_data = card_reader.get_data()
-    if card_data is not None:
-        card_number, facility_code = card_data
-    else:
-        card_number, facility_code = None, None
-
-    return jsonify(card_number=card_number, facility_code=facility_code)
+#@bp.route("/card_data/")
+#def card_data():
+#    card_data = card_reader.get_data()
+#    if card_data is not None:
+#        card_number, facility_code = card_data
+#    else:
+#        card_number, facility_code = None, None
+#
+#    return jsonify(card_number=card_number, facility_code=facility_code)
 
     
 @bp.route("/permissions/student/")
@@ -186,3 +192,20 @@ def remove_user_form():
             return f"(Error; not in database.)"
     else:
         return render_template("remove_user_form.html")
+    
+@bp.route('/manage-equipment/')
+def manage_equipment():
+    return render_template("manage_equipment.html")
+
+@bp.route('/insert-equipment/', methods= ['POST'])
+def insert_equipment():
+    if request.method == 'POST':
+        equipment_name = request.form['equipment_name']
+
+        #TODO: connect functionality to appropriate user_options function
+        # functionality needs to include way to assign next available number as ID
+        
+        # Message displayed upon success
+        flash("Equipment Added Successfully")
+
+        return redirect('/manage-equipment/')
