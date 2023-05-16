@@ -42,17 +42,16 @@
               </tr>
             </thead>
             <tbody>
-              <!-- TODO: Check for functionality once Machine db issue gets fixed -->
               {% for row in machines %}
               <tr>
                 <td>{{row.id}}</td>
                 <td>{{row.name}}</td>
                 <td>
                   <a
-                    href=""
+                    href="/update-equipment/{{row.id}}"
                     class="btn edit"
                     data-bs-toggle="modal"
-                    data-bs-target="#edit_modal"
+                    data-bs-target="#edit_modal{{row.id}}"
                     ><i class="fa-solid fa-pen-to-square"></i
                   ></a>
                   <a
@@ -64,24 +63,31 @@
                 </td>
               </tr>
               <!-- Edit Equipment Modal -->
-              <div id="edit_modal" class="modal fade" role="dialog">
+              <div id="edit_modal{{row.id}}" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h4 class="modal-title">Edit Equipment</h4>
                     </div>
                     <div class="modal-body">
-                      <form action="" method="POST">
+                      <form
+                        action="{{url_for('views.update_equipment')}}"
+                        method="POST"
+                      >
                         <div class="form-group">
                           <label for="new_equipment_name" class="mb-1"
                             >New equipment name:</label
                           >
-                          <input type="hidden" name="id" value="id" />
+                          <input
+                            type="hidden"
+                            name="equipment_name"
+                            value="{{row.name}}"
+                          />
                           <input
                             type="text"
                             class="form-control"
                             name="new_equipment_name"
-                            value="Machine 1"
+                            value="{{row.name}}"
                           />
                         </div>
                         <div class="form-group">

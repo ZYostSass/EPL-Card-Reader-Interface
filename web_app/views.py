@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash
+from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import add_new_user, remove_user, read_all_machines
+from database.user_options import add_new_user, remove_user, read_all_machines, edit_machine, add_machine
 from .admin import login_required
 from . import db#, card_reader
 from sqlalchemy.orm.exc import NoResultFound
@@ -192,15 +192,25 @@ def manage_equipment():
     all_machine_data = read_all_machines()
     return render_template("manage_equipment.html", machines=all_machine_data)
 
+@bp.route('/update-equipment/', methods = ['GET', 'POST'])
+def update_equipment():
+    if request.method == "POST":
+        equipment_name = request.form.get("equipment_name")
+        new_equipment_name = request.form.get("new_equipment_name")
+
+        edit_machine(equipment_name, new_equipment_name)
+        flash("Equipment Updated Successfully")
+
+        return redirect(url_for('views.manage_equipment'))
+
 @bp.route('/insert-equipment/', methods= ['POST'])
 def insert_equipment():
     if request.method == 'POST':
         equipment_name = request.form['equipment_name']
 
-        #TODO: connect functionality to appropriate user_options function
-        # functionality needs to include way to assign next available number as ID
+        add_machine(equipment_name)
         
         # Message displayed upon success
         flash("Equipment Added Successfully")
 
-        return redirect('/manage-equipment/')
+        return redirect(url_for('views.manage_equipment'))
