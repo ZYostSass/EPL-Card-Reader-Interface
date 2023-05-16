@@ -21,8 +21,17 @@ def checkin_user(badge):
     if to_checkin == None:
         print("User is not in the database")
         return
-    print("Welcome", to_checkin)
-    
+    #print("Welcome", to_checkin)
+    return to_checkin
+
+def get_user_data(badge):
+    to_display = database_init.session.execute(select(class_models.User)
+        .where(class_models.User.badge == badge)).scalar_one_or_none()
+    if to_display == None:
+        print("User is not in the database")
+        return
+    return [to_display.firstname, to_display.lastname, to_display.id]
+
 # Manager Commands
 
 # Addes a new user, if the ID is not currently present    
@@ -75,6 +84,19 @@ def add_machine (name):
 
     to_add = class_models.Machine(i, name)
     database_init.session.add(to_add)
+    database_init.session.commit()
+
+# Edit a given machine's name
+def edit_machine(name, new_name):
+    # Check to see if the machine is already in the database
+    machine = database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.name == name)).scalar_one_or_none()
+    # If it isn't, leave
+    if machine == None:
+        print("Machine isn't in the database")
+        return
+    # Otherwise, edit it
+    machine.name = new_name
     database_init.session.commit()
 
 # Remove a machine from the database
