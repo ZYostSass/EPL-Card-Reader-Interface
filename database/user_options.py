@@ -67,7 +67,7 @@ def add_machine (name):
         .where(class_models.Machine.name == name)).scalar_one_or_none()
     # If it is, leave
     if machine is not None:
-        raise ValueError("Machine is already in the database")
+        raise ValueError(f"Machine is already in the database")
     
     # Otherwise, add it to the end of the database
     max_id = database_init.session.query(func.max(class_models.Machine.id)).scalar()
@@ -83,9 +83,8 @@ def edit_machine(name, new_name):
     machine = database_init.session.execute(select(class_models.Machine)
         .where(class_models.Machine.name == name)).scalar_one_or_none()
     # If it isn't, leave
-    if machine == None:
-        print("Machine isn't in the database")
-        return
+    if machine is None:
+        raise ValueError(f"Machine isn't in the database")
     # Otherwise, edit it
     machine.name = new_name
     database_init.session.commit()

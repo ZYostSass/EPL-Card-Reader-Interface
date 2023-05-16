@@ -198,9 +198,11 @@ def update_equipment():
         equipment_name = request.form.get("equipment_name")
         new_equipment_name = request.form.get("new_equipment_name")
 
-        edit_machine(equipment_name, new_equipment_name)
-        #TODO: Add options for other errors (not just success statement)
-        flash("Equipment Updated Successfully")
+        try:
+            edit_machine(equipment_name, new_equipment_name)
+            flash("Equipment Updated Successfully", "success")
+        except ValueError as e:
+            flash(str(e), "error")        
 
         return redirect(url_for('views.manage_equipment'))
 
@@ -221,8 +223,8 @@ def insert_equipment():
 def remove_equipment(name):
     try:
         remove_machine(name)
-        flash("Equipment Removed Successfully")
+        flash("Equipment Removed Successfully", "success")
     except ValueError as e:
-        flash(f"{str(e)}", "error")
+        flash(str(e), "error")
 
     return redirect(url_for('views.manage_equipment'))
