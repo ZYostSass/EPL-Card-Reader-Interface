@@ -10,13 +10,7 @@ bp = Blueprint('views', __name__)
 
 @bp.route("/")
 def index():
-
-    #TODO: test functionality after machine db issue gets fixed,
-    #      currently showing there are no machines in Machine db
-    # all_machine_data = read_all_machines()
-
     return render_template('index.html')
-    #return render_template('index.html', machines=all_machine_data)
 
 @bp.route("/login")
 def login():
@@ -195,7 +189,8 @@ def remove_user_form():
     
 @bp.route('/manage-equipment/')
 def manage_equipment():
-    return render_template("manage_equipment.html")
+    all_machine_data = read_all_machines()
+    return render_template("manage_equipment.html", machines=all_machine_data)
 
 @bp.route('/insert-equipment/', methods= ['POST'])
 def insert_equipment():
