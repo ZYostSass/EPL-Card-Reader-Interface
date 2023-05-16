@@ -105,9 +105,8 @@ def remove_machine(name):
     machine = database_init.session.execute(select(class_models.Machine)
         .where(class_models.Machine.name == name)).scalar_one_or_none()
     # If it is, leave
-    if machine == None:
-        print("Machine is not in the database")
-        return
+    if machine is None:
+        raise ValueError("Machine is not in the database")
     database_init.session.delete(machine)
     database_init.session.commit()
 

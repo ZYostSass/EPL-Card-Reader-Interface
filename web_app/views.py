@@ -219,9 +219,10 @@ def insert_equipment():
     
 @bp.route('/remove-equipment/<name>', methods = ['GET', 'POST'])
 def remove_equipment(name):
-    remove_machine(name)
-
-    #TODO: error handling
-    flash("Equipment Removed Successfully")
+    try:
+        remove_machine(name)
+        flash("Equipment Removed Successfully")
+    except ValueError as e:
+        flash(f"{str(e)}", "error")
 
     return redirect(url_for('views.manage_equipment'))
