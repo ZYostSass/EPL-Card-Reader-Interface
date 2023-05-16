@@ -21,15 +21,16 @@ def checkin_user(badge):
     if to_checkin == None:
         print("User is not in the database")
         return
-    print("Welcome", to_checkin)
+    #print("Welcome", to_checkin)
+    return to_checkin
 
 def get_user_data(badge):
     to_display = database_init.session.execute(select(class_models.User)
         .where(class_models.User.badge == badge)).scalar_one_or_none()
     if to_display == None:
         print("User is not in the database")
-        return    
-    print("First Name:", to_display.firstname, "\nLast Name:", to_display.lastname, "\nID Number: ", to_display.id)
+        return
+    return [to_display.firstname, to_display.lastname, to_display.id]
 
 # Manager Commands
 

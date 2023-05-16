@@ -3,8 +3,10 @@ import user_options
 print("\n")
 # Check in base admin - sure hit
 print("Checking is user with ID: 0 (Base Admin)")
-user_options.checkin_user(0)
-user_options.get_user_data(0)
+given_user = user_options.checkin_user(0)
+print("Welcome", given_user)
+given_user = user_options.get_user_data(0)
+print("First Name:", given_user[0], "\nLast Name:", given_user[1], "\nID Number: ", given_user[2])
 print("\n")
 
 # Check in unregistered user - sure miss
