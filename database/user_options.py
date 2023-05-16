@@ -133,10 +133,10 @@ def add_training(user_id, machine_id):
 # Remove trainings to a passed User
 def remove_training(user_id, machine_id):
     # Check to see if the user is in the database
-    to_train = database_init.session.execute(select(class_models.User)
+    to_delete = database_init.session.execute(select(class_models.User)
         .where(class_models.User.id == user_id)).scalar_one_or_none()
     # If they aren't, leave
-    if to_train == None:
+    if to_delete == None:
         print("User is not in the database")
         return
     # Else, remove from the database

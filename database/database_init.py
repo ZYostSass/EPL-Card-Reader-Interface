@@ -4,7 +4,7 @@ from database import class_models
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-path = os.getcwd
+path = os.getcwd()
 # print(path)
 check_file = os.path.isfile("database.db") 
 if not (check_file):
