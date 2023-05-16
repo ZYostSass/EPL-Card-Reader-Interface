@@ -55,9 +55,9 @@
                     ><i class="fa-solid fa-pen-to-square"></i
                   ></a>
                   <a
-                    href=""
+                    href="{{ url_for('views.remove_equipment', name=row.name)}}"
                     class="btn delete"
-                    onclick="return confirm('Are you sure you want to delete this equipment?')"
+                    onclick="return confirm('Are you sure you want to remove this equipment?')"
                     ><i class="fa-solid fa-trash"></i
                   ></a>
                 </td>

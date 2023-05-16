@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import add_new_user, remove_user, read_all_machines, edit_machine, add_machine
+from database.user_options import add_new_user, remove_user, read_all_machines, edit_machine, add_machine, remove_machine
 from .admin import login_required
 from . import db#, card_reader
 from sqlalchemy.orm.exc import NoResultFound
@@ -216,3 +216,12 @@ def insert_equipment():
         flash("Equipment Added Successfully")
 
         return redirect(url_for('views.manage_equipment'))
+    
+@bp.route('/remove-equipment/<name>', methods = ['GET', 'POST'])
+def remove_equipment(name):
+    remove_machine(name)
+
+    #TODO: error handling
+    flash("Equipment Removed Successfully")
+
+    return redirect(url_for('views.manage_equipment'))
