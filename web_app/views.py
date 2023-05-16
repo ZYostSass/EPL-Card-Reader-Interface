@@ -199,6 +199,7 @@ def update_equipment():
         new_equipment_name = request.form.get("new_equipment_name")
 
         edit_machine(equipment_name, new_equipment_name)
+        #TODO: Add options for other errors (not just success statement)
         flash("Equipment Updated Successfully")
 
         return redirect(url_for('views.manage_equipment'))
@@ -210,6 +211,7 @@ def insert_equipment():
 
         add_machine(equipment_name)
         
+        #TODO: Add options for other errors
         # Message displayed upon success
         flash("Equipment Added Successfully")
 
