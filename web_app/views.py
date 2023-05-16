@@ -6,6 +6,12 @@ from . import db
 from sqlalchemy.orm.exc import NoResultFound
 import json
 import os
+from card_reader.reader_svc import CardReader
+from . import app, socketio
+from flask_socketio import emit, join_room
+
+
+
 
 
 bp = Blueprint('views', __name__)
@@ -141,18 +147,19 @@ def card_test():
 
 @bp.route("/card_data/")
 def card_data():
-    card_data_file = os.path.join(os.path.dirname(__file__), "..", "card_reader", "card_data.json")
-    try:
-        with open(card_data_file, 'r') as f:
-            data = json.load(f)
-            timestamp = data.get('timestamp')
-            card_number = data.get('card_number')
-            facility_code = data.get('facility_code')
-            return jsonify(timestamp=timestamp, card_number=card_number, facility_code=facility_code)
-    except (FileNotFoundError, json.JSONDecodeError):
-        pass
-    return jsonify(timestamp=None, card_number=None, facility_code=None)
-    
+    # Retrieve the latest card data from the CardReader instance
+    card_data = app.card_reader.get_data()
+    return jsonify(card_data)
+
+@socketio.on('card_data', namespace='/card_reader')
+def handle_card_data(data):
+    # Retrieve the card data from the emitted event
+    card_number = data.get('card_number')
+    facility_code = data.get('facility_code')
+    timestamp = data.get('timestamp')
+
+    # Return the card data as a JSON response
+    return jsonify(timestamp=timestamp, card_number=card_number, facility_code=facility_code)
     
 @bp.route("/permissions/student/")
 def permissionsStudent():

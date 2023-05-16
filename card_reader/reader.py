@@ -4,7 +4,9 @@ import time, datetime
 import json
 
 
-# This loop is supposed to execute while the Flask ap
+# This loop is supposed to execute in a sub-process while the main Flask app runs in the foreground
+# Problem currently appears to be that the start_reading_loop() method is not being called when the 
+# app is started. 
 def read_loop(port=None, baudrate=None, bytesize=None, parity=None, stopbits=None, timeout=None):
     card_reader = CardReader(port=port, baudrate=baudrate, bytesize=bytesize, parity=parity, stopbits=stopbits, timeout=timeout)
     while True:
@@ -17,9 +19,13 @@ class CardReader:
     # Constructor takes baud_rate and optionally a port path
     # Instead of relying on input for the port path, it now 
     # locates the card reader by either a passed in device name
-    # or the default value.
+    # or the default value. 
+    # The serial object is no longer called here - this was the issue with the 'Access Denied' error
+    # Instead, the serial object is created in the get_data() method and closed after each read
+    # This avoids the issue of the serial port being tied up by a different process
+    # Stupid Windows grumble grumble
     
-    _lock = multiprocessing.Lock()
+    _lock = multiprocessing.Lock() # Lock to prevent multiple processes from accessing the serial port at the same time
     def __init__(self, device_name=None, port=None, baudrate=9600, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=1):
       try:
         if port:
@@ -67,11 +73,11 @@ class CardReader:
       except Exception as e:
           print(f"An error occurred while writing to file: {e}")
   
-    # When called, checks for data in serial buffer. If present, it 
-    # formats the hexadecimal string (See card reader documentation)
-    # and returns the card number and facility code as a tuple.
-    # A None response indicates no data in buffer
-    # 
+    # This method is called by the read_loop() method
+    # When called it attempts to acquire a lock, open the serial port, read the data, and write it to a file.
+    # This avoids the issue of the serial port being tied up by a different process
+    # but there are some timing issues with the cardreader and physically swiping the badge.
+
     def get_data(self):
       print("get_data called")
       self._lock.acquire()
@@ -108,7 +114,9 @@ class CardReader:
           print(f"An error occurred while reading badge data: {e}")
       finally:
           self._lock.release()
-
+    # Theoretically, this method launches a subprocess that executes the read_loop() method.
+    # Works in the test script, but not in the FLask app.  Appears to be that the function call
+    # is never executed.  Blocking?
     def start_reading_loop(self):
       print("Starting reading loop")
       try:

@@ -2,20 +2,31 @@
 <h1>Card Reader Test</h1>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    function fetchData() {
-      $.getJSON('/card_data', function(data) {
-          $('#facility-code').text(data.facility_code !== null ? data.facility_code : 'No data received.');
-          $('#card-number').text(data.card_number !== null ? data.card_number : 'No data received.');
-          $('#timestamp').text(data.timestamp !== null ? data.timestamp : 'No data received.');
-      }).fail(function() {
-          $('#facility-code').text('No data received.');
-          $('#card-number').text('No data received.');
-          $('#timestamp').text('No data received.');
-      });
-    }
+   $(document).ready(function() {
+        // Define a function to update the data elements
+        function updateData(timestamp, cardNumber, facilityCode) {
+            $('#timestamp').text(timestamp !== null ? timestamp : 'No data received.');
+            $('#card-number').text(cardNumber !== null ? cardNumber : 'No data received.');
+            $('#facility-code').text(facilityCode !== null ? facilityCode : 'No data received.');
+        }
+
+        // Define a function to fetch the data using AJAX
+        function fetchData() {
+            $.getJSON('/card_data', function(data) {
+                updateData(data.timestamp, data.card_number, data.facility_code);
+            }).fail(function() {
+                updateData(null, null, null);
+            });
+        }
+
+        // Call fetchData function when the page loads
+        fetchData();
+        
+        // Refresh the data every 2 seconds
+        setInterval(fetchData, 2000);
+    });
     </script>
 <body>
-  <h1>Card Reader Data</h1>
   <p>Timestamp: <span id="timestamp"></span></p>
   <p>Card Number: <span id="card-number"></span></p>
   <p>Facility Code: <span id="facility-code"></span></p>
