@@ -66,23 +66,14 @@ def add_machine (name):
     machine = database_init.session.execute(select(class_models.Machine)
         .where(class_models.Machine.name == name)).scalar_one_or_none()
     # If it is, leave
-    if machine != None:
-        print("Machine is already in the database")
-        return
+    if machine is not None:
+        raise ValueError("Machine is already in the database")
+    
     # Otherwise, add it to the end of the database
+    max_id = database_init.session.query(func.max(class_models.Machine.id)).scalar()
+    next_id = (max_id or 0) + 1
 
-    # Prime the pump
-    # TODO - See if there is a better fix
-    i = 0
-    result = database_init.session.execute(select(class_models.Machine)
-        .where(class_models.Machine.id == i)).scalar_one_or_none()
-    # Cycle through the database to place the new entry at the end
-    while(result):
-        i += 1
-        result = database_init.session.execute(select(class_models.Machine)
-        .where(class_models.Machine.id == i)).scalar_one_or_none()
-
-    to_add = class_models.Machine(i, name)
+    to_add = class_models.Machine(next_id, name)
     database_init.session.add(to_add)
     database_init.session.commit()
 
@@ -106,7 +97,7 @@ def remove_machine(name):
         .where(class_models.Machine.name == name)).scalar_one_or_none()
     # If it is, leave
     if machine is None:
-        raise ValueError("Machine is not in the database")
+        raise ValueError(f"Machine is not in the database")
     database_init.session.delete(machine)
     database_init.session.commit()
 

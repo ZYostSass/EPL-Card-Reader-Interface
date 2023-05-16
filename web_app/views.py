@@ -209,11 +209,11 @@ def insert_equipment():
     if request.method == 'POST':
         equipment_name = request.form['equipment_name']
 
-        add_machine(equipment_name)
-        
-        #TODO: Add options for other errors
-        # Message displayed upon success
-        flash("Equipment Added Successfully")
+        try:
+            add_machine(equipment_name)
+            flash("Equipment Added Successfully", "success")
+        except ValueError as e:
+            flash(str(e), "error")
 
         return redirect(url_for('views.manage_equipment'))
     
