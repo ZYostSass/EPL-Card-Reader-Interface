@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash
+from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import add_new_user, remove_user, read_all_machines, change_user_access_level
+from database.user_options import add_new_user, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level
 from .admin import login_required
 from . import db#, card_reader
 from sqlalchemy.orm.exc import NoResultFound
@@ -13,13 +13,7 @@ bp = Blueprint('views', __name__)
 
 @bp.route("/")
 def index():
-
-    #TODO: test functionality after machine db issue gets fixed,
-    #      currently showing there are no machines in Machine db
-    # all_machine_data = read_all_machines()
-
     return render_template('index.html')
-    #return render_template('index.html', machines=all_machine_data)
 
 @bp.route("/login")
 def login():
@@ -239,17 +233,42 @@ def add_promote_dummy_data():
     
 @bp.route('/manage-equipment/')
 def manage_equipment():
-    return render_template("manage_equipment.html")
+    all_machine_data = read_all_machines()
+    return render_template("manage_equipment.html", machines=all_machine_data)
+
+@bp.route('/update-equipment/', methods = ['GET', 'POST'])
+def update_equipment():
+    if request.method == "POST":
+        equipment_name = request.form.get("equipment_name")
+        new_equipment_name = request.form.get("new_equipment_name")
+
+        try:
+            edit_machine(equipment_name, new_equipment_name)
+            flash("Equipment Updated Successfully", "success")
+        except ValueError as e:
+            flash(str(e), "error")        
+
+        return redirect(url_for('views.manage_equipment'))
 
 @bp.route('/insert-equipment/', methods= ['POST'])
 def insert_equipment():
     if request.method == 'POST':
         equipment_name = request.form['equipment_name']
 
-        #TODO: connect functionality to appropriate user_options function
-        # functionality needs to include way to assign next available number as ID
-        
-        # Message displayed upon success
-        flash("Equipment Added Successfully")
+        try:
+            add_machine(equipment_name)
+            flash("Equipment Added Successfully", "success")
+        except ValueError as e:
+            flash(str(e), "error")
 
-        return redirect('/manage-equipment/')
+        return redirect(url_for('views.manage_equipment'))
+    
+@bp.route('/remove-equipment/<name>', methods = ['GET', 'POST'])
+def remove_equipment(name):
+    try:
+        remove_machine(name)
+        flash("Equipment Removed Successfully", "success")
+    except ValueError as e:
+        flash(str(e), "error")
+
+    return redirect(url_for('views.manage_equipment'))
