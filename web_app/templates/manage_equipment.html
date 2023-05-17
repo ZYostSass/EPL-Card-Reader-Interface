@@ -16,10 +16,24 @@
             </button>
           </h3>
           <!-- Flash messages -->
-          {% with messages = get_flashed_messages() %} {% if messages %} {% for
-          message in messages %}
+          {% with messages = get_flashed_messages(with_categories=True) %} {% if
+          messages %} {% for category, message in messages %} {% if category ==
+          'error' %}
           <div
-            class="alert alert-success alert-dismissable fade show"
+            class="alert alert-danger alert-dismissable fade show d-flex justify-content-between"
+            role="alert"
+          >
+            {{ message }}
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+          {% else %}
+          <div
+            class="alert alert-success alert-dismissable fade show d-flex justify-content-between"
             role="alert"
           >
             {{message}}
@@ -30,7 +44,7 @@
               aria-label="Close"
             ></button>
           </div>
-          {% endfor %} {% endif %} {% endwith %}
+          {% endif %} {% endfor %} {% endif %} {% endwith %}
           <!-- End Flash messages -->
           <!-- Equipment/Machine table -->
           <table class="table table-hover">
@@ -42,106 +56,52 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Static test data for weekly meeting demo -->
-              <tr>
-                <td>1</td>
-                <td>Machine 1</td>
-                <td>
-                  <a
-                    href=""
-                    class="btn edit"
-                    data-bs-toggle="modal"
-                    data-bs-target="#edit_modal"
-                    ><i class="fa-solid fa-pen-to-square"></i
-                  ></a>
-                  <a
-                    href=""
-                    class="btn delete"
-                    onclick="return confirm('Are you sure you want to delete this equipment?')"
-                    ><i class="fa-solid fa-trash"></i
-                  ></a>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Machine 2</td>
-                <td>
-                  <a
-                    href=""
-                    class="btn edit"
-                    data-bs-toggle="modal"
-                    data-bs-target="#edit_modal"
-                    ><i class="fa-solid fa-pen-to-square"></i
-                  ></a>
-                  <a
-                    href=""
-                    class="btn delete"
-                    onclick="return confirm('Are you sure you want to delete this equipment?')"
-                    ><i class="fa-solid fa-trash"></i
-                  ></a>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Machine 3</td>
-                <td>
-                  <a
-                    href=""
-                    class="btn edit"
-                    data-bs-toggle="modal"
-                    data-bs-target="#edit_modal"
-                    ><i class="fa-solid fa-pen-to-square"></i
-                  ></a>
-                  <a
-                    href=""
-                    class="btn delete"
-                    onclick="return confirm('Are you sure you want to delete this equipment?')"
-                    ><i class="fa-solid fa-trash"></i
-                  ></a>
-                </td>
-              </tr>
-              <!-- End test data -->
-              <!-- TODO: Check for functionality once Machine db issue gets fixed -->
               {% for row in machines %}
               <tr>
                 <td>{{row.id}}</td>
                 <td>{{row.name}}</td>
                 <td>
                   <a
-                    href=""
+                    href="/update-equipment/{{row.id}}"
                     class="btn edit"
                     data-bs-toggle="modal"
-                    data-bs-target="#edit_modal"
+                    data-bs-target="#edit_modal{{row.id}}"
                     ><i class="fa-solid fa-pen-to-square"></i
                   ></a>
                   <a
-                    href=""
+                    href="{{ url_for('views.remove_equipment', name=row.name)}}"
                     class="btn delete"
-                    onclick="return confirm('Are you sure you want to delete this equipment?')"
+                    onclick="return confirm('Are you sure you want to remove this equipment?')"
                     ><i class="fa-solid fa-trash"></i
                   ></a>
                 </td>
               </tr>
-              {% endfor %}
               <!-- Edit Equipment Modal -->
-              <div id="edit_modal" class="modal fade" role="dialog">
+              <div id="edit_modal{{row.id}}" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h4 class="modal-title">Edit Equipment</h4>
                     </div>
                     <div class="modal-body">
-                      <form action="" method="POST">
+                      <form
+                        action="{{url_for('views.update_equipment')}}"
+                        method="POST"
+                      >
                         <div class="form-group">
                           <label for="new_equipment_name" class="mb-1"
                             >New equipment name:</label
                           >
-                          <input type="hidden" name="id" value="id" />
+                          <input
+                            type="hidden"
+                            name="equipment_name"
+                            value="{{row.name}}"
+                          />
                           <input
                             type="text"
                             class="form-control"
                             name="new_equipment_name"
-                            value="Machine 1"
+                            value="{{row.name}}"
                           />
                         </div>
                         <div class="form-group">
@@ -165,6 +125,7 @@
               </div>
               <!-- End Edit Equipment Modal -->
             </tbody>
+            {% endfor %}
           </table>
           <!-- End Equipment/Machine table -->
         </div>
