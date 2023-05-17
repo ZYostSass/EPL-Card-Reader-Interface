@@ -53,8 +53,8 @@ def remove_user(idnumber):
     to_delete = database_init.session.execute(select(class_models.User)
         .where(class_models.User.id == idnumber)).scalar_one_or_none()
     # If not found, return
-    if to_delete == None:
-        raise LookupError(f"User with ID {idnumber} does not exist")
+    if to_delete is None:
+        raise ValueError(f"User with PSU ID {idnumber} does not exist")
     # Else, remove from the database
     else:
         database_init.session.delete(to_delete)
