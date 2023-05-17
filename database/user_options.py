@@ -8,8 +8,8 @@
 	# Do everything a Manager can do
 	# Change a user's access level
 
-import database_init
-import class_models
+from . import database_init
+from . import class_models
 from sqlalchemy import select, func
 
 # Helper Methods
@@ -64,8 +64,7 @@ def add_new_user(idnumber, access, firstname, lastname, email, role, login):
     to_check = is_user_id_present(idnumber)
     # Return if they do
     if to_check != None:
-        print("User", to_check, "- ID (", to_check.id, ") is already in the database")
-        return
+        raise ValueError(f"User with ID {idnumber} is already in the database")
     # Otherwise, add the user to the database
     user = class_models.User(idnumber, access, firstname, lastname, email, role, login)
     database_init.session.add(user)
@@ -77,11 +76,11 @@ def remove_user(idnumber):
     to_delete = is_user_id_present(idnumber)
     # If not found, return
     if to_delete == None:
-        print("User is not in the database")
-        return
+        raise LookupError(f"User with ID {idnumber} does not exist")
     # Else, remove from the database
-    database_init.session.delete(to_delete)
-    database_init.session.commit()
+    else:
+        database_init.session.delete(to_delete)
+        database_init.session.commit()
 
 # Add new machines to the database
 def add_machine (name):
@@ -157,14 +156,8 @@ def remove_training(user_id, machine_id):
     if to_train == None:
         print("User is not in the database")
         return
-    # Check to see if the machine is in the database
-    machine = database_init.session.execute(select(class_models.Machine)
-        .where(class_models.Machine.id == machine_id)).scalar_one_or_none()
-    # If is isn't, leave
-    if machine == None:
-        print("Machine is not in the database")
-        return
-    to_train.machines.remove(machine)
+    # Else, remove from the database
+    database_init.session.delete(to_delete)
     database_init.session.commit()
 
 # Output all Machines and user trained on them
@@ -194,3 +187,8 @@ def change_user_access_level(idnumber, new_access_level):
         return None
     result.role = new_access_level
     database_init.session.commit()
+
+# Test: Returning all equipment data
+def read_all_machines():
+    results = database_init.session.scalars(select(class_models.Machine)).all()
+    return results

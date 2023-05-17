@@ -13,7 +13,7 @@ try:
     ser = serial.Serial(port=PORT, baudrate=BAUD, bytesize=BYTESIZE, timeout=TIMEOUT)
 except Exception as e:
     print("Error opening port: " + str(e))
-print(26)  
+print(26)
 # Send output to serial port
 ser.write(hex_value)
 print(29)

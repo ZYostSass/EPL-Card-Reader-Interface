@@ -1,3 +1,5 @@
 Flask
 Flask-SQLAlchemy
 Flask-Migrate
+flask_seeder
+pyserial
