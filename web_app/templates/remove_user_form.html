@@ -1,11 +1,16 @@
-{% extends "index.html" %}
-{% block content %}
+{% extends "index.html" %} {% block content %}
 
 <div class="form-content px-3 pt-4">
   <h2 class="fs-5 pe-2">Remove User</h2>
-  {% if error_statement %}
-  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    {{ error_statement }}
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=True) %} {% if
+  messages %} {% for category, message in messages %} {% if category == 'error'
+  %}
+  <div
+    class="alert alert-danger alert-dismissable fade show d-flex justify-content-between"
+    role="alert"
+  >
+    {{ message }}
     <button
       type="button"
       class="btn-close"
@@ -13,20 +18,40 @@
       aria-label="Close"
     ></button>
   </div>
-  {% endif %}
+  {% else %}
+  <div
+    class="alert alert-success alert-dismissable fade show d-flex justify-content-between"
+    role="alert"
+  >
+    {{message}}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  {% endif %} {% endfor %} {% endif %} {% endwith %}
+  <!-- End Flash messages -->
   <form action="/remove-user/" method="POST" class="m-5">
     <div class="mb-3">
-      <label for="idnumber" class="form-label">PSU ID</label>
+      <label for="id" class="form-label">PSU ID</label>
       <input
-        type="id"
-        maxlength="9"
+        type="text"
         class="form-control"
         name="id"
+        id="id"
+        value="{{ id }}"
+        maxlength="9"
+        inputmode="numeric"
+        pattern="[0-9]{9}"
         required
       />
-      <div id="idHelp" class="form-text">Enter the ID number of the user to remove</div>
+      <div id="idHelp" class="form-text">Must be a 9 digit number</div>
     </div>
-    <button type="submit" class="btn-primary" id="submit-btn">Remove User</button>
+    <button type="submit" class="btn-primary" id="submit-btn">
+      Remove User
+    </button>
   </form>
 </div>
 {% endblock %}

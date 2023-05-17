@@ -1,9 +1,15 @@
 {% extends "index.html" %} {% block content %}
 <div class="form-content px-3 pt-4">
   <h2 class="fs-2 pe-2">Add New User</h2>
-  {% if error_statement %}
-  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    {{ error_statement }}
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=True) %} {% if
+  messages %} {% for category, message in messages %} {% if category == 'error'
+  %}
+  <div
+    class="alert alert-danger alert-dismissable fade show d-flex justify-content-between"
+    role="alert"
+  >
+    {{ message }}
     <button
       type="button"
       class="btn-close"
@@ -11,9 +17,12 @@
       aria-label="Close"
     ></button>
   </div>
-  {% endif %} {% if success_statement %}
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ success_statement }}
+  {% else %}
+  <div
+    class="alert alert-success alert-dismissable fade show d-flex justify-content-between"
+    role="alert"
+  >
+    {{message}}
     <button
       type="button"
       class="btn-close"
@@ -21,7 +30,8 @@
       aria-label="Close"
     ></button>
   </div>
-  {% endif %}
+  {% endif %} {% endfor %} {% endif %} {% endwith %}
+  <!-- End Flash messages -->
   <div class="card-prompt">
     <h3>Scan PSU ID card</h3>
     <h4><span>OR</span></h4>
@@ -29,26 +39,32 @@
   <form action="/add-user-form/" method="POST" class="m-5">
     <h3>Enter Manually</h3>
     <div class="mb-3">
-      <label for="idnumber" class="form-label">PSU ID</label>
+      <label for="id" class="form-label">PSU ID</label>
       <input
-        type="id"
-        maxlength="9"
+        type="text"
         class="form-control"
-        name="idnumber"
-        id="idnumber"
-        value="{{ idnumber }}"
+        name="id"
+        id="id"
+        value="{{ id }}"
+        maxlength="9"
+        inputmode="numeric"
+        pattern="[0-9]{9}"
+        required
       />
       <div id="idHelp" class="form-text">Must be a 9 digit number</div>
     </div>
     <div class="mb-3">
-      <label for="accessnumber" class="form-label">Access badge ID</label>
+      <label for="badge" class="form-label">Access badge ID</label>
       <input
-        type="id"
-        maxlength="6"
+        type="text"
         class="form-control"
-        name="accessnumber"
-        id="accessnumber"
-        value="{{ accessnumber }}"
+        name="badge"
+        id="badge"
+        value="{{ badge }}"
+        maxlength="6"
+        inputmode="numeric"
+        pattern="[0-6]{6}"
+        required
       />
       <div id="idHelp" class="form-text">Must be a 6 digit number</div>
     </div>
@@ -60,6 +76,8 @@
         name="fname"
         id="fname"
         value="{{ fname }}"
+        pattern="[A-Za-z]+"
+        required
       />
     </div>
     <div class="mb-3">
@@ -70,6 +88,8 @@
         name="lname"
         id="lname"
         value="{{ lname }}"
+        pattern="[A-Za-z]+"
+        required
       />
     </div>
     <div class="mb-3">
@@ -81,6 +101,8 @@
         name="email"
         id="email"
         value="{{ email }}"
+        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}"
+        required
       />
     </div>
     <button type="submit" class="btn-primary" id="submit-btn">Submit</button>

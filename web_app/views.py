@@ -74,31 +74,21 @@ def test_write(name):
 def add_user_form():
     
     if request.method == "POST":
+        # TODO (if time): Function call to get badge number by scanning in
+        # Otherwise, proceed with getting inputs via manual entry
         user_id = request.form['id']
-        user_badge = request.form['access']
+        user_badge = request.form['badge']
         user_fname = request.form['fname']
         user_lname = request.form['lname']
         user_email = request.form['email']
-     #   user_role = request.form['role']
-
-        # Check for all form fields
-        if not user_id or not user_badge or not user_fname or not user_lname or not user_email:
-            error_statement = "All form fields are required"
-            return render_template("add_user_form.html",
-                                   error_statement=error_statement,
-                                   id=user_id,
-                                   badge = user_badge,
-                                   firstname=user_fname,
-                                   lastname=user_lname,
-                                   email=user_email)
-       #                           role = user_role)
-
         try:
+            #Potential TODO: Change role from Admin to Student for this form (not sure why it's Admin currently)
             add_new_user(user_id, user_badge, user_fname, user_lname, user_email, "Admin")
-            return redirect('/add-user-form/')
-        except:
-            # TODO: Add a fail html page to handle error outputs
-            return f"(Error adding {user_fname} {user_lname} to the database)"
+            flash("User Added Successfully", "success")
+            return redirect(url_for('views.add_user_form'))
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.add_user_form'))
 
     else:
         return render_template("add_user_form.html")
@@ -184,9 +174,11 @@ def remove_user_form():
         user_id = request.form['id']
         try:
             remove_user(user_id)
-            return redirect('/remove-user/')
-        except:
-            return f"(Error; not in database.)"
+            flash("User Removed Successfully", "success")
+            return redirect(url_for('views.remove_user_form'))
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.remove_user_form'))
     else:
         return render_template("remove_user_form.html")
 
