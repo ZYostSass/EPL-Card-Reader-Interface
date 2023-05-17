@@ -39,27 +39,31 @@
   <form action="/add-user-form/" method="POST" class="m-5">
     <h3>Enter Manually</h3>
     <div class="mb-3">
-      <label for="idnumber" class="form-label">PSU ID</label>
+      <label for="id" class="form-label">PSU ID</label>
       <input
-        type="id"
-        maxlength="9"
+        type="text"
         class="form-control"
-        name="idnumber"
-        id="idnumber"
-        value="{{ idnumber }}"
+        name="id"
+        id="id"
+        value="{{ id }}"
+        maxlength="9"
+        inputmode="numeric"
+        pattern="[0-9]{9}"
         required
       />
       <div id="idHelp" class="form-text">Must be a 9 digit number</div>
     </div>
     <div class="mb-3">
-      <label for="accessnumber" class="form-label">Access badge ID</label>
+      <label for="badge" class="form-label">Access badge ID</label>
       <input
-        type="id"
-        maxlength="6"
+        type="text"
         class="form-control"
-        name="accessnumber"
-        id="accessnumber"
-        value="{{ accessnumber }}"
+        name="badge"
+        id="badge"
+        value="{{ badge }}"
+        maxlength="6"
+        inputmode="numeric"
+        pattern="[0-6]{6}"
         required
       />
       <div id="idHelp" class="form-text">Must be a 6 digit number</div>
@@ -72,6 +76,7 @@
         name="fname"
         id="fname"
         value="{{ fname }}"
+        pattern="[A-Za-z]+"
         required
       />
     </div>
@@ -83,6 +88,7 @@
         name="lname"
         id="lname"
         value="{{ lname }}"
+        pattern="[A-Za-z]+"
         required
       />
     </div>
@@ -95,6 +101,7 @@
         name="email"
         id="email"
         value="{{ email }}"
+        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}"
         required
       />
     </div>
