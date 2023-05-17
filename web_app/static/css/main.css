@@ -446,6 +446,66 @@ hr.h-color {
   cursor: pointer;
 }
 
+/* Training Session Details */
+.training-session-details-content .card-prompt {
+  margin: 40px 0 0 48px;
+}
+
+.training-session-details-content .card-prompt h3 {
+  width: 50%;
+  background: var(--white);
+  padding: 1em;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  font-size: 20px;
+  text-align: center;
+}
+
+.training-session-details-content .card-prompt h4 {
+  width: 50%;
+  text-align: center;
+  border-bottom: 1px solid var(--dimGray);
+  margin: 60px 0 60px;
+  line-height: 0.1em;
+}
+
+.training-session-details-content .card-prompt h4 span {
+  background-color: var(--bootstrapLight);
+  padding: 0 10px;
+}
+
+.training-session-details-content form {
+  width: 50%;
+  background: var(--white);
+  padding: 1em;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.training-session-details-content form h3 {
+  text-align: center;
+  font-size: 20px;
+  margin: 0 0 20px 0;
+}
+
+.training-session-details-content #idHelp {
+  color: var(--dimGray);
+}
+
+.training-session-details-content form button {
+  width: 100%;
+  background: var(--lightPSUgreen);
+  border: 1px solid var(--PSUgreen);
+  color: var(--white);
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.training-session-details-content form button:hover {
+  background: var(--lightPSUgreen);
+  border-color: var(--lightPSUgreen);
+}
+
 /* Media Queries */
 @media (max-width: 767px) {
   /* Sidebar */
