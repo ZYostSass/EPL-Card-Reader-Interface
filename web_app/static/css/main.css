@@ -429,6 +429,23 @@ hr.h-color {
   box-shadow: 0 0 10px var(--lightPSUgreen);
 }
 
+/* Training Session */
+.training-session-content h3 {
+  padding: 10px 0;
+}
+
+.training-session-content table {
+  width: 50%;
+}
+
+.training-session-content .equipment-name {
+  padding-left: 125px;
+}
+
+.training-session-content .clickable-row:hover {
+  cursor: pointer;
+}
+
 /* Media Queries */
 @media (max-width: 767px) {
   /* Sidebar */

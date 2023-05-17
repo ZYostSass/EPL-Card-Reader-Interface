@@ -1,0 +1,34 @@
+{% extends "index.html" %} {% block content %}
+<div class="training-session-content">
+  <div class="container">
+    <div class="row">
+      <div class="col md-12">
+        <div class="jumbotron p-3">
+          <h3>Select <b>Equipment</b> For Training</h3>
+          <!-- Equipment/Machine table -->
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>ID</th>
+                <th class="equipment-name">Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in machines %}
+              <tr
+                class="clickable-row"
+                onclick="location.href = `{{ url_for('views.dashboard') }}`;"
+              >
+                <td>{{row.id}}</td>
+                <td class="equipment-name">{{row.name}}</td>
+              </tr>
+            </tbody>
+            {% endfor %}
+          </table>
+          <!-- End Equipment/Machine table -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

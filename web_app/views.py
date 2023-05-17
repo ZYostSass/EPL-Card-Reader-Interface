@@ -264,3 +264,8 @@ def remove_equipment(name):
         flash(str(e), "error")
 
     return redirect(url_for('views.manage_equipment'))
+
+@bp.route('/training-session/')
+def training_session():
+    all_machine_data = read_all_machines()
+    return render_template('training_session.html', machines=all_machine_data)
