@@ -1,6 +1,6 @@
 import serial, serial.tools.list_ports
 
-
+"""
 class CardReader:
     # Constructor takes baud_rate and optionally a port path
     # Instead of relying on input for the port path, it now 
@@ -17,7 +17,7 @@ class CardReader:
     # Otherwise raises an Exception - validate the port name in use
     def set_port(self, device_name=None):
       if not device_name:
-        device_name= 'CP2102 USB to UART'  
+        device_name= 'Silicon Labs CP210x USB to UART Bridge'
       ports = serial.tools.list_ports.comports()
       for port in ports:
         if device_name in port.name or device_name in port.description:
@@ -58,4 +58,4 @@ class CardReader:
        
     def close(self):
       self.ser.close()
-
+"""

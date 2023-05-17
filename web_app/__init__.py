@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from card_reader.reader import CardReader
+#from card_reader.reader import CardReader
 from flask_seeder import FlaskSeeder
 import os
 
@@ -19,7 +19,9 @@ except OSError:
 
 db = SQLAlchemy()
 
-card_reader = CardReader(baud_rate=9600) # Note- add option for timeout prefs?
+
+# Commented out until card reader fix for other OS
+#card_reader = CardReader(baud_rate=9600) # Note- add option for timeout prefs?
 migrate = Migrate()
 seeder = FlaskSeeder()
 
