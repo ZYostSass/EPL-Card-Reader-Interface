@@ -40,8 +40,8 @@ def add_new_user(idnumber, access, firstname, lastname, email, role):
     to_check = database_init.session.execute(select(class_models.User)
         .where(class_models.User.id == idnumber)).scalar_one_or_none()
     # Raise an exception if they do
-    if to_check != None:
-        raise ValueError(f"User with ID {idnumber} is already in the database")
+    if to_check is not None:
+        raise ValueError(f"User with PSU ID {idnumber} is already in the database")
     # Otherwise, add the user to the database
     user = class_models.User(idnumber, access, firstname, lastname, email, role)
     database_init.session.add(user)
