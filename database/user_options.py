@@ -12,47 +12,69 @@ import database_init
 import class_models
 from sqlalchemy import select, func
 
+# Helper Methods
+
+# Checks to see if a given user is in the database, via badge number
+# Returns result (either the user or None)
+def is_user_badge_present(badge):
+    return database_init.session.execute(select(class_models.User)
+        .where(class_models.User.badge == badge)).scalar_one_or_none()
+
+# Checks to see if a given user is in the database, via ID Number
+# Returns result (either the user or None)
+def is_user_id_present(idnumber):
+    return database_init.session.execute(select(class_models.User)
+        .where(class_models.User.id == idnumber)).scalar_one_or_none()
+
+# Checks to see if a given machine is in the database, via name
+# Returns result (either the user or None)
+def is_machine_present(name):
+    return database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.name == name)).scalar_one_or_none()
+
 # Universal Commands
 
 # Takes parsed card data and inputs it into the database
+# Returns either None or the User
+# Can be used to access User members
 def checkin_user(badge):
-    to_checkin = database_init.session.execute(select(class_models.User)
-        .where(class_models.User.badge == badge)).scalar_one_or_none()
+    # Checks to see if the user is in the database
+    to_checkin = is_user_badge_present(badge)
+    # If not, leave
     if to_checkin == None:
         print("User is not in the database")
-        return
-    #print("Welcome", to_checkin)
+        return None
+    # Return the User checked in
     return to_checkin
 
+# Gets the first name, last name, and id number of a given badge number
+# Returns either None or the [firstname, lastname, id] of the user
 def get_user_data(badge):
-    to_display = database_init.session.execute(select(class_models.User)
-        .where(class_models.User.badge == badge)).scalar_one_or_none()
+    to_display = is_user_badge_present(badge)
     if to_display == None:
-        print("User is not in the database")
-        return
-    return [to_display.firstname, to_display.lastname, to_display.id]
+        return None
+    else:
+        return [to_display.firstname, to_display.lastname, to_display.id]
 
 # Manager Commands
 
 # Addes a new user, if the ID is not currently present    
-def add_new_user(idnumber, access, firstname, lastname, email, role):
+def add_new_user(idnumber, access, firstname, lastname, email, role, login):
     # Check if user already exists
-    to_check = database_init.session.execute(select(class_models.User)
-        .where(class_models.User.id == idnumber)).scalar_one_or_none()
+    to_check = is_user_id_present(idnumber)
     # Return if they do
     if to_check != None:
         print("User", to_check, "- ID (", to_check.id, ") is already in the database")
         return
     # Otherwise, add the user to the database
-    user = class_models.User(idnumber, access, firstname, lastname, email, role)
+    user = class_models.User(idnumber, access, firstname, lastname, email, role, login)
     database_init.session.add(user)
     database_init.session.commit()
 
 # Removes a user from the database, if they are present
 def remove_user(idnumber):
     # Looks for the User with a matching ID
-    to_delete = database_init.session.execute(select(class_models.User)
-        .where(class_models.User.id == idnumber)).scalar_one_or_none()
+    to_delete = is_user_id_present(idnumber)
     # If not found, return
     if to_delete == None:
         print("User is not in the database")
@@ -64,8 +86,7 @@ def remove_user(idnumber):
 # Add new machines to the database
 def add_machine (name):
     # Check to see if the machine is already in the database
-    machine = database_init.session.execute(select(class_models.Machine)
-        .where(class_models.Machine.name == name)).scalar_one_or_none()
+    machine = is_machine_present(name)
     # If it is, leave
     if machine != None:
         print("Machine is already in the database")
@@ -90,8 +111,7 @@ def add_machine (name):
 # Edit a given machine's name
 def edit_machine(name, new_name):
     # Check to see if the machine is already in the database
-    machine = database_init.session.execute(select(class_models.Machine)
-        .where(class_models.Machine.name == name)).scalar_one_or_none()
+    machine = is_machine_present(name)
     # If it isn't, leave
     if machine == None:
         print("Machine isn't in the database")
@@ -103,8 +123,7 @@ def edit_machine(name, new_name):
 # Remove a machine from the database
 def remove_machine(name):
     # Check to see if the machine is already in the database
-    machine = database_init.session.execute(select(class_models.Machine)
-        .where(class_models.Machine.name == name)).scalar_one_or_none()
+    machine = is_machine_present(name)
     # If it is, leave
     if machine == None:
         print("Machine is not in the database")
@@ -115,8 +134,7 @@ def remove_machine(name):
 # Add trainings to a passed User
 def add_training(user_id, machine_id):
     # Check to see if the user is in the database
-    to_train = database_init.session.execute(select(class_models.User)
-        .where(class_models.User.id == user_id)).scalar_one_or_none()
+    to_train = is_user_id_present(user_id)
     # If they aren't, leave
     if to_train == None:
         print("User is not in the database")
@@ -134,8 +152,7 @@ def add_training(user_id, machine_id):
 # Remove trainings to a passed User
 def remove_training(user_id, machine_id):
     # Check to see if the user is in the database
-    to_train = database_init.session.execute(select(class_models.User)
-        .where(class_models.User.id == user_id)).scalar_one_or_none()
+    to_train = is_user_id_present(user_id)
     # If they aren't, leave
     if to_train == None:
         print("User is not in the database")
@@ -155,39 +172,25 @@ def read_all_machines():
     # Current as of SQLAlchemy 2.0
     # TODO - Display all users trained
     results = database_init.session.scalars(select(class_models.Machine)).all()
-    print(results)
-
-# Currently unused
-def user_check(firstname, lastname):
-    results = select(class_models.User).where(class_models.User.firstname.in_(firstname))
-    for class_models.User in database_init.session.scalars(results):
-        print(results)
+    return results
 
 # Output all users in the database
 def read_all():
     # Current as of SQLAlchemy 2.0
     results = database_init.session.scalars(select(class_models.User)).all()
-
-    # Legacy 1.4
-    #results = database_init.session.query(class_models.User).all()#.join(class_models.Machine.idnumber == class_models.User.idnumber)
-
-    print(results)
+    return results
 
 # Method to see who is currently in the lab
 def read_all_online():
     results = database_init.session.scalars(select(class_models.User)).all()
-    print(results)
-
-# Unused and an artifact from prior development
-def change_user_training(idnumber, machine, trained_status):
-    result = select(class_models.User).where(class_models.User.id == idnumber) #join(class_models.Machine).where
-    user_to_change = database_init.session.scalars(result).one()
-    database_init.session.commit()
+    return results
 
 # Admin Commands
 
 def change_user_access_level(idnumber, new_access_level):
-    result = select(class_models.User).where(class_models.User.id == idnumber)
-    to_change = database_init.session.scalars(result).one()
-    to_change.role = new_access_level
+    result = is_user_id_present(idnumber)
+    if result == None:
+        print("User not present in database\n")
+        return None
+    result.role = new_access_level
     database_init.session.commit()
