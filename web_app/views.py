@@ -178,9 +178,11 @@ def remove_user_form():
         user_id = request.form['id']
         try:
             remove_user(user_id)
-            return redirect('/remove-user/')
-        except:
-            return f"(Error; not in database.)"
+            flash("User Removed Successfully", "success")
+            return redirect(url_for('views.remove_user_form'))
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.remove_user_form'))
     else:
         return render_template("remove_user_form.html")
     
