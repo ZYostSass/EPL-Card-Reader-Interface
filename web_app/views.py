@@ -1,12 +1,15 @@
-from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response
+from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response,flash
 from database.class_models import *
-from database.user_options import add_new_user, remove_user
+from database.user_options import add_new_user, remove_user, change_user_access_level
 from .admin import login_required
-from . import db, card_reader
+from . import db #card_reader
 from sqlalchemy.orm.exc import NoResultFound
-
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, validators
+# from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
+# bp.config['SECRET_KEY'] = "asdfghjkl"
 
 @bp.route("/")
 def index():
@@ -88,7 +91,7 @@ def add_user_form():
                                    firstname=user_fname,
                                    lastname=user_lname,
                                    email=user_email)
-       #                            role = user_role)
+       #                           role = user_role)
 
         try:
             add_new_user(user_id, user_badge, user_fname, user_lname, user_email, "Admin")
@@ -136,15 +139,15 @@ def card_test():
 # https://tedboy.github.io/flask/generated/flask.jsonify.html
 # https://api.jquery.com/ (Used in card_test.html to update page)
 
-@bp.route("/card_data/")
-def card_data():
-    card_data = card_reader.get_data()
-    if card_data is not None:
-        card_number, facility_code = card_data
-    else:
-        card_number, facility_code = None, None
+# @bp.route("/card_data/")
+# def card_data():
+#     card_data = card_reader.get_data()
+#     if card_data is not None:
+#         card_number, facility_code = card_data
+#     else:
+#         card_number, facility_code = None, None
 
-    return jsonify(card_number=card_number, facility_code=facility_code)
+#     return jsonify(card_number=card_number, facility_code=facility_code)
 
     
 @bp.route("/permissions/student/")
@@ -186,3 +189,50 @@ def remove_user_form():
             return f"(Error; not in database.)"
     else:
         return render_template("remove_user_form.html")
+
+#Creating a form for promoting a user
+class PromoteForm(FlaskForm):
+    id = StringField("Enter PSU ID", [validators.DataRequired()])
+    role = StringField("Update role as student, admin or manager ", [validators.DataRequired()])
+    submit = SubmitField("Update")
+
+#Create a Promote Page
+@bp.route("/promote", methods = ["POST", "GET"])
+def PromoteUser():
+    id = None
+    update_role = None
+    form = PromoteForm()
+    #Validate Form
+    if form.validate_on_submit():
+        id = form.id.data
+        update_role = form.role.data
+        set_roles = ["student", "admin", "manager"]
+            
+        if (update_role):
+            change_user_access_level(id, update_role)
+            flash("Successfully updated")
+            return redirect('/promote')    
+        
+    return render_template("promote_user.html",id = id, form = form)
+    
+@bp.route("/promote-dummy", methods =["GET","POST"])
+def add_promote_dummy_data():
+    for x in range(3):
+        add_new_user(x +1,x,"A", "Nguyen", "123@pdx.edu", "student")
+        # user = User(
+        #     id = x,
+        #     bagde= 1234,
+        #     role = 'student',
+        #     fname= 'A',
+        #     lname= "Nguyen",
+        #     email = '123@pdx.edu', 
+        # )
+        # db.session.add(user)
+        # db.session.commit()
+        
+    return render_template("dashboard.html")
+
+
+
+    
+

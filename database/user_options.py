@@ -68,6 +68,20 @@ def read_all():
 
     print(results)
 
+# # Update user's role for promotion
+# def promote_user(idnumber,role):
+#     # Check if user already exists
+#     to_promote = database_init.session.execute(select(class_models.User)
+#         .where(class_models.User.id == idnumber)).scalar_one_or_none()
+#     #If not, raise an exception
+#     if to_promote == None:
+#         raise ValueError(f"User with ID {idnumber} is not in the database")
+#     else:   
+#         to_promote.role = role
+#         database_init.session.update(to_promote)
+#         database_init.session.commit()
+
+
 # Method to see who is currently in the lab
 def read_all_online():
     results = database_init.session.scalars(select(class_models.User)).all()
