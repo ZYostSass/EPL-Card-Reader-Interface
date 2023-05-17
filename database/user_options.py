@@ -42,19 +42,19 @@ def checkin_user(badge):
     to_checkin = is_user_badge_present(badge)
     # If not, leave
     if to_checkin == None:
-        print("User is not in the database")
+        raise LookupError(f"User with access number {badge} does not exist")
         return None
     # Return the User checked in
     return to_checkin
 
 # Gets the first name, last name, and id number of a given badge number
-# Returns either None or the [firstname, lastname, id] of the user
-def get_user_data(badge):
+# Returns either None or the entire User
+def get_user(badge):
     to_display = is_user_badge_present(badge)
     if to_display == None:
         return None
     else:
-        return [to_display.firstname, to_display.lastname, to_display.id]
+        return to_display
 
 # Manager Commands
 
@@ -88,8 +88,7 @@ def add_machine (name):
     machine = is_machine_present(name)
     # If it is, leave
     if machine != None:
-        print("Machine is already in the database")
-        return
+        raise ValueError(f"{name} is already in the database")
     # Otherwise, add it to the end of the database
 
     # Prime the pump
@@ -113,8 +112,7 @@ def edit_machine(name, new_name):
     machine = is_machine_present(name)
     # If it isn't, leave
     if machine == None:
-        print("Machine isn't in the database")
-        return
+        raise LookupError(f"Machine with name {name} does not exist")
     # Otherwise, edit it
     machine.name = new_name
     database_init.session.commit()
@@ -125,8 +123,7 @@ def remove_machine(name):
     machine = is_machine_present(name)
     # If it is, leave
     if machine == None:
-        print("Machine is not in the database")
-        return
+        raise LookupError(f"Machine with name {name} does not exist")
     database_init.session.delete(machine)
     database_init.session.commit()
 
@@ -136,34 +133,37 @@ def add_training(user_id, machine_id):
     to_train = is_user_id_present(user_id)
     # If they aren't, leave
     if to_train == None:
-        print("User is not in the database")
-        return
+        raise LookupError(f"User with ID {user_id} does not exist")
     # Check to see if the machine is in the database
     machine = database_init.session.execute(select(class_models.Machine)
         .where(class_models.Machine.id == machine_id)).scalar_one_or_none()
     # If is isn't, leave
     if machine == None:
-        print("Machine is not in the database")
-        return
+        raise LookupError(f"Machine with ID {machine_id} does not exist")
     to_train.machines.append(machine)
     database_init.session.commit()
 
 # Remove trainings to a passed User
 def remove_training(user_id, machine_id):
     # Check to see if the user is in the database
-    to_train = is_user_id_present(user_id)
+    to_untrain = is_user_id_present(user_id)
     # If they aren't, leave
-    if to_train == None:
-        print("User is not in the database")
-        return
-    # Else, remove from the database
-    database_init.session.delete(to_delete)
+    if to_untrain == None:
+        raise LookupError(f"User with ID {user_id} does not exist")
+    # Check to see if the machine is in the database
+    # Works off of machine ID rather than name
+    machine = database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.id == machine_id)).scalar_one_or_none()
+    # If is isn't, leave
+    if machine == None:
+        raise LookupError(f"Machine with ID {machine_id} does not exist")
+    # Remove training from the found user
+    to_untrain.machines.remove(machine)
     database_init.session.commit()
 
-# Output all Machines and user trained on them
+# Output all Machines, can access trained list
 def read_all_machines():
     # Current as of SQLAlchemy 2.0
-    # TODO - Display all users trained
     results = database_init.session.scalars(select(class_models.Machine)).all()
     return results
 
@@ -183,12 +183,6 @@ def read_all_online():
 def change_user_access_level(idnumber, new_access_level):
     result = is_user_id_present(idnumber)
     if result == None:
-        print("User not present in database\n")
-        return None
+        raise LookupError(f"User with ID {idnumber} does not exist")
     result.role = new_access_level
     database_init.session.commit()
-
-# Test: Returning all equipment data
-def read_all_machines():
-    results = database_init.session.scalars(select(class_models.Machine)).all()
-    return results

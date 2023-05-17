@@ -1,3 +1,4 @@
+"""
 import user_options
 
 print("\n")
@@ -34,7 +35,7 @@ print("\n")
 
 # Duplicate user check
 print("Adding duplicate Base Admin: John Doe")
-user_options.add_new_user(0, 0, "John", "Doe", "jdoe@pdx.edu", "Admin", user_options.class_models.datetime.datetime.now())
+#user_options.add_new_user(0, 0, "John", "Doe", "jdoe@pdx.edu", "Admin", user_options.class_models.datetime.datetime.now())
 print("\n")
 
 # New User Addition
@@ -109,3 +110,4 @@ for n in range(len(output_list)):
     print(output_list[n])
     for m in range(len(output_list[n].trained_users)):
         print(" >", output_list.trained_users[m])
+"""
