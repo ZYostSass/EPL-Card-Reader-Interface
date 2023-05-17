@@ -82,25 +82,11 @@ def add_user_form():
         user_fname = request.form['fname']
         user_lname = request.form['lname']
         user_email = request.form['email']
-     #   user_role = request.form['role']
-
-        # Check for all form fields
-        if not user_id or not user_badge or not user_fname or not user_lname or not user_email:
-            error_statement = "All form fields are required"
-            return render_template("add_user_form.html",
-                                   error_statement=error_statement,
-                                   id=user_id,
-                                   badge = user_badge,
-                                   firstname=user_fname,
-                                   lastname=user_lname,
-                                   email=user_email)
-       #                            role = user_role)
 
         try:
             add_new_user(user_id, user_badge, user_fname, user_lname, user_email, "Admin")
             return redirect('/add-user-form/')
         except:
-            # TODO: Add a fail html page to handle error outputs
             return f"(Error adding {user_fname} {user_lname} to the database)"
 
     else:
