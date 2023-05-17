@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash
+from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
 from database.user_options import add_new_user, remove_user, read_all_machines
 from .admin import login_required
@@ -77,17 +77,22 @@ def test_write(name):
 def add_user_form():
     
     if request.method == "POST":
+        # TODO (if time): Function call to get badge number by scanning in
+        # Otherwise, proceed with getting inputs via manual entry
         user_id = request.form['id']
-        user_badge = request.form['access']
+        user_badge = request.form['badge']
         user_fname = request.form['fname']
         user_lname = request.form['lname']
         user_email = request.form['email']
 
         try:
+            #Potential TODO: Change role from Admin to Student for this form (not sure why it's Admin currently)
             add_new_user(user_id, user_badge, user_fname, user_lname, user_email, "Admin")
-            return redirect('/add-user-form/')
-        except:
-            return f"(Error adding {user_fname} {user_lname} to the database)"
+            flash("User Added Successfully", "success")
+            return redirect(url_for('views.add_user_form'))
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.add_user_form'))
 
     else:
         return render_template("add_user_form.html")
