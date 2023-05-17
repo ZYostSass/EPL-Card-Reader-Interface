@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+<h1>Promotion</h1>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {%for message in messages %}
+            <p> {{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<form method = "POST">
+    {{form.hidden_tag()}}
+
+    {{form.id.label}}
+    {{form.id()}}
+    <br/>
+    {{form.role.label}}
+    {{form.role()}}
+    
+    <br/>
+    {{form.submit}}
+</form>
+
+
+{% endblock %}
