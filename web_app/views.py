@@ -193,27 +193,26 @@ def remove_user_form():
 #Creating a form for promoting a user
 class PromoteForm(FlaskForm):
     id = StringField("Enter PSU ID", [validators.DataRequired()])
-    role = StringField("Update role as student, admin or manager ", [validators.DataRequired()])
+    role = StringField("Update role", [validators.DataRequired()])
     submit = SubmitField("Update")
 
 #Create a Promote Page
 @bp.route("/promote", methods = ["POST", "GET"])
 def PromoteUser():
     id = None
-    update_role = None
+    role = None
     form = PromoteForm()
     #Validate Form
     if form.validate_on_submit():
         id = form.id.data
-        update_role = form.role.data
+        role = form.role.data
         set_roles = ["student", "admin", "manager"]
-            
-        if (update_role):
-            change_user_access_level(id, update_role)
+        if (role):
+            change_user_access_level(id, role)
             flash("Successfully updated")
             return redirect('/promote')    
         
-    return render_template("promote_user.html",id = id, form = form)
+    return render_template("promote_user.html",id = id, role= role, form = form)
     
 @bp.route("/promote-dummy", methods =["GET","POST"])
 def add_promote_dummy_data():
