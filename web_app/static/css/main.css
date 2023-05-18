@@ -392,8 +392,12 @@ hr.h-color {
 }
 
 /* Manage Equipment */
-.manage-equipment-content h3 {
+.manage-equipment-content h2 {
   padding: 10px 0;
+}
+
+.manage-equipment-content b {
+  color: var(--PSUgreen);
 }
 
 .manage-equipment-content .btn.edit {
@@ -449,6 +453,10 @@ hr.h-color {
 
 .training-session-content .clickable-row:hover {
   cursor: pointer;
+}
+
+.training-session-content b {
+  color: var(--PSUgreen);
 }
 
 /* Training Session Details */
