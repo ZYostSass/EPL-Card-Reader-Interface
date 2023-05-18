@@ -186,8 +186,3 @@ def change_user_access_level(idnumber, new_access_level):
     to_change = database_init.session.scalars(result).one()
     to_change.role = new_access_level
     database_init.session.commit()
-
-# Test: Returning all equipment data
-def read_all_machines():
-    results = database_init.session.scalars(select(class_models.Machine)).all()
-    return results
