@@ -13,6 +13,7 @@ bp = Blueprint('views', __name__)
 
 @bp.route("/")
 def index():
+    print("Index page")
     return render_template('index.html')
 
 @bp.route("/login", methods=['POST', 'GET'])
@@ -39,9 +40,9 @@ def login():
   return render_template("login.html")
 
 @bp.route("/logout")
-def logout(id):
-    session.pop('username', None)
-    return redirect(url_for('index'))
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('views.index'))
 
 @bp.route('/read-user/', defaults={'id': 1})
 @bp.route("/read-user/<id>")

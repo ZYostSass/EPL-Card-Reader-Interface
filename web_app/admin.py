@@ -18,7 +18,6 @@ def set_user_global():
         g.user = None
     else:
         user = get_user_by_id(user_id)
-        print(user)
         g.user = user
 
 
