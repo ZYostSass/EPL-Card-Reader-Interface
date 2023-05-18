@@ -8,6 +8,7 @@
 	# Do everything a Manager can do
 	# Change a user's access level
 
+from bcrypt import checkpw
 from . import database_init
 from . import class_models
 from sqlalchemy import select, func
@@ -31,6 +32,30 @@ def get_user_data(badge):
         print("User is not in the database")
         return
     return [to_display.firstname, to_display.lastname, to_display.id]
+
+def get_user_by_id(id): 
+    user = database_init.session.execute(select(class_models.User)
+        .where(class_models.User.id == id)).scalar_one_or_none()
+    if user == None:
+        print("User is not in the database")
+        return None
+    return user
+
+def check_user_password(email, password):
+    if email is None or password is None:
+        return None
+    
+    user = database_init.session.execute(select(class_models.User)
+        .where(class_models.User.email == email)).scalar_one_or_none()
+    
+    print(str.encode(password), user.pw_hash)
+
+    if user == None:
+        return None
+    elif not checkpw(str.encode(password), user.pw_hash):
+        return None
+    else:
+        return user
 
 # Manager Commands
 
@@ -154,6 +179,7 @@ def read_all():
     #results = database_init.session.query(class_models.User).all()#.join(class_models.Machine.idnumber == class_models.User.idnumber)
 
     print(results)
+    return results
 
 # # Update user's role for promotion
 # def promote_user(idnumber,role):

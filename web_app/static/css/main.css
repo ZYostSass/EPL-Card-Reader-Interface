@@ -364,7 +364,7 @@ hr.h-color {
   color: var(--dimGray);
 }
 
-.form-content form button {
+.form-content form button, .psu-button {
   width: 100%;
   background: var(--lightPSUgreen);
   border: 1px solid var(--PSUgreen);
@@ -373,9 +373,10 @@ hr.h-color {
   border-radius: 10px;
   margin-top: 15px;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.form-content form button:hover {
+.form-content form button:hover, .psu-button:hover {
   background: var(--lightPSUgreen);
   border: 1px solid var(--PSUgreen);
   box-shadow: 0 0 2px var(--PSUgreen);

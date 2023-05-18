@@ -25,6 +25,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 seeder = FlaskSeeder()
 
+
 db.init_app(app)
 migrate.init_app(app, db)
 seeder.init_app(app, db)

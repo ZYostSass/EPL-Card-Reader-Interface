@@ -2,6 +2,7 @@ import datetime
 from typing import Optional
 from sqlalchemy import Column, Table, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
+from bcrypt import checkpw, gensalt, hashpw
 
 # Replaced depreciated 'Base = declarative_base()'
 class Base(DeclarativeBase):
@@ -32,6 +33,7 @@ class User(Base):
     lastname: Mapped[str]
     email: Mapped[str]
     role: Mapped[str]
+    pw_hash: Mapped[str]
     # List of machines the user is trained on
     machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
     #trainings: Mapped[Optional[list["Machine"]]] = relationship(back_populates="trained_on")
@@ -44,12 +46,13 @@ class User(Base):
     #machines = relationship('Machine', secondary=students_machines, backref=backref('students', lazy='dynamic'))
     #trainings = relationship.back_populates('StudentMachine', lazy='dynamic')
     
-    def __init__(self, id, access, fname, lname, email, role ="student"):
+    def __init__(self, id, access, fname, lname, email, password, role ="student"):
         self.id = id
         self.badge = access
         self.firstname = fname
         self.lastname = lname
         self.email = email
+        self.pw_hash = hashpw(password, gensalt())
         self.role = role
     
     def __repr__(self):
