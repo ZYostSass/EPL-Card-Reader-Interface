@@ -444,7 +444,7 @@ hr.h-color {
 }
 
 .training-session-content table {
-  width: 50%;
+  width: 60%;
 }
 
 .training-session-content .equipment-name {
@@ -562,9 +562,15 @@ hr.h-color {
   .daily-user-log-data .data .data-list {
     font-size: 75%;
   }
+
+  /* Training Session */
+  .training-session-content table {
+    width: 100%;
+  }
 }
 
 @media (min-width: 1200px) {
+  /* Dashboard */
   .dashboard-menu {
     display: flex;
     flex-wrap: wrap;
