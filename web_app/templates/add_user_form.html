@@ -32,10 +32,13 @@
   </div>
   {% endif %} {% endfor %} {% endif %} {% endwith %}
   <!-- End Flash messages -->
+  <!-- Card Prompt -->
   <div class="card-prompt">
     <h3>Scan PSU ID card</h3>
     <h4><span>OR</span></h4>
   </div>
+  <!-- End Card Prompt -->
+  <!-- Manual Entry -->
   <form action="/add-user-form/" method="POST" class="m-5">
     <h3>Enter Manually</h3>
     <div class="mb-3">
@@ -107,6 +110,7 @@
     </div>
     <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
   </form>
+  <!-- End Manual Entry-->
 </div>
 
 {% endblock %}
