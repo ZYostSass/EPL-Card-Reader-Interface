@@ -1,8 +1,39 @@
 {% extends "index.html" %} {% block content %}
 <div class="training-session-details-content px-3 pt-4">
   <h2 class="fs-5 pe-2">
-    Training Sesssion for <b class="equipment-name">{{ name|escape }}</b>
+    Training Session for <b class="equipment-name">{{ name|escape }}</b>
   </h2>
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=True) %} {% if
+  messages %} {% for category, message in messages %} {% if category == 'error'
+  %}
+  <div
+    class="alert alert-danger alert-dismissable fade show d-flex justify-content-between"
+    role="alert"
+  >
+    {{ message }}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  {% else %}
+  <div
+    class="alert alert-success alert-dismissable fade show d-flex justify-content-between"
+    role="alert"
+  >
+    {{message}}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  {% endif %} {% endfor %} {% endif %} {% endwith %}
+  <!-- End Flash messages -->
   <!-- Card Prompt -->
   <div class="card-prompt">
     <h3>Scan PSU ID card</h3>
@@ -10,24 +41,29 @@
   </div>
   <!-- End Card Prompt -->
   <!-- Manual Entry -->
-  <form action="/permissions/" method="POST" class="m-5">
+  <form
+    action="{{ url_for('views.training_session_details', machine_id=machine_id, name=name)}}"
+    method="POST"
+    class="m-5"
+  >
     <h3>Enter Manually</h3>
     <div class="mb-3">
-      <label for="idnumber" class="form-label">PSU ID</label>
+      <label for="user_id" class="form-label">PSU ID</label>
       <input
-        type="id"
-        maxlength="9"
+        type="text"
         class="form-control"
-        name="idnumber"
-        id="idnumber"
-        value="{{ idnumber }}"
+        name="user_id"
+        id="user_id"
+        value="{{ user_id }}"
+        maxlength="9"
+        inputmode="numeric"
+        pattern="[0-9]{9}"
+        required
       />
       <div id="idHelp" class="form-text">Must be a 9 digit number</div>
     </div>
     <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
   </form>
   <!-- End Manual Entry -->
-  <!-- Training Log -->
-  <!-- End Training Log -->
 </div>
 {% endblock %}

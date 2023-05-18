@@ -105,17 +105,16 @@ def add_training(user_id, machine_id):
     # Check to see if the user is in the database
     to_train = database_init.session.execute(select(class_models.User)
         .where(class_models.User.id == user_id)).scalar_one_or_none()
+    # Potential TODO: Check if user has already been trained on equipment? Necessary?
     # If they aren't, leave
-    if to_train == None:
-        print("User is not in the database")
-        return
+    if to_train is None:
+        raise ValueError(f"User with PSU ID {user_id} is not in the database")
     # Check to see if the machine is in the database
     machine = database_init.session.execute(select(class_models.Machine)
         .where(class_models.Machine.id == machine_id)).scalar_one_or_none()
     # If is isn't, leave
-    if machine == None:
-        print("Machine is not in the database")
-        return
+    if machine is None:
+        raise ValueError(f"Machine with ID {machine_id} is not in the database")
     to_train.machines.append(machine)
     database_init.session.commit()
 
