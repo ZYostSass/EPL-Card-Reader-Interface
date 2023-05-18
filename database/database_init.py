@@ -20,7 +20,7 @@ if not (check_file):
 
     # Create Base Admin
     # TODO - Fill in correct info
-    base_admin = class_models.User(0, 0, "John", "Doe", "jdoe@pdx.edu", "Admin", class_models.datetime.datetime.now())
+    base_admin = class_models.User(0, 0, "John", "Doe", "jdoe@pdx.edu", b"password", "Admin", class_models.datetime.datetime.now())
     session.add(base_admin)
     session.commit()
 
