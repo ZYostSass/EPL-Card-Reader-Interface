@@ -71,8 +71,6 @@ def check_user_password(email, password):
     
     user = database_init.session.execute(select(class_models.User)
         .where(class_models.User.email == email)).scalar_one_or_none()
-    
-    print(str.encode(password), user.pw_hash)
 
     if user == None:
         return None
