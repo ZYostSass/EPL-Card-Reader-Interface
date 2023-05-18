@@ -1,6 +1,8 @@
 {% extends "index.html" %} {% block content %}
 <div class="training-session-details-content px-3 pt-4">
-  <h2 class="fs-5 pe-2">Training Sesssion for {{ name|escape }}</h2>
+  <h2 class="fs-5 pe-2">
+    Training Sesssion for <b class="equipment-name">{{ name|escape }}</b>
+  </h2>
   <!-- Card Prompt -->
   <div class="card-prompt">
     <h3>Scan PSU ID card</h3>

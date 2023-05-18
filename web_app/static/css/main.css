@@ -226,6 +226,11 @@ hr.h-color {
   border-color: var(--lightPSUgreen);
 }
 
+.permissions-content input:focus {
+  border: 1px solid var(--lightPSUgreen);
+  box-shadow: 0 0 10px var(--lightPSUgreen);
+}
+
 /* Permissions Student */
 .permissionsStudent-content {
   margin: 20px 0;
@@ -504,6 +509,15 @@ hr.h-color {
 .training-session-details-content form button:hover {
   background: var(--lightPSUgreen);
   border-color: var(--lightPSUgreen);
+}
+
+.training-session-details-content input:focus {
+  border: 1px solid var(--lightPSUgreen);
+  box-shadow: 0 0 10px var(--lightPSUgreen);
+}
+
+.training-session-details-content b.equipment-name {
+  color: var(--lightPSUgreen);
 }
 
 /* Media Queries */
