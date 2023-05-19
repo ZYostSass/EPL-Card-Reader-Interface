@@ -42,13 +42,14 @@ class User(Base):
     # List of machines the user is trained on
     machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
     
-    def __init__(self, id, access, fname, lname, email, role, last_login, password):
+    def __init__(self, id, access, fname, lname, email, last_login, role, password = None):
         self.id = id
         self.badge = access
         self.firstname = fname
         self.lastname = lname
         self.email = email
-        self.pw_hash = hashpw(password, gensalt())
+        if password is not None:
+            self.pw_hash = hashpw(password, gensalt())
         self.role = role
         self.last_login = last_login
     

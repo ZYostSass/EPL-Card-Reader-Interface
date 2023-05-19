@@ -74,6 +74,8 @@ def check_user_password(email, password):
 
     if user == None:
         return None
+    elif user.pw_hash is None:
+        return None # Can't log in without a password set    
     elif not checkpw(str.encode(password), user.pw_hash):
         return None
     else:
@@ -89,7 +91,7 @@ def add_new_user(idnumber, access, firstname, lastname, email, role, login):
     if to_check != None:
         raise ValueError(f"User with ID {idnumber} is already in the database")
     # Otherwise, add the user to the database
-    user = class_models.User(idnumber, access, firstname, lastname, email, role, login)
+    user = class_models.User(idnumber, access, firstname, lastname, email, login, role)
     database_init.session.add(user)
     database_init.session.commit()
 
