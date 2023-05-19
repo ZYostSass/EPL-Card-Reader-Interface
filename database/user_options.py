@@ -8,6 +8,7 @@
 	# Do everything a Manager can do
 	# Change a user's access level
 
+from bcrypt import checkpw
 from . import database_init
 from . import class_models
 from sqlalchemy import select, func
@@ -55,6 +56,28 @@ def get_user(badge):
         return None
     else:
         return to_display
+
+def get_user_by_id(id): 
+    user = database_init.session.execute(select(class_models.User)
+        .where(class_models.User.id == id)).scalar_one_or_none()
+    if user == None:
+        print("User is not in the database")
+        return None
+    return user
+
+def check_user_password(email, password):
+    if email is None or password is None:
+        return None
+    
+    user = database_init.session.execute(select(class_models.User)
+        .where(class_models.User.email == email)).scalar_one_or_none()
+
+    if user == None:
+        return None
+    elif not checkpw(str.encode(password), user.pw_hash):
+        return None
+    else:
+        return user
 
 # Manager Commands
 

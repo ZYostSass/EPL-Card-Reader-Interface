@@ -1,7 +1,8 @@
 Flask
 Flask-SQLAlchemy
 Flask-Migrate
-flask_seeder
 pyserial
 WTForms
 Flask-WTF
+flask-bcrypt
+bcrypt
