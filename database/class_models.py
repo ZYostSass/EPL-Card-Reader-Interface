@@ -2,6 +2,7 @@ import datetime
 from typing import Optional
 from sqlalchemy import Column, Table, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
+from bcrypt import checkpw, gensalt, hashpw
 
 # Replaced depreciated 'Base = declarative_base()'
 class Base(DeclarativeBase):
@@ -9,6 +10,8 @@ class Base(DeclarativeBase):
 
 # Bi-directional join table for many-to-many relationships
 # using sqlalchemy.Column construct
+    # Primary Key: User ID -> user.id
+    # Primary Key: Machine ID -> machine.id
 user_machine_join_table = Table(
     "user_machine_table",
     Base.metadata,
@@ -22,6 +25,8 @@ user_machine_join_table = Table(
 	# Last Name
     # Email
     # Role
+    # Last Log In datetime
+    # List of machines the user is trained on (can be none) -> user_machine assosiation table
 
 class User(Base):
     __tablename__ = "user"
@@ -32,29 +37,28 @@ class User(Base):
     lastname: Mapped[str]
     email: Mapped[str]
     role: Mapped[str]
+    pw_hash: Mapped[str]
+    last_login: Mapped[datetime.datetime]
     # List of machines the user is trained on
     machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
-    #trainings: Mapped[Optional[list["Machine"]]] = relationship(back_populates="trained_on")
-
-    # Imperative Form, legacy since SQLAlchemy 1.4, may need some tweaking
-    #id = Column(Integer, primary_key=True)
-    #firstname = Column(String)
-    #lastname = Column(String)
-    #email = Column(String)
-    #machines = relationship('Machine', secondary=students_machines, backref=backref('students', lazy='dynamic'))
-    #trainings = relationship.back_populates('StudentMachine', lazy='dynamic')
     
-    def __init__(self, id, access, fname, lname, email, role ="student"):
+    def __init__(self, id, access, fname, lname, email, role, last_login, password):
         self.id = id
         self.badge = access
         self.firstname = fname
         self.lastname = lname
         self.email = email
+        self.pw_hash = hashpw(password, gensalt())
         self.role = role
+        self.last_login = last_login
     
     def __repr__(self):
         return f"{self.firstname} {self.lastname}"
-  
+
+# Machine Table:
+    # Primary Key: ID Number
+    # Name
+    # Trained Users list (can be none) -> user_machine assosiation table
 class Machine(Base):
     __tablename__ = "machine"
     # Declarative Form, prefered as of SQLAlchemy 2.0
@@ -62,11 +66,6 @@ class Machine(Base):
     name: Mapped[str]
     # List of Users that are trained on this machine
     trained_users: Mapped[Optional[list["User"]]] = relationship(secondary = user_machine_join_table, back_populates="machines")
-
-    # Imperative Form, legacy since SQLAlchemy 1.4
-    #id = Column(Integer, primary_key=True)
-    #name = Column(String)
-    #trainings = relationship('StudentMachine', backref='machine', lazy='dynamic')
     
     def __init__(self, id, name):
         self.id = id
@@ -75,7 +74,7 @@ class Machine(Base):
     def __repr__(self):
         return self.name
 
-
+# Holding off on deleting this for now
 """    
 class UserMachine(Base):
     __tablename__ = "usermachine"

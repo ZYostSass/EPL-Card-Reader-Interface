@@ -1,9 +1,8 @@
 from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-
-from database.user_options import add_new_user, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, add_training
+from database.user_options import add_new_user, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, add_training, check_user_password
 from .admin import login_required
-from . import db#, card_reader
+from . import db
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators
@@ -14,19 +13,21 @@ bp = Blueprint('views', __name__)
 
 @bp.route("/")
 def index():
+    print("Index page")
     return render_template('index.html')
 
-@bp.route("/login")
+@bp.route("/login", methods=['POST', 'GET'])
 def login():
   if request.method == "POST":
       user_email = request.form['email']
       password = request.form['password']
 
       # Verify password
-      user = db.session.get(User, id) #STUB< NEEDS TO BE REPLACED WITH A PASSWORD CHECK
+      user = check_user_password(user_email, password) 
 
       if user is None:
-          return render_template("login.html", error="Failed to verify username or password") #STUB< Page needs to be implemented
+          flash("Failed to verify username or password", "error")
+          return render_template("login.html")
       else:
           session["user_id"] = user.id
           redirect_arg = request.args.get('next')
@@ -38,14 +39,10 @@ def login():
 
   return render_template("login.html")
 
-  @bp.route("/logout")
-  def login(id):
-      session.pop('username', None)
-      return redirect(url_for('index'))
-
-
-# Pulling from the database
-
+@bp.route("/logout")
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('views.index'))
 
 @bp.route('/read-user/', defaults={'id': 1})
 @bp.route("/read-user/<id>")
@@ -73,7 +70,6 @@ def test_write(name):
 
 @bp.route("/add-user-form/", methods=['POST', 'GET'])
 def add_user_form():
-    
     if request.method == "POST":
         # TODO (if time): Function call to get badge number by scanning in
         # Otherwise, proceed with getting inputs via manual entry

@@ -20,7 +20,7 @@ if not (check_file):
 
     # Create Base Admin
     # TODO - Fill in correct info
-    base_admin = class_models.User(0, 0, "John", "Doe", "jdoe@pdx.edu", "Admin")
+    base_admin = class_models.User(0, 0, "John", "Doe", "jdoe@pdx.edu", b"password", "Admin", class_models.datetime.datetime.now())
     session.add(base_admin)
     session.commit()
 
@@ -93,6 +93,7 @@ if not (check_file):
     # QD-1390 Laser Cutter
     machine13 = class_models.Machine(13, "QD-1390 Laser Cutter")
     session.add(machine13)
+
     session.commit()
 
 
