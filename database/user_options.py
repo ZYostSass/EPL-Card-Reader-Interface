@@ -225,3 +225,8 @@ def change_user_access_level(idnumber, new_access_level):
         raise LookupError(f"User with ID {idnumber} does not exist")
     result.role = new_access_level
     database_init.session.commit()
+
+# Purge the database of all Users and Machines
+def purge_database():
+    # I hope you're happy
+    class_models.Base.metadata.drop_all()
