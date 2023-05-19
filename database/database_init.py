@@ -21,8 +21,15 @@ if not (check_file):
 
     # Create Base Admin
     # TODO - Fill in correct info
-    base_admin = class_models.User(id=0, access=0, fname="John", lname="Doe", email="jdoe@pdx.edu", password=b"password", role="Admin", last_login=datetime.datetime.now())
+    base_admin = class_models.User(id=100000000, access="000001", fname="John", lname="Admin", email="jadmin@pdx.edu", password=b"password", role="Admin", last_login=datetime.datetime.now())
     session.add(base_admin)
+
+    base_manager = class_models.User(id=200000000, access="000002", fname="John", lname="Manager", email="jmanager@pdx.edu", password=b"password", role="Manager", last_login=datetime.datetime.now())
+    session.add(base_manager)
+
+    base_student = class_models.User(id=300000000, access="000003", fname="John", lname="Student", email="jstudent@pdx.edu", password=None, role="Student", last_login=datetime.datetime.now())
+    session.add(base_student)
+
     session.commit()
 
     # Add all machines to database

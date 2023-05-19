@@ -32,7 +32,7 @@ class User(Base):
     __tablename__ = "user"
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True)
-    badge: Mapped[int]
+    badge: Mapped[str]
     firstname: Mapped[str]
     lastname: Mapped[str]
     email: Mapped[str]
@@ -48,6 +48,9 @@ class User(Base):
         self.firstname = fname
         self.lastname = lname
         self.email = email
+        if password is not None and role is "Student":
+            raise ValueError("Invalid student configuration")
+        
         if password is not None:
             self.pw_hash = hashpw(password, gensalt())
         self.role = role
