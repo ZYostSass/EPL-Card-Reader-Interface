@@ -73,9 +73,11 @@ def check_user_password(email, password):
         .where(class_models.User.email == email)).scalar_one_or_none()
 
     if user == None:
-        return None
+        raise LookupError(f"User with email {email} does not exist")
+    elif user.pw_hash is None:
+        raise LookupError(f"User with email {email} is not a manager or admin and so cannot login")
     elif not checkpw(str.encode(password), user.pw_hash):
-        return None
+        raise ValueError(f"Incorrect password for {email}")
     else:
         return user
 
@@ -89,7 +91,7 @@ def add_new_user(idnumber, access, firstname, lastname, email, role, login):
     if to_check != None:
         raise ValueError(f"User with ID {idnumber} is already in the database")
     # Otherwise, add the user to the database
-    user = class_models.User(idnumber, access, firstname, lastname, email, role, login)
+    user = class_models.User(idnumber, access, firstname, lastname, email, login, role)
     database_init.session.add(user)
     database_init.session.commit()
 

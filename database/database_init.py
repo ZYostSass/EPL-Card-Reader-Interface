@@ -3,6 +3,7 @@ from database import class_models
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import datetime
 
 path = os.getcwd()
 # print(path)
@@ -20,7 +21,7 @@ if not (check_file):
 
     # Create Base Admin
     # TODO - Fill in correct info
-    base_admin = class_models.User(0, 0, "John", "Doe", "jdoe@pdx.edu", b"password", "Admin", class_models.datetime.datetime.now())
+    base_admin = class_models.User(id=0, access=0, fname="John", lname="Doe", email="jdoe@pdx.edu", password=b"password", role="Admin", last_login=datetime.datetime.now())
     session.add(base_admin)
     session.commit()
 
