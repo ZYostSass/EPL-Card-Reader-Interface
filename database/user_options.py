@@ -209,15 +209,8 @@ def read_all_online():
 # Admin Commands
 
 def change_user_access_level(idnumber, new_access_level):
-<<<<<<< HEAD
-    result = select(class_models.User).where(class_models.User.id == idnumber)
-    to_change = database_init.session.scalars(result).one()
-    to_change.role = new_access_level
-    database_init.session.commit()
-=======
     result = is_user_id_present(idnumber)
     if result == None:
         raise LookupError(f"User with ID {idnumber} does not exist")
     result.role = new_access_level
     database_init.session.commit()
->>>>>>> main
