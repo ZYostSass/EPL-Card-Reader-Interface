@@ -6,6 +6,7 @@ from . import db
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators
+import datetime
 # from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
@@ -80,7 +81,7 @@ def add_user_form():
         user_email = request.form['email']
         try:
             #Potential TODO: Change role from Admin to Student for this form (not sure why it's Admin currently)
-            add_new_user(user_id, user_badge, user_fname, user_lname, user_email, "Admin")
+            add_new_user(idnumber=user_id, access=user_badge, firstname=user_fname, lastname=user_lname, email=user_email, role="Student", login=datetime.datetime.now())
             flash("User Added Successfully", "success")
             return redirect(url_for('views.add_user_form'))
         except ValueError as e:

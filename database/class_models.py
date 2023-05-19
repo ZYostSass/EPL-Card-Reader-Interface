@@ -37,7 +37,7 @@ class User(Base):
     lastname: Mapped[str]
     email: Mapped[str]
     role: Mapped[str]
-    pw_hash: Mapped[str]
+    pw_hash: Mapped[Optional[str]]
     last_login: Mapped[datetime.datetime]
     # List of machines the user is trained on
     machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
