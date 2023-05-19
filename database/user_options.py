@@ -164,6 +164,40 @@ def read_all():
     results = database_init.session.scalars(select(class_models.User)).all()
     return results
 
+# Edit User badge
+def edit_user_badge(idnumber, new_badge):
+    # Ensure the user is in the database, via ID
+    to_edit = is_user_id_present(idnumber)
+    # If not, raise an error
+    if to_edit is None:
+        raise ValueError(f"User with PSU ID {idnumber} does not exist")
+    # Otherwise, edit the User's badge
+    to_edit.badge = new_badge
+    database_init.session.commit()
+
+# Edit User name
+def edit_user_name(idnumber, new_first, new_last):
+    # Ensure the user is in the database, via ID
+    to_edit = is_user_id_present(idnumber)
+    # If not, raise an error
+    if to_edit is None:
+        raise ValueError(f"User with PSU ID {idnumber} does not exist")
+    # Otherwise, edit the User's name
+    to_edit.firstname = new_first
+    to_edit.lastname = new_last
+    database_init.session.commit()
+
+# Edit User email
+def edit_user_email(idnumber, new_email):
+    # Ensure the user is in the database, via ID
+    to_edit = is_user_id_present(idnumber)
+    # If not, raise an error
+    if to_edit is None:
+        raise ValueError(f"User with PSU ID {idnumber} does not exist")
+    # Otherwise, edit the User's email
+    to_edit.email = new_email
+    database_init.session.commit()
+
 # # Update user's role for promotion
 # def promote_user(idnumber,role):
 #     # Check if user already exists
