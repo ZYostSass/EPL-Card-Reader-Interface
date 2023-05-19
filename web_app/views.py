@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import add_new_user, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password
+from database.user_options import add_new_user, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, add_training, check_user_password
 from .admin import login_required
 from . import db
 from sqlalchemy.orm.exc import NoResultFound
@@ -261,3 +261,26 @@ def remove_equipment(name):
         flash(str(e), "error")
 
     return redirect(url_for('views.manage_equipment'))
+
+@bp.route('/training-session/')
+def training_session():
+    all_machine_data = read_all_machines()
+    return render_template('training_session.html', machines=all_machine_data)
+
+@bp.route('/training-session/<int:machine_id>/<path:name>', methods= ['GET', 'POST'])
+def training_session_details(machine_id, name):
+    if request.method == 'POST':
+        
+        try:
+            # TODO (if time): Function call to get badge number by scanning in
+            # Otherwise, proceed with getting inputs via manual entry
+            user_id = request.form['user_id']
+            add_training(user_id, machine_id)
+            flash(f"Training for user with PSU ID {user_id} updated successfully", "success")
+            return redirect(url_for('views.training_session_details', machine_id=machine_id, name=name))
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.training_session_details', machine_id=machine_id, name=name))
+
+    else:
+        return render_template('training_session_details.html', machine_id=machine_id, name=name)
