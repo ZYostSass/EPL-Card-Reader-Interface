@@ -28,22 +28,35 @@ user_machine_join_table = Table(
     # Last Log In datetime
     # List of machines the user is trained on (can be none) -> user_machine assosiation table
 
+class AccessLog(Base):
+    __tablename__ = "access_log"
+    # Declarative Form, prefered as of SQLAlchemy 2.0
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    checked_in_at: Mapped[datetime.datetime]
+    checked_out_at: Mapped[Optional[datetime.datetime]]
+
+    def __init__(self, user_id, checked_in_at, checked_out_at = None):
+        self.user_id = user_id
+        self.checked_in_at = checked_in_at
+        self.checked_out_at = checked_out_at
+
 class User(Base):
     __tablename__ = "user"
     # Declarative Form, prefered as of SQLAlchemy 2.0
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    psu_id: Mapped[str]
     badge: Mapped[str]
     firstname: Mapped[str]
     lastname: Mapped[str]
     email: Mapped[str]
     role: Mapped[str]
     pw_hash: Mapped[Optional[str]]
-    last_login: Mapped[datetime.datetime]
     # List of machines the user is trained on
     machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
     
-    def __init__(self, id, access, fname, lname, email, last_login, role, password = None):
-        self.id = id
+    def __init__(self, psu_id, access, fname, lname, email, role, password = None):
+        self.psu_id = psu_id
         self.badge = access
         self.firstname = fname
         self.lastname = lname
@@ -53,8 +66,8 @@ class User(Base):
         
         if password is not None:
             self.pw_hash = hashpw(password, gensalt())
+        
         self.role = role
-        self.last_login = last_login
     
     def __repr__(self):
         return f"{self.firstname} {self.lastname} ({self.role})"
