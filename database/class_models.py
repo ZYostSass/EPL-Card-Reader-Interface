@@ -57,7 +57,13 @@ class User(Base):
         self.last_login = last_login
     
     def __repr__(self):
-        return f"{self.firstname} {self.lastname}"
+        return f"{self.firstname} {self.lastname} ({self.role})"
+    
+    def has_admin(self):
+        return self.role is "Admin"
+    
+    def has_manager(self):
+        return self.role == "Manager" or self.role == "Admin"
 
 # Machine Table:
     # Primary Key: ID Number
