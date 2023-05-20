@@ -3,5 +3,4 @@ SQLAlchemy
 pyserial
 WTForms
 Flask-WTF
-flask-bcrypt
 bcrypt
