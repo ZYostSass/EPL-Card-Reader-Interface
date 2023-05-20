@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from typing import Optional
 from sqlalchemy import Column, Table, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
@@ -19,6 +19,25 @@ user_machine_join_table = Table(
     Column("machine_id", ForeignKey("machine.id"), primary_key=True),
 )
 
+class EventLog(Base):
+    __tablename__ = "event_log"
+    # Declarative Form, prefered as of SQLAlchemy 2.0
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    fname: Mapped[str]
+    lname: Mapped[str]
+    badge: Mapped[str]
+    psu_id: Mapped[str]
+    event: Mapped[str]
+    timestamp: Mapped[datetime]
+
+    def __init__(self, fname, lname, badge, psu_id, event, timestamp):
+        self.fname = fname
+        self.lname = lname
+        self.badge = badge
+        self.psu_id = psu_id
+        self.event = event
+        self.timestamp = timestamp
+
 # User Table:
 	# Primary Key: ID Number
 	# First Name
@@ -27,19 +46,6 @@ user_machine_join_table = Table(
     # Role
     # Last Log In datetime
     # List of machines the user is trained on (can be none) -> user_machine assosiation table
-
-class AccessLog(Base):
-    __tablename__ = "access_log"
-    # Declarative Form, prefered as of SQLAlchemy 2.0
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    checked_in_at: Mapped[datetime.datetime]
-    checked_out_at: Mapped[Optional[datetime.datetime]]
-
-    def __init__(self, user_id, checked_in_at, checked_out_at = None):
-        self.user_id = user_id
-        self.checked_in_at = checked_in_at
-        self.checked_out_at = checked_out_at
 
 class User(Base):
     __tablename__ = "user"
