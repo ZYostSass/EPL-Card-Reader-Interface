@@ -49,17 +49,42 @@ def checkin_user(badge):
         return None
     
     # If they are, check them in
+<<<<<<< HEAD
     # TODO: Add checkouts to the log somewhere
     log = class_models.EventLog.check_in(user)
     database_init.session.add(log)
     database_init.session.commit()
     
+=======
+    to_checkin.checkin()
+>>>>>>> 1614586 (Remove unnescessary imports and files, add access log table and stub out access method)
     # Return the User checked in
     return user
 
 def access_logs():
     # TODO: add time range filters
     return database_init.session.execute(select(class_models.EventLog)).scalars().all()
+
+class DisplayAccessLog:
+    user: class_models.User
+    time_in: datetime
+    time_out: Optional[datetime]
+
+    def __init__(self, user, time_in, time_out):
+        self.user = user
+        self.time_in = time_in
+        self.time_out = time_out
+
+def access_logs(from_date, to_date):
+    
+    if from_date is None and to_date is None:
+        access_logs = database_init.session.execute(select(class_models.AccessLog)).all()
+    elif from_date is None and to_date is not None:
+        access_logs = database_init.session.execute(select(class_models.AccessLog)).all()
+    elif from_date is not None and to_date is None:
+        access_logs = database_init.session.execute(select(class_models.AccessLog)).all()
+    elif from_date is not None and to_date is not None:
+        access_logs = database_init.session.execute(select(class_models.AccessLog)).all()
 
 # Gets the first name, last name, and id number of a given badge number
 # Returns either None or the entire User
