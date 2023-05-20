@@ -64,7 +64,6 @@ class DisplayAccessLog:
         self.time_out = time_out
 
 def access_logs(from_date, to_date):
-    
     if from_date is None and to_date is None:
         access_logs = database_init.session.execute(select(class_models.AccessLog)).all()
     elif from_date is None and to_date is not None:
