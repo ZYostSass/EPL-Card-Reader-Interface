@@ -3,7 +3,7 @@ from database import class_models
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import datetime
+from datetime import datetime, timedelta
 
 path = os.getcwd()
 # print(path)
@@ -21,15 +21,28 @@ if not (check_file):
 
     # Create Base Admin
     # TODO - Fill in correct info
-    base_admin = class_models.User(id=100000000, access="000001", fname="John", lname="Admin", email="jadmin@pdx.edu", password=b"password", role="Admin", last_login=datetime.datetime.now())
+    base_admin = class_models.User(psu_id="900000000", access="000001", fname="John", lname="Admin", email="jadmin@pdx.edu", password=b"password", role="Admin")
     session.add(base_admin)
 
-    base_manager = class_models.User(id=200000000, access="000002", fname="John", lname="Manager", email="jmanager@pdx.edu", password=b"password", role="Manager", last_login=datetime.datetime.now())
+    base_manager = class_models.User(psu_id="900000001", access="000002", fname="John", lname="Manager", email="jmanager@pdx.edu", password=b"password", role="Manager")
     session.add(base_manager)
 
-    base_student = class_models.User(id=300000000, access="000003", fname="John", lname="Student", email="jstudent@pdx.edu", password=None, role="Student", last_login=datetime.datetime.now())
-    session.add(base_student)
+    base_student1 = class_models.User(psu_id="900000011", access="000011", fname="John", lname="Student", email="jstudent@pdx.edu", password=None, role="Student")
+    session.add(base_student1)
+    base_student2 = class_models.User(psu_id="900000012", access="000012", fname="Frank", lname="Student", email="fstudent@pdx.edu", password=None, role="Student")
+    session.add(base_student2)
+    base_student3 = class_models.User(psu_id="900000013", access="000013", fname="Emily", lname="Student", email="estudent@pdx.edu", password=None, role="Student")
+    session.add(base_student3)  
+    session.commit()
 
+    access_log1 = class_models.AccessLog(user_id=base_student1.id, checked_in_at=datetime.now() - timedelta(hours=1), checked_out_at=datetime.now())
+    session.add(access_log1)
+    access_log2 = class_models.AccessLog(user_id=base_student1.id, checked_in_at=datetime.now() - timedelta(hours=2, minutes=5), checked_out_at=datetime.now()  - timedelta(hours=2))
+    session.add(access_log2)
+    access_log3 = class_models.AccessLog(user_id=base_student2.id, checked_in_at=datetime.now() - timedelta(hours=1, minutes=5), checked_out_at=datetime.now() - - timedelta(minutes=5))
+    session.add(access_log3)
+    access_log4 = class_models.AccessLog(user_id=base_student3.id, checked_in_at=datetime.now() - timedelta(hours=1), checked_out_at=datetime.now())
+    session.add(access_log4)
     session.commit()
 
     # Add all machines to database
@@ -119,10 +132,6 @@ if not (check_file):
     machine16 = class_models.Machine(16, "Thermocut 115/E")
     session.add(machine16)
     session.commit()
-
-
-    
-
     
 else:
     # Otherwise

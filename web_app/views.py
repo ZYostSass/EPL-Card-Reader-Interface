@@ -2,7 +2,6 @@ from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
 from database.user_options import add_new_user, get_user_by_id, read_all, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, add_training, check_user_password
-from . import db
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators
@@ -94,40 +93,6 @@ def show_users():
   print(users)
   return render_template("admin/users.html", users=users)
 
-@bp.route("/<id>")
-@admin_required
-def edit_users(id):
-  # Now can access the currently logged in user with g.user
-  user = db.get_or_404(User, id)
-  return render_template("admin/update_user.html", user=user)
-
-
-@bp.route('/read-user/', defaults={'id': 1})
-@bp.route("/read-user/<id>")
-@manager_required
-def test_read(id):
-    user = db.get_or_404(User, id)
-    return render_template('read_user.html', user=user)
-
-
-# Inserting into the database
-@bp.route("/add-user/<name>")
-@manager_required
-def test_write(name):
-    user = User(
-        firstname=name,
-    )
-    db.session.add(user)
-    db.session.commit()
-
-    return render_template('added_user.html', user=user)
-
-# Adding new user into database from form
-# TODO: Only allow access to this page when logged in as an Admin or Manager
-
-# Zach: Set default role to always be student at this time.
-
-
 @bp.route("/add-user-form/", methods=['POST', 'GET'])
 @manager_required
 def add_user_form():
@@ -142,7 +107,7 @@ def add_user_form():
         try:
             # Potential TODO: Change role from Admin to Student for this form (not sure why it's Admin currently)
             add_new_user(idnumber=user_id, access=user_badge, firstname=user_fname,
-                         lastname=user_lname, email=user_email, role="Student", login=datetime.datetime.now())
+                         lastname=user_lname, email=user_email, role="Student")
             flash("User Added Successfully", "success")
             return redirect(url_for('views.add_user_form'))
         except ValueError as e:
@@ -215,17 +180,13 @@ def permissionsStudent():
 def account_creation_form():
     # for some reason I'm not getting a post call on submit.
     if request.method == "POST":
-        user_id = request.form['id']
+        psu_id = request.form['id']
         user_fname = request.form['fname']
         user_lname = request.form['lname']
         user_email = request.form['email']
-        # grab data from radio button for promote user automatically
 
-        # Check for all form fields
-        # method from user_options.py no intial reaction, but this may
-        # be from some other error in the route. tbd...
-        add_new_user(user_id, 0, user_fname, user_lname, user_email, "Admin")
-        return ("User data: is" + user_id + user_fname)
+        add_new_user(psu_id, 0, user_fname, user_lname, user_email, "Admin")
+        return ("User data: is" + psu_id + user_fname)
 
     else:
         return render_template("account_creation_form.html")
@@ -280,24 +241,6 @@ def PromoteUser():
             return redirect('/promote')
 
     return render_template("promote_user.html", id=id, role=role, form=form)
-
-
-@bp.route("/promote-dummy", methods=["GET", "POST"])
-def add_promote_dummy_data():
-    for x in range(3):
-        add_new_user(x + 1, x, "A", "Nguyen", "123@pdx.edu", "student")
-        # user = User(
-        #     id = x,
-        #     bagde= 1234,
-        #     role = 'student',
-        #     fname= 'A',
-        #     lname= "Nguyen",
-        #     email = '123@pdx.edu',
-        # )
-        # db.session.add(user)
-        # db.session.commit()
-
-    return render_template("dashboard.html")
 
 
 @bp.route('/manage-equipment/')

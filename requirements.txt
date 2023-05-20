@@ -1,6 +1,5 @@
 Flask
-Flask-SQLAlchemy
-Flask-Migrate
+SQLAlchemy
 pyserial
 WTForms
 Flask-WTF
