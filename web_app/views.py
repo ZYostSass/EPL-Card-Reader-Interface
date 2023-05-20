@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
+from functools import wraps
+from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import add_new_user, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, add_training, check_user_password
-from .admin import login_required
+from database.user_options import add_new_user, get_user_by_id, read_all, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, add_training, check_user_password
 from . import db
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
@@ -15,8 +15,19 @@ bp = Blueprint('views', __name__)
 
 @bp.route("/")
 def index():
-    print("Index page")
-    return render_template('index.html')
+    print(g.user)
+    if g.user is None:
+        next = url_for("views.dashboard")
+        if request.args.get('next') is not None:
+            next = request.args.get('next')
+        return redirect(url_for('views.login', next=next))
+    else: 
+        return redirect(url_for('views.dashboard'))
+
+@bp.errorhandler(403)
+def access_denied(e):
+    flash(str(e), "error")
+    return render_template('access-denied.html', next=url_for(request.endpoint), no_sidebar=True, no_navbar=True), 403
 
 
 @bp.route("/login", methods=['POST', 'GET'])
@@ -51,11 +62,49 @@ def login():
 @bp.route("/logout")
 def logout():
     session.pop('user_id', None)
-    return redirect(url_for('views.index'))
+    return redirect(url_for('views.index', next=request.args.get('next')))
+
+admin_bp = Blueprint('admin_views', __name__, url_prefix='/admin')
+
+
+def manager_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        print(g.user.has_manager())
+        if g.user is None or not g.user.has_manager():
+            abort(403, description="This action is only allowed for managers or admins.")
+        return f(*args, **kwargs)
+    return decorated_function
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # print(g.user.role)
+        if g.user is None or not g.user.has_admin():
+            abort(403, description="This action is only allowed for admins.")
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@admin_bp.route("/")
+@admin_required
+def show_users():
+  # Now can access the user with g.user
+  users = read_all()
+  print(users)
+  return render_template("admin/users.html", users=users)
+
+@bp.route("/<id>")
+@admin_required
+def edit_users(id):
+  # Now can access the currently logged in user with g.user
+  user = db.get_or_404(User, id)
+  return render_template("admin/update_user.html", user=user)
 
 
 @bp.route('/read-user/', defaults={'id': 1})
 @bp.route("/read-user/<id>")
+@manager_required
 def test_read(id):
     user = db.get_or_404(User, id)
     return render_template('read_user.html', user=user)
@@ -63,7 +112,7 @@ def test_read(id):
 
 # Inserting into the database
 @bp.route("/add-user/<name>")
-@login_required
+@manager_required
 def test_write(name):
     user = User(
         firstname=name,
@@ -80,6 +129,7 @@ def test_write(name):
 
 
 @bp.route("/add-user-form/", methods=['POST', 'GET'])
+@manager_required
 def add_user_form():
     if request.method == "POST":
         # TODO (if time): Function call to get badge number by scanning in
@@ -104,26 +154,31 @@ def add_user_form():
 
 
 @bp.route("/dashboard/")
+@manager_required
 def dashboard():
     return render_template("dashboard.html")
 
 
 @bp.route("/equipOverview/")
+@manager_required
 def equipOverview():
     return render_template("equipOverview.html")
 
 
 @bp.route("/equipOverview/student/")
+@manager_required
 def equipStudent():
     return render_template("equipStudent.html")
 
 
 @bp.route("/permissions/")
+@manager_required
 def permissions():
     return render_template("permissions.html")
 
 
 @bp.route("/waiver/")
+@manager_required
 def waiver():
     return render_template('waiver.html')
 
@@ -150,11 +205,13 @@ def waiver():
 
 
 @bp.route("/permissions/student/")
+@manager_required
 def permissionsStudent():
     return render_template("permissionsStudent.html")
 
 
 @bp.route("/account-creation-form/", methods=['POST', 'GET'])
+@manager_required
 def account_creation_form():
     # for some reason I'm not getting a post call on submit.
     if request.method == "POST":
@@ -175,11 +232,13 @@ def account_creation_form():
 
 
 @bp.route("/edit_user/")
+@manager_required
 def edit_user():
     return render_template('edit_user.html')
 
 
 @bp.route('/remove-user/', methods=['GET', 'POST'])
+@manager_required
 def remove_user_form():
     if request.method == "POST":
         user_id = request.form['id']
@@ -205,6 +264,7 @@ class PromoteForm(FlaskForm):
 
 
 @bp.route("/promote", methods=["POST", "GET"])
+@admin_required
 def PromoteUser():
     id = None
     role = None
@@ -241,12 +301,14 @@ def add_promote_dummy_data():
 
 
 @bp.route('/manage-equipment/')
+@manager_required
 def manage_equipment():
     all_machine_data = read_all_machines()
     return render_template("manage_equipment.html", machines=all_machine_data)
 
 
 @bp.route('/update-equipment/', methods=['GET', 'POST'])
+@manager_required
 def update_equipment():
     if request.method == "POST":
         equipment_name = request.form.get("equipment_name")
@@ -262,6 +324,7 @@ def update_equipment():
 
 
 @bp.route('/insert-equipment/', methods=['POST'])
+@manager_required
 def insert_equipment():
     if request.method == 'POST':
         equipment_name = request.form['equipment_name']
@@ -276,6 +339,7 @@ def insert_equipment():
 
 
 @bp.route('/remove-equipment/<name>', methods=['GET', 'POST'])
+@manager_required
 def remove_equipment(name):
     try:
         remove_machine(name)
@@ -286,11 +350,13 @@ def remove_equipment(name):
     return redirect(url_for('views.manage_equipment'))
 
 @bp.route('/training-session/')
+@manager_required
 def training_session():
     all_machine_data = read_all_machines()
     return render_template('training_session.html', machines=all_machine_data)
 
 @bp.route('/training-session/<int:machine_id>/<path:name>', methods= ['GET', 'POST'])
+@manager_required
 def training_session_details(machine_id, name):
     if request.method == 'POST':
         
