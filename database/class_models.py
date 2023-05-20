@@ -46,7 +46,6 @@ class EventLog(Base):
     # Role
     # Last Log In datetime
     # List of machines the user is trained on (can be none) -> user_machine assosiation table
-
 class User(Base):
     __tablename__ = "user"
     # Declarative Form, prefered as of SQLAlchemy 2.0

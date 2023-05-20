@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import add_new_user, get_user_by_id, read_all, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, add_training, check_user_password
+from database.user_options import access_logs, add_new_user, get_user_by_id, read_all, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, add_training, check_user_password
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators
@@ -121,7 +121,8 @@ def add_user_form():
 @bp.route("/dashboard/")
 @manager_required
 def dashboard():
-    return render_template("dashboard.html")
+    logs = access_logs()
+    return render_template("dashboard.html", logs=logs)
 
 
 @bp.route("/equipOverview/")
