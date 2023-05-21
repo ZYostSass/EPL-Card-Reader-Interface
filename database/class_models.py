@@ -19,36 +19,6 @@ user_machine_join_table = Table(
     Column("machine_id", ForeignKey("machine.id"), primary_key=True),
 )
 
-class EventLog(Base):
-    __tablename__ = "event_log"
-    # Declarative Form, prefered as of SQLAlchemy 2.0
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    fname: Mapped[str]
-    lname: Mapped[str]
-    badge: Mapped[str]
-    psu_id: Mapped[str]
-    event: Mapped[str]
-    timestamp: Mapped[datetime]
-
-    def __init__(self, fname, lname, badge, psu_id, event, timestamp):
-        self.fname = fname
-        self.lname = lname
-        self.badge = badge
-        self.psu_id = psu_id
-        self.event = event
-        self.timestamp = timestamp
-
-    def __repr__(self):
-        return f"{self.fname} {self.lname} ({self.badge}) {self.event} at {self.timestamp}"
-    
-    def check_in(self, fname, lname, badge, psu_id):
-        self.event = "check_in"
-        self.timestamp = datetime.now()
-        self.fname = fname
-        self.lname = lname
-        self.badge = badge
-        self.psu_id = psu_id
-
 # User Table:
 	# Primary Key: ID Number
 	# First Name
@@ -93,6 +63,37 @@ class User(Base):
     
     def has_manager(self):
         return self.role == "Manager" or self.role == "Admin"
+
+class EventLog(Base):
+    __tablename__ = "event_log"
+    # Declarative Form, prefered as of SQLAlchemy 2.0
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    fname: Mapped[str]
+    lname: Mapped[str]
+    badge: Mapped[str]
+    psu_id: Mapped[str]
+    event: Mapped[str]
+    timestamp: Mapped[datetime]
+
+    def __init__(self, fname, lname, badge, psu_id, event, timestamp):
+        self.fname = fname
+        self.lname = lname
+        self.badge = badge
+        self.psu_id = psu_id
+        self.event = event
+        self.timestamp = timestamp
+
+    def __repr__(self):
+        return f"{self.fname} {self.lname} ({self.badge}) {self.event} at {self.timestamp}"
+    
+    @staticmethod
+    def check_in(user: User):
+        return EventLog(user.firstname, user.lastname, user.badge, user.psu_id, "check_in", datetime.now())
+    
+    @staticmethod
+    def check_out(user: User):
+        return EventLog(user.firstname, user.lastname, user.badge, user.psu_id, "check_out", datetime.now())
+
 
 # Machine Table:
     # Primary Key: ID Number

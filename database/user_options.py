@@ -49,7 +49,8 @@ def checkin_user(badge):
         return None
     
     # If they are, check them in
-    log = class_models.EventLog.check_in(user.fname, user.lname, user.badge, user.psu_id)
+    # TODO: Add checkouts to the log somewhere
+    log = class_models.EventLog.check_in(user)
     database_init.session.add(log)
     database_init.session.commit()
     
