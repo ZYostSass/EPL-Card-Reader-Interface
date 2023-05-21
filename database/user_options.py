@@ -61,8 +61,7 @@ def get_user_by_id(id):
     user = database_init.session.execute(select(class_models.User)
         .where(class_models.User.id == id)).scalar_one_or_none()
     if user == None:
-        print("User is not in the database")
-        return None
+        raise ValueError(f"User with PSU ID {id} is not in the database")
     return user
 
 def check_user_password(email, password):
