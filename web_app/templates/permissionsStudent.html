@@ -1,11 +1,9 @@
 {% extends "index.html" %} {% block content %}
 <div class="permissionsStudent-content">
   <div class="student-info">
-    <!-- TODO: Dynamically add student information -->
-    <h2>John Doe</h2>
+    <h2>{{ user.firstname }} {{ user.lastname }}</h2>
   </div>
   <!-- Circuit Board Manufacturing Equipment -->
-  <!-- TODO: dynamically add class true or false class to images -->
   <div class="circuit-board">
     <h3>Circuit Board Manufacturing</h3>
     <div class="container mx-0 overflow-hidden">
@@ -13,70 +11,78 @@
         <div class="col equipment">
           <div class="card">
             <h4>LPKF Multipress S</h4>
+            {% set multipress_s_class = 'true' if 'LPKF Multipress S' in user_machines|map(attribute='name') else 'false' %}
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/lpkf_multipress_s.jpg')}}"
-              alt="LPKF multipress S"
-              class="false"
+              alt="LPKF Multipress S"
+              class="{{ multipress_s_class }}"
             />
           </div>
         </div>
         <div class="col equipment">
           <div class="card">
             <h4>LPKF S63 PCB Router</h4>
+            {% set s63_pcb_router_class = 'true' if 'LPKF S63 PCB Router' in user_machines|map(attribute='name') else 'false' %}
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/lpkf_s63_pcb_router.jpg')}}"
               alt="LPKF S63 PCB Router"
-              class="true"
+              class="{{ s63_pcb_router_class }}"
             />
           </div>
         </div>
         <div class="col equipment">
           <div class="card">
             <h4>LPKF S104 PCB Router</h4>
+            {% set s104_pcb_router_class = 'true' if 'LPKF S104 PCB Router' in user_machines|map(attribute='name') else 'false' %}
+
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/lpkf_s104_pcb_router.jpg')}}"
               alt="LPKF S104 PCB Router"
-              class="true"
+              class="{{ s104_pcb_router_class }}"
             />
           </div>
         </div>
         <div class="col equipment">
           <div class="card">
             <h4>Pick and Place</h4>
+            {% set pick_and_place_class = 'true' if 'Pick and Place' in user_machines|map(attribute='name') else 'false' %}
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/pick_and_place.jpg')}}"
               alt="Pick and Place"
-              class="false"
+              class="{{ pick_and_place_class }}"
             />
           </div>
         </div>
         <div class="col equipment">
           <div class="card">
             <h4>Soldering Equipment</h4>
+            {% set soldering_equipment_class = 'true' if 'Soldering Equipment' in user_machines|map(attribute='name') else 'false' %}
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/soldering_equipment.jpg')}}"
               alt="Soldering Equipment"
-              class="true"
+              class="{{ soldering_equipment_class }}"
             />
           </div>
         </div>
         <div class="col equipment">
           <div class="card">
             <h4>T200N Desktop Solder Oven</h4>
+            {% set desktop_solder_oven_class = 'true' if 'T200N Desktop Solder Oven' in user_machines|map(attribute='name') else 'false' %}
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/t200n_desktop_solder_oven.jpg')}}"
               alt="T200N Desktop Solder Oven"
-              class="true"
+              class="{{ desktop_solder_oven_class }}"
             />
           </div>
         </div>
         <div class="col equipment">
           <div class="card">
             <h4>Test and Measurement</h4>
+            {% set test_and_measurement_class = 'true' if 'Test and Measurement' in user_machines|map(attribute='name') else 'false' %}
             <img
               src="{{url_for('static', filename='equipment_images/circuit_board_manufacturing/test_and_measurement.jpg')}}"
               alt="Test and Measurement"
-              class="true"
+              class="{{ test_and_measurement_class }}"
             />
           </div>
         </div>
@@ -90,20 +96,22 @@
           <div class="col equipment">
             <div class="card">
               <h4>Form 3 SLA Printer</h4>
+              {% set form_3_sla_printer_class = 'true' if 'Form 3 SLA Printer' in user_machines|map(attribute='name') else 'false' %}
               <img
                 src="{{url_for('static', filename='equipment_images/3d_printers/form_3_sla_printer.jpg')}}"
                 alt="Form 3 SLA Printer"
-                class="true"
+                class="{{ form_3_sla_printer_class }}"
               />
             </div>
           </div>
           <div class="col equipment">
             <div class="card">
               <h4>Ultimaker3 Extended 3D Printer</h4>
+              {% set ultimaker3_extended_3d_printer_class = 'true' if 'Ultimaker3 Extended 3D Printer' in user_machines|map(attribute='name') else 'false' %}
               <img
                 src="{{url_for('static', filename='equipment_images/3d_printers/ultimaker3_extended_3d_printer.jpg')}}"
                 alt="Ultimaker 3 Extended 3D Printer"
-                class="false"
+                class="{{ ultimaker3_extended_3d_printer_class }}"
               />
             </div>
           </div>
@@ -118,40 +126,44 @@
           <div class="col equipment">
             <div class="card">
               <h4>Drill Press</h4>
+              {% set drill_press_class = 'true' if 'Drill Press' in user_machines|map(attribute='name') else 'false' %}
               <img
                 src="{{url_for('static', filename='equipment_images/machining_equipment/drill_press.jpg')}}"
                 alt="Drill Press"
-                class="true"
+                class="{{ drill_press_class }}"
               />
             </div>
           </div>
           <div class="col equipment">
             <div class="card">
               <h4>Little Machine Shop Lathe</h4>
+              {% set machine_shop_lathe_class = 'true' if 'Little Machine Shop Lathe' in user_machines|map(attribute='name') else 'false' %}
               <img
                 src="{{url_for('static', filename='equipment_images/machining_equipment/little_machine_shop_lathe.jpg')}}"
                 alt="Little Machine Shop Lathe"
-                class="true"
+                class="{{ machine_shop_lathe_class }}"
               />
             </div>
           </div>
           <div class="col equipment">
             <div class="card">
               <h4>Little Machine Shop Mill</h4>
+              {% set machine_shop_mill_class = 'true' if 'Little Machine Shop Mill' in user_machines|map(attribute='name') else 'false' %}
               <img
                 src="{{url_for('static', filename='equipment_images/machining_equipment/little_machine_shop_mill.jpg')}}"
                 alt="Little Machine Shop Mill"
-                class="true"
+                class="{{ machine_shop_mill_class }}"
               />
             </div>
           </div>
           <div class="col equipment">
             <div class="card">
               <h4>WAZER</h4>
+              {% set wazer_class = 'true' if 'WAZER' in user_machines|map(attribute='name') else 'false' %}
               <img
                 src="{{url_for('static', filename='equipment_images/machining_equipment/wazer.jpg')}}"
                 alt="WAZER"
-                class="true"
+                class="{{ wazer_class }}"
               />
             </div>
           </div>
@@ -166,10 +178,11 @@
           <div class="col equipment">
             <div class="card">
               <h4>QD-1390 Laser Cutter</h4>
+              {% set qd1390_laser_cutter_class = 'true' if 'QD-1390 Laser Cutter' in user_machines|map(attribute='name') else 'false' %}
               <img
                 src="{{url_for('static', filename='equipment_images/laser_cutters/qd-1390_laser_cutter.jpg')}}"
                 alt="QD-1390 Laser Cutter"
-                class="true"
+                class="{{ qd1390_laser_cutter_class }}"
               />
             </div>
           </div>
@@ -184,30 +197,33 @@
           <div class="col equipment">
             <div class="card">
               <h4>EZFORM SV 1217</h4>
+              {% set ezform_sv_1217_class = 'true' if 'EZFORM SV 1217' in user_machines|map(attribute='name') else 'false' %}
               <img
                 src="{{url_for('static', filename='equipment_images/miscellaneous/ezform_sv_1217.jpg')}}"
                 alt="EZFORM SV 1217"
-                class="false"
+                class="{{ ezform_sv_1217_class }}"
               />
             </div>
           </div>
           <div class="col equipment">
             <div class="card">
               <h4>Silhouette Cameo</h4>
+              {% set silhouette_cameo_class = 'true' if 'Silhouette Cameo' in user_machines|map(attribute='name') else 'false' %}
               <img
                 src="{{url_for('static', filename='equipment_images/miscellaneous/silhouette_cameo.jpg')}}"
                 alt="Silhouette Cameo"
-                class="false"
+                class="{{ silhouette_cameo_class }}"
               />
             </div>
           </div>
           <div class="col equipment">
             <div class="card">
               <h4>Thermocut 115/E</h4>
+              {% set thermocut_115e_class = 'true' if 'Thermocut 115/E' in user_machines|map(attribute='name') else 'false' %}
               <img
                 src="{{url_for('static', filename='equipment_images/miscellaneous/thermocut_115e.jpg')}}"
                 alt="Thermocut 115/E"
-                class="true"
+                class="{{ thermocut_115e_class }}"
               />
             </div>
           </div>
