@@ -41,7 +41,7 @@ if not (check_file):
     session.add(machine0)
     session.commit()
     # LPFK S63 PCB Router
-    machine1 = class_models.Machine(1, "LPFK S63 PCB Router")
+    machine1 = class_models.Machine(1, "LPKF S63 PCB Router")
     session.add(machine1)
     session.commit()
     # LPKF S104 PCB Router
