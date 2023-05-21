@@ -95,9 +95,15 @@ def get_user(badge):
     else:
         return to_display
 
+<<<<<<< HEAD
 def get_user_by_psu_id(id): 
     user = database_init.session.execute(select(class_models.User)
         .where(class_models.User.psu_id == id)).scalar_one_or_none()
+=======
+def get_user_by_psu_id(psu_id): 
+    user = database_init.session.execute(select(class_models.User)
+        .where(class_models.User.psu_id == psu_id)).scalar_one_or_none()
+>>>>>>> dd26b3a (Update permissions page to use new APIs)
     if user == None:
         raise ValueError(f"User with PSU ID {id} is not in the database")
     return user
@@ -107,7 +113,7 @@ def get_user_by_id(id):
     user = database_init.session.execute(select(class_models.User)
         .where(class_models.User.id == id)).scalar_one_or_none()
     if user == None:
-        raise ValueError(f"User with PSU ID {id} is not in the database")
+        raise ValueError(f"User with {id} is not in the database")
     return user
 
 def check_user_password(email, password):

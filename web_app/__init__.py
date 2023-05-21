@@ -4,8 +4,6 @@ import os
 
 from database.user_options import get_user_by_id
 
-
-
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev"
 app.config["EXPLAIN_TEMPLATE_LOADING"] = True

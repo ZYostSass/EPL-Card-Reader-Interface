@@ -1,7 +1,11 @@
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
+<<<<<<< HEAD
 from database.user_options import access_logs, add_new_user, get_user_by_psu_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training
+=======
+from database.user_options import access_logs, add_new_user, get_user_by_psu_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, get_user_by_id, read_all, add_training
+>>>>>>> dd26b3a (Update permissions page to use new APIs)
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
@@ -188,6 +192,7 @@ def waiver():
 
     
 @bp.route("/permissions/<id>/")
+@manager_required
 def permissionsStudent(id):
     user = get_user_by_psu_id(id)
     user_machines = user.machines
