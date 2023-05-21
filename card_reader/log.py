@@ -1,6 +1,7 @@
 import csv
 import datetime 
-
+from database.class_models import *
+from database.user_options import add_new_user, remove_user
 
 filename = 'log.csv'
 
@@ -18,7 +19,7 @@ def logFile(data):
 
 #run this if the log file is empty        
 def initLog():
-    field = ['fname' , 'lname', 'PSUID', 'USERID', 'CardNumber', 'date/time']
+    field = ['fname' , 'lname', 'PSUID', 'CardNumber', 'date/time']
     
     exampleData = ['John', 'Doe', '123123', '123123', '123123', 'datetime' ] 
     
@@ -28,8 +29,7 @@ def initLog():
         csvwriter.writerow(exampleData)
         
 def main():
-    print("Hello World!", datetime.date.today())
-    #initLog()
+    initLog()
     logFile('12345')
 
 if __name__ == "__main__":
