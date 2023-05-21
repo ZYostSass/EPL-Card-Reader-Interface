@@ -1,11 +1,7 @@
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-<<<<<<< HEAD
 from database.user_options import access_logs, add_new_user, get_user_by_psu_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, get_user, read_all, add_training
-=======
-from database.user_options import access_logs, add_new_user, get_user_by_psu_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training
->>>>>>> 293329b (Remove unnescessary imports and files, add access log table and stub out access method)
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
@@ -195,8 +191,6 @@ def card_data():
 def permissionsStudent(badge):
     user = get_user(badge)
     user_machines = user.machines
-    print(user_machines)
-    print(user)
     return render_template("permissionsStudent.html", user=user, user_machines=user_machines)
 
 @bp.route("/edit_user/")
