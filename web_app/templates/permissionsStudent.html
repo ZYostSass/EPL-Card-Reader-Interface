@@ -1,8 +1,7 @@
 {% extends "index.html" %} {% block content %}
 <div class="permissionsStudent-content">
   <div class="student-info">
-    <!-- TODO: Dynamically add student information -->
-    <h2>John Doe</h2>
+    <h2>{{ user.firstname }} {{ user.lastname }}</h2>
   </div>
   <!-- Circuit Board Manufacturing Equipment -->
   <!-- TODO: dynamically add class true or false class to images -->
