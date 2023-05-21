@@ -38,6 +38,17 @@ class EventLog(Base):
         self.event = event
         self.timestamp = timestamp
 
+    def __repr__(self):
+        return f"{self.fname} {self.lname} ({self.badge}) {self.event} at {self.timestamp}"
+    
+    def check_in(self, fname, lname, badge, psu_id):
+        self.event = "check_in"
+        self.timestamp = datetime.now()
+        self.fname = fname
+        self.lname = lname
+        self.badge = badge
+        self.psu_id = psu_id
+
 # User Table:
 	# Primary Key: ID Number
 	# First Name
