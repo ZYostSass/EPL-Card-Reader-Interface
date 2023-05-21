@@ -1,0 +1,36 @@
+{% extends "index.html" %} {% block content %}
+<div class="training-session-content">
+  <div class="container">
+    <div class="row">
+      <div class="col md-12">
+        <div class="jumbotron p-3">
+          <h3>Select <b>Equipment</b> For Training</h3>
+          <!-- Equipment/Machine table -->
+          <div class="table-container">
+            <table class="table table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>ID</th>
+                  <th class="equipment-name">Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in machines %}
+                <tr
+                  class="clickable-row"
+                  onclick="location.href = `{{ url_for('views.training_session_details', machine_id=row.id, name=row.name) }}`;"
+                >
+                  <td><b>{{row.id}}</b></td>
+                  <td class="equipment-name">{{row.name}}</td>
+                </tr>
+              </tbody>
+              {% endfor %}
+            </table>
+          </div>
+          <!-- End Equipment/Machine table -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

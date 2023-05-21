@@ -72,9 +72,11 @@ def check_user_password(email, password):
         .where(class_models.User.email == email)).scalar_one_or_none()
 
     if user == None:
-        return None
+        raise LookupError(f"User with email {email} does not exist")
+    elif user.pw_hash is None:
+        raise LookupError(f"User with email {email} is not a manager or admin and so cannot login")
     elif not checkpw(str.encode(password), user.pw_hash):
-        return None
+        raise ValueError(f"Incorrect password for {email}")
     else:
         return user
 
@@ -88,7 +90,7 @@ def add_new_user(idnumber, access, firstname, lastname, email, role, login):
     if to_check != None:
         raise ValueError(f"User with ID {idnumber} is already in the database")
     # Otherwise, add the user to the database
-    user = class_models.User(idnumber, access, firstname, lastname, email, role, login)
+    user = class_models.User(idnumber, access, firstname, lastname, email, login, role)
     database_init.session.add(user)
     database_init.session.commit()
 
@@ -186,6 +188,40 @@ def read_all():
     results = database_init.session.scalars(select(class_models.User)).all()
     return results
 
+# Edit User badge
+def edit_user_badge(idnumber, new_badge):
+    # Ensure the user is in the database, via ID
+    to_edit = is_user_id_present(idnumber)
+    # If not, raise an error
+    if to_edit is None:
+        raise ValueError(f"User with PSU ID {idnumber} does not exist")
+    # Otherwise, edit the User's badge
+    to_edit.badge = new_badge
+    database_init.session.commit()
+
+# Edit User name
+def edit_user_name(idnumber, new_first, new_last):
+    # Ensure the user is in the database, via ID
+    to_edit = is_user_id_present(idnumber)
+    # If not, raise an error
+    if to_edit is None:
+        raise ValueError(f"User with PSU ID {idnumber} does not exist")
+    # Otherwise, edit the User's name
+    to_edit.firstname = new_first
+    to_edit.lastname = new_last
+    database_init.session.commit()
+
+# Edit User email
+def edit_user_email(idnumber, new_email):
+    # Ensure the user is in the database, via ID
+    to_edit = is_user_id_present(idnumber)
+    # If not, raise an error
+    if to_edit is None:
+        raise ValueError(f"User with PSU ID {idnumber} does not exist")
+    # Otherwise, edit the User's email
+    to_edit.email = new_email
+    database_init.session.commit()
+
 # # Update user's role for promotion
 # def promote_user(idnumber,role):
 #     # Check if user already exists
@@ -213,3 +249,8 @@ def change_user_access_level(idnumber, new_access_level):
         raise LookupError(f"User with ID {idnumber} does not exist")
     result.role = new_access_level
     database_init.session.commit()
+
+# Purge the database of all Users and Machines
+def purge_database():
+    # I hope you're happy
+    class_models.Base.metadata.drop_all()

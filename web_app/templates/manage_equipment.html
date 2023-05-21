@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col md-12">
         <div class="jumbotron p-3">
-          <h3>
+          <h2>
             Manage <b>Equipment</b>
             <button
               class="btn btn-success float-end"
@@ -14,38 +14,7 @@
             >
               Add new equipment
             </button>
-          </h3>
-          <!-- Flash messages -->
-          {% with messages = get_flashed_messages(with_categories=True) %} {% if
-          messages %} {% for category, message in messages %} {% if category ==
-          'error' %}
-          <div
-            class="alert alert-danger alert-dismissable fade show d-flex justify-content-between"
-            role="alert"
-          >
-            {{ message }}
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="alert"
-              aria-label="Close"
-            ></button>
-          </div>
-          {% else %}
-          <div
-            class="alert alert-success alert-dismissable fade show d-flex justify-content-between"
-            role="alert"
-          >
-            {{message}}
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="alert"
-              aria-label="Close"
-            ></button>
-          </div>
-          {% endif %} {% endfor %} {% endif %} {% endwith %}
-          <!-- End Flash messages -->
+          </h2>
           <!-- Equipment/Machine table -->
           <table class="table table-hover">
             <thead class="table-dark">
@@ -58,7 +27,7 @@
             <tbody>
               {% for row in machines %}
               <tr>
-                <td>{{row.id}}</td>
+                <td><b>{{row.id}}</b></td>
                 <td>{{row.name}}</td>
                 <td>
                   <a
@@ -66,75 +35,80 @@
                     class="btn edit"
                     data-bs-toggle="modal"
                     data-bs-target="#edit_modal{{row.id}}"
+                    aria-label="Edit equipment"
                     ><i class="fa-solid fa-pen-to-square"></i
                   ></a>
                   <a
                     href="{{ url_for('views.remove_equipment', name=row.name)}}"
                     class="btn delete"
-                    onclick="return confirm('Are you sure you want to remove this equipment?')"
+                    onclick="return confirm('Are you sure you want to remove ' + '{{row.name}}' + '?')"
+                    aria-label="Delete equipment"
                     ><i class="fa-solid fa-trash"></i
                   ></a>
                 </td>
               </tr>
-              <!-- Edit Equipment Modal -->
-              <div id="edit_modal{{row.id}}" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title">Edit Equipment</h4>
-                    </div>
-                    <div class="modal-body">
-                      <form
-                        action="{{url_for('views.update_equipment')}}"
-                        method="POST"
-                      >
-                        <div class="form-group">
-                          <label for="new_equipment_name" class="mb-1"
-                            >New equipment name:</label
-                          >
-                          <input
-                            type="hidden"
-                            name="equipment_name"
-                            value="{{row.name}}"
-                          />
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="new_equipment_name"
-                            value="{{row.name}}"
-                          />
-                        </div>
-                        <div class="form-group">
-                          <button class="btn" type="submit">
-                            Update Equipment
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- End Edit Equipment Modal -->
+              {% endfor %}
             </tbody>
-            {% endfor %}
           </table>
           <!-- End Equipment/Machine table -->
         </div>
+        <!-- Edit Equipment Modal -->
+        {% for row in machines %}
+        <div id="edit_modal{{row.id}}" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title">Edit Equipment</h3>
+              </div>
+              <div class="modal-body">
+                <form
+                  action="{{url_for('views.update_equipment')}}"
+                  method="POST"
+                >
+                  <div class="form-group">
+                    <label
+                      for="new_equipment_name_{{row.id}}"
+                      class="mb-1 visually-hidden"
+                      >New equipment name:</label
+                    >
+                    <input
+                      type="hidden"
+                      name="equipment_name"
+                      value="{{row.name}}"
+                    />
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="new_equipment_name_{{row.id}}"
+                      name="new_equipment_name"
+                      value="{{row.name}}"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <button class="btn" type="submit">Update Equipment</button>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        <!-- End Edit Equipment Modal -->
         <!-- Add Equipment Modal -->
         <div id="add_modal" class="modal fade" role="dialog">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h4 class="modal-title">Add Equipment</h4>
+                <h3 class="modal-title">Add Equipment</h3>
               </div>
               <div class="modal-body">
                 <form
@@ -142,14 +116,16 @@
                   method="POST"
                 >
                   <div class="form-group">
-                    <label for="equipment_name" class="mb-1"
+                    <label for="equipment_name" class="mb-1 visually-hidden"
                       >Equipment name:</label
                     >
                     <input
                       type="text"
                       class="form-control"
+                      id="equipment_name"
                       name="equipment_name"
                       required="1"
+                      aria-labelledby="equipment_name"
                     />
                   </div>
                   <div class="form-group">

@@ -32,28 +32,38 @@ class User(Base):
     __tablename__ = "user"
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True)
-    badge: Mapped[int]
+    badge: Mapped[str]
     firstname: Mapped[str]
     lastname: Mapped[str]
     email: Mapped[str]
     role: Mapped[str]
-    pw_hash: Mapped[str]
+    pw_hash: Mapped[Optional[str]]
     last_login: Mapped[datetime.datetime]
     # List of machines the user is trained on
     machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
     
-    def __init__(self, id, access, fname, lname, email, role, last_login, password):
+    def __init__(self, id, access, fname, lname, email, last_login, role, password = None):
         self.id = id
         self.badge = access
         self.firstname = fname
         self.lastname = lname
         self.email = email
-        self.pw_hash = hashpw(password, gensalt())
+        if password is not None and role is "Student":
+            raise ValueError("Invalid student configuration")
+        
+        if password is not None:
+            self.pw_hash = hashpw(password, gensalt())
         self.role = role
         self.last_login = last_login
     
     def __repr__(self):
-        return f"{self.firstname} {self.lastname}"
+        return f"{self.firstname} {self.lastname} ({self.role})"
+    
+    def has_admin(self):
+        return self.role is "Admin"
+    
+    def has_manager(self):
+        return self.role == "Manager" or self.role == "Admin"
 
 # Machine Table:
     # Primary Key: ID Number

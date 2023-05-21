@@ -10,6 +10,7 @@
         <!--this may be better as a text field, rather than another page....-->
       </div>
     </div>
+    {% if current_role == "Admin" %}
     <div class="card col-4">
       <i class="fa-solid fa-bolt"></i>
       <h1>Promote User</h1>
@@ -18,6 +19,7 @@
         <button>Promote</button>
       </div>
     </div>
+    {% endif %}
     <div class="card col-4">
       <i class="fa-solid fa-pen-to-square"></i>
       <h1>User Data</h1>
