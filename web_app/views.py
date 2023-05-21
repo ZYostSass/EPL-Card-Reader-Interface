@@ -121,9 +121,22 @@ def add_user_form():
 @bp.route("/dashboard/")
 @manager_required
 def dashboard():
+    # TODO: Filter these results by today
     logs = access_logs()
     return render_template("dashboard.html", logs=logs)
 
+#TODO: Add get parameters for time range
+@bp.route("/event-log-csv/")
+@manager_required
+def event_log_csv():
+    #TODO: get time range from get parameters and pass them here
+    logs = access_logs()
+    response = make_response(render_template("event_log.csv", logs=logs))
+    #TODO adjust file name based on time range
+    file_name = "event_log.csv"
+    response.headers["Content-Disposition"] = f"attachment; filename={file_name}"
+    response.headers["Content-Type"] = "text/csv"
+    return response
 
 @bp.route("/equipOverview/")
 @manager_required
