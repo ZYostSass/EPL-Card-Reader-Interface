@@ -15,9 +15,7 @@
       <h1>Equipment</h1>
       <p>Manage equipment</p>
       <div class="card-buttons">
-        <a href="{{ url_for('views.manage_equipment')}}"
-          ><button>Manage</button></a
-        >
+        <a href="{{ url_for('views.manage_equipment')}}"><button>Manage</button></a>
       </div>
     </div>
     <div class="card col-4">
@@ -26,8 +24,7 @@
       <p>Update training for users</p>
       <div class="card-buttons">
         <a href="{{ url_for('views.training_session')}}">
-          <button>Update</button></a
-        >
+          <button>Update</button></a>
       </div>
     </div>
     <div class="daily-user-log">
@@ -36,7 +33,7 @@
         <h1>Recent users</h1>
       </div>
       <div class="daily-user-log-data">
-        <div class="row header-row">
+        <div class="data-row header-row">
           <span class="data data-title access-id">Access Badge ID</span>
           <span class="data data-title psu-id">PSU ID</span>
           <span class="data data-title names">Name</span>
@@ -44,6 +41,15 @@
           <span class="data data-title time">Time</span>
         </div>
       </div>
+      {% if logs %}{% for event in logs %}
+      <div class="data-row header-row">
+        <span class="data data-title access-id">{{event.badge}}</span>
+        <span class="data data-title psu-id">{{event.psu_id}}</span>
+        <span class="data data-title names">{{event.fname}} {{logs.lname}}</span>
+        <span class="data data-title event">{{event.event}}</span>
+        <span class="data data-title time">{{ event.timestamp.strftime('%H:%M:%S') }}</span>
+      </div>
+      {% endfor %} {% endif %}
     </div>
   </div>
 </section>

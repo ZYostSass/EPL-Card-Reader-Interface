@@ -143,9 +143,13 @@ hr.h-color {
   margin: 0;
 }
 
-.daily-user-log .daily-user-log-data {
+.daily-user-log .data-row {
   display: flex;
-  justify-content: space-between;
+  flex-flow: row;
+}
+
+.data {
+  margin-right: 10px;
 }
 
 .daily-user-log-data .data {

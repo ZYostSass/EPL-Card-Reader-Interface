@@ -42,19 +42,23 @@ def is_machine_present(name):
 # Can be used to access User members
 def checkin_user(badge):
     # Checks to see if the user is in the database
-    to_checkin = is_user_badge_present(badge)
+    user = is_user_badge_present(badge)
     # If not, leave
-    if to_checkin == None:
+    if user == None:
         raise LookupError(f"User with access number {badge} does not exist")
         return None
     
     # If they are, check them in
-    to_checkin.checkin()
+    log = class_models.EventLog.check_in(user.fname, user.lname, user.badge, user.psu_id)
+    database_init.session.add(log)
+    database_init.session.commit()
+    
     # Return the User checked in
-    return to_checkin
+    return user
 
 def access_logs():
-    return database_init.session.execute(select(class_models.EventLog)).all()
+    # TODO: add time range filters
+    return database_init.session.execute(select(class_models.EventLog)).scalars().all()
 
 # Gets the first name, last name, and id number of a given badge number
 # Returns either None or the entire User
