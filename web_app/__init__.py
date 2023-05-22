@@ -1,3 +1,4 @@
+import base64
 from flask import Flask, g, session
 #from card_reader.reader import CardReader
 import os
@@ -41,3 +42,9 @@ def set_user_global():
     else:
         user = get_user_by_id(user_id)
         g.user = user
+
+# The following was written by chatgpt:
+@app.template_filter('base64_to_data_url')
+def base64_to_data_url(value):
+    data = value.decode('utf-8')
+    return f"data:image/jpg;base64,{data}"
