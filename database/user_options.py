@@ -264,11 +264,11 @@ def read_all_online():
 
 # Admin Commands
 
-def change_user_access_level(idnumber, new_access_level):
-    result = is_user_id_present(idnumber)
-    if result == None:
+def change_user_access_level(idnumber, new_access_level, password):
+    user = is_user_id_present(idnumber)
+    if user == None:
         raise LookupError(f"User with ID {idnumber} does not exist")
-    result.role = new_access_level
+    user.promote(new_access_level, password)
     database_init.session.commit()
 
 # Purge the database of all Users and Machines

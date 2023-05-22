@@ -4,7 +4,7 @@ from database.class_models import *
 from database.user_options import access_logs, add_new_user, get_user_by_psu_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, get_user_by_id, read_all, add_training
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, validators
+from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
 # from wtforms.validators import DataRequired
 
@@ -101,7 +101,7 @@ def add_user_form():
         user_email = request.form['email']
         try:
             # Potential TODO: Change role from Admin to Student for this form (not sure why it's Admin currently)
-            add_new_user(idnumber=user_id, access=user_badge, firstname=user_fname,
+            add_new_user(psu_id=user_id, access=user_badge, firstname=user_fname,
                          lastname=user_lname, email=user_email, role="Student")
             flash("User Added Successfully", "success")
             return redirect(url_for('views.add_user_form'))
@@ -195,23 +195,6 @@ def permissionsStudent(id):
     print(user)
     return render_template("permissionsStudent.html", user=user, user_machines=user_machines)
 
-
-@bp.route("/account-creation-form/", methods=['POST', 'GET'])
-@manager_required
-def account_creation_form():
-    if request.method == "POST":
-        psu_id = request.form['id']
-        user_fname = request.form['fname']
-        user_lname = request.form['lname']
-        user_email = request.form['email']
-
-        add_new_user(psu_id, 0, user_fname, user_lname, user_email, "Admin")
-        return ("User data: is" + psu_id + user_fname)
-
-    else:
-        return render_template("account_creation_form.html")
-
-
 @bp.route("/edit_user/")
 @manager_required
 def edit_user():
@@ -238,7 +221,8 @@ def remove_user_form():
 
 class PromoteForm(FlaskForm):
     id = StringField("Enter PSU ID", [validators.DataRequired()])
-    role = StringField("Update role", [validators.DataRequired()])
+    role = RadioField('Role', choices=[('Admin','Admin'),('Manager','Manager')])
+    password = StringField("Add a password", [validators.DataRequired()])
     submit = SubmitField("Update")
 
 # Create a Promote Page
@@ -246,7 +230,7 @@ class PromoteForm(FlaskForm):
 
 @bp.route("/promote", methods=["POST", "GET"])
 @admin_required
-def PromoteUser():
+def promote_user():
     id = None
     role = None
     form = PromoteForm()
@@ -254,9 +238,10 @@ def PromoteUser():
     if form.validate_on_submit():
         id = form.id.data
         role = form.role.data
-        set_roles = ["student", "admin", "manager"]
+        password = form.password.data
+        print(role)
         if (role):
-            change_user_access_level(id, role)
+            change_user_access_level(id, role, password)
             flash("Successfully updated")
             return redirect('/promote')
 

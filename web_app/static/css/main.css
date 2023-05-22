@@ -107,7 +107,7 @@ hr.h-color {
   text-align: center;
 }
 
-.dashboard-menu .card button {
+.dashboard-menu .card a {
   display: inline-block;
   background: var(--lightPSUgreen);
   color: var(--white);
@@ -116,6 +116,7 @@ hr.h-color {
   border-radius: 10px;
   margin-top: 15px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .daily-user-log {

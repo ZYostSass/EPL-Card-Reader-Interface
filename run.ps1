@@ -14,7 +14,6 @@ POWERSHELL_SCRIPT
 set +o histexpand 2>/dev/null
 # ===== Bash Script Begin =====
 . venv/bin/activate
-rm database.db
 pip install -qr requirements.txt
 flask --app web_app/webapp.py --debug run
 # ====== Bash Script End ======

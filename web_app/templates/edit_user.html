@@ -6,7 +6,7 @@
       <h1>Student</h1>
       <p>Remove users</p>
       <div class="card-buttons">
-        <a href="{{ url_for('views.remove_user_form')}}"><button>Remove</button></a>
+        <a href="{{ url_for('views.remove_user_form')}}">Remove</a>
         <!--this may be better as a text field, rather than another page....-->
       </div>
     </div>
@@ -16,7 +16,7 @@
       <h1>Promote User</h1>
       <p>change user permissions</p>
       <div class="card-buttons">
-        <button>Promote</button>
+        <a style="margin-top: 20px;" href="{{ url_for('views.promote_user') }}">Promote</a>
       </div>
     </div>
     {% endif %}
@@ -25,7 +25,7 @@
       <h1>User Data</h1>
       <p>Update data for users</p>
       <div class="card-buttons">
-        <button>Update</button>
+        <a href="">Update</a>
       </div>
     </div>
   </div>
