@@ -149,6 +149,36 @@ hr.h-color {
   flex-flow: row;
 }
 
+.data-title.access-id {
+  width: 145px;
+  text-align: center;
+}
+
+.data-title.psu-id {
+  width: 100px;
+  text-align: center;  
+}
+
+.data-title.names {
+  width: 250px;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.data-title.event {
+  width: 100px;
+  text-align: center;  
+}
+
+.data-title.time {
+  width: 100px;
+  text-align: center;  
+}
+
+
+
 .data {
   margin-right: 10px;
 }
@@ -156,7 +186,6 @@ hr.h-color {
 .daily-user-log-data .data {
   display: flex;
   flex-direction: column;
-  margin: 0 15px;
 }
 
 .daily-user-log-data .data .data-list {
