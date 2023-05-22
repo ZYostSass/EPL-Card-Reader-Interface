@@ -224,19 +224,15 @@ def permissionsStudent(id):
 @bp.route("/account-creation-form/", methods=['POST', 'GET'])
 @manager_required
 def account_creation_form():
-    # for some reason I'm not getting a post call on submit.
     if request.method == "POST":
         user_id = request.form['id']
         user_fname = request.form['fname']
         user_lname = request.form['lname']
         user_email = request.form['email']
-        # grab data from radio button for promote user automatically
-
-        # Check for all form fields
-        # method from user_options.py no intial reaction, but this may
-        # be from some other error in the route. tbd...
-        add_new_user(user_id, 0, user_fname, user_lname, user_email, "Admin")
-        return ("User data: is" + user_id + user_fname)
+        
+        #used method from user_options.py. 
+        add_new_user(user_id, 0,"Admin",  user_fname, user_lname)            
+        return("User data: is" + user_id + user_fname)
 
     else:
         return render_template("account_creation_form.html")
