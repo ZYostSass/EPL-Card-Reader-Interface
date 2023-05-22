@@ -43,6 +43,10 @@ def set_user_global():
         user = get_user_by_id(user_id)
         g.user = user
 
+@app.template_filter('format_category')
+def format_category(value):
+    return value.replace(" ", "-").lower()
+
 # The following was written by chatgpt:
 @app.template_filter('base64_to_data_url')
 def base64_to_data_url(value):

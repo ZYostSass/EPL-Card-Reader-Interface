@@ -139,8 +139,6 @@ def event_log_csv():
 @manager_required
 def equipOverview():
     categories = all_categories()
-    for category in categories:
-        category.clazz = category.tag.replace(" ", "-").lower()
     return render_template("equipOverview.html", categories=categories)
 
 
@@ -260,7 +258,8 @@ def promote_user():
 @manager_required
 def manage_equipment():
     all_machine_data = read_all_machines()
-    return render_template("manage_equipment.html", machines=all_machine_data)
+    categories = all_categories()
+    return render_template("manage_equipment.html", machines=all_machine_data, categories=categories)
 
 
 @bp.route('/update-equipment/', methods=['GET', 'POST'])

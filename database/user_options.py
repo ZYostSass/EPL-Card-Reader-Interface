@@ -71,17 +71,6 @@ class DisplayAccessLog:
         self.time_in = time_in
         self.time_out = time_out
 
-def access_logs(from_date, to_date):
-    
-    if from_date is None and to_date is None:
-        access_logs = database_init.session.execute(select(class_models.AccessLog)).all()
-    elif from_date is None and to_date is not None:
-        access_logs = database_init.session.execute(select(class_models.AccessLog)).all()
-    elif from_date is not None and to_date is None:
-        access_logs = database_init.session.execute(select(class_models.AccessLog)).all()
-    elif from_date is not None and to_date is not None:
-        access_logs = database_init.session.execute(select(class_models.AccessLog)).all()
-
 # Gets the first name, last name, and id number of a given badge number
 # Returns either None or the entire User
 def get_user(badge):
