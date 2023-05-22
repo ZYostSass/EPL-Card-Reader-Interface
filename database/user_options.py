@@ -268,6 +268,8 @@ def change_user_access_level(idnumber, new_access_level, password):
     user = is_user_id_present(idnumber)
     if user == None:
         raise LookupError(f"User with ID {idnumber} does not exist")
+    if password is None and user.pw_hash is None:
+        raise ValueError("User does not have a password, please provide one")
     user.promote(new_access_level, password)
     database_init.session.commit()
 

@@ -221,8 +221,8 @@ def remove_user_form():
 
 class PromoteForm(FlaskForm):
     id = StringField("Enter PSU ID", [validators.DataRequired()])
-    role = RadioField('Role', choices=[('Admin','Admin'),('Manager','Manager')])
-    password = StringField("Add a password", [validators.DataRequired()])
+    role = RadioField('Role', choices=[('Admin','Admin'),('Manager','Manager')], validators=[validators.DataRequired()])
+    password = StringField("Add a password")
     submit = SubmitField("Update")
 
 # Create a Promote Page
@@ -239,11 +239,17 @@ def promote_user():
         id = form.id.data
         role = form.role.data
         password = form.password.data
+        if password == "":
+            password = None
         print(role)
         if (role):
-            change_user_access_level(id, role, password)
-            flash("Successfully updated")
-            return redirect('/promote')
+            try:
+                change_user_access_level(id, role, password)
+                flash("Successfully updated")
+                return redirect('/promote')
+            except Exception as e:
+                flash(str(e), "error")
+                return render_template("promote_user.html", id=id, role=role, form=form)
 
     return render_template("promote_user.html", id=id, role=role, form=form)
 

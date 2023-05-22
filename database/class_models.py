@@ -65,11 +65,11 @@ class User(Base):
         return self.role == "Manager" or self.role == "Admin"
     
     def promote(self, new_role, password):
-        print("'" + new_role + "'")
         if new_role != "Manager" and new_role != "Admin":
             raise ValueError("Invalid role promotion")
         self.role = new_role
-        self.pw_hash = hashpw(bytes(password, 'utf-8'), gensalt())
+        if password is not None:
+            self.pw_hash = hashpw(bytes(password, 'utf-8'), gensalt())
 
 class EventLog(Base):
     __tablename__ = "event_log"
