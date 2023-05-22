@@ -69,7 +69,6 @@ admin_bp = Blueprint('admin_views', __name__, url_prefix='/admin')
 def manager_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        print(g.user.has_manager())
         if g.user is None or not g.user.has_manager():
             abort(403, description="This action is only allowed for managers or admins.")
         return f(*args, **kwargs)
@@ -78,7 +77,6 @@ def manager_required(f):
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # print(g.user.role)
         if g.user is None or not g.user.has_admin():
             abort(403, description="This action is only allowed for admins.")
         return f(*args, **kwargs)
