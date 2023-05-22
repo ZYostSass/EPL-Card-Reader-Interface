@@ -26,23 +26,6 @@ class TrainingLog(Base):
     # Role
     # Last Log In datetime
     # List of machines the user is trained on (can be none) -> user_machine assosiation table
-<<<<<<< HEAD
-=======
-
-class AccessLog(Base):
-    __tablename__ = "access_log"
-    # Declarative Form, prefered as of SQLAlchemy 2.0
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    checked_in_at: Mapped[datetime.datetime]
-    checked_out_at: Mapped[Optional[datetime.datetime]]
-
-    def __init__(self, user_id, checked_in_at, checked_out_at = None):
-        self.user_id = user_id
-        self.checked_in_at = checked_in_at
-        self.checked_out_at = checked_out_at
-
->>>>>>> 1614586 (Remove unnescessary imports and files, add access log table and stub out access method)
 class User(Base):
     __tablename__ = "user"
     # Declarative Form, prefered as of SQLAlchemy 2.0

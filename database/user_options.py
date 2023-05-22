@@ -49,15 +49,11 @@ def checkin_user(badge):
         return None
     
     # If they are, check them in
-<<<<<<< HEAD
     # TODO: Add checkouts to the log somewhere
     log = class_models.EventLog.check_in(user)
     database_init.session.add(log)
     database_init.session.commit()
     
-=======
-    to_checkin.checkin()
->>>>>>> 1614586 (Remove unnescessary imports and files, add access log table and stub out access method)
     # Return the User checked in
     return user
 
@@ -95,15 +91,9 @@ def get_user(badge):
     else:
         return to_display
 
-<<<<<<< HEAD
 def get_user_by_psu_id(id): 
     user = database_init.session.execute(select(class_models.User)
         .where(class_models.User.psu_id == id)).scalar_one_or_none()
-=======
-def get_user_by_psu_id(psu_id): 
-    user = database_init.session.execute(select(class_models.User)
-        .where(class_models.User.psu_id == psu_id)).scalar_one_or_none()
->>>>>>> dd26b3a (Update permissions page to use new APIs)
     if user == None:
         raise ValueError(f"User with PSU ID {id} is not in the database")
     return user

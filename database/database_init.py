@@ -32,14 +32,7 @@ if not (check_file):
         lname="Manager", email="jmanager@pdx.edu", password=b"password", role="Manager")
     session.add(base_manager)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     student1 = class_models.User(psu_id="900000011", access="000011", fname="John", lname="Student", email="jstudent@pdx.edu", password=None, role="Student")
-=======
-    student1 = class_models.User(
-        psu_id="900000011", access="000011", fname="John",
-        lname="Student", email="jstudent@pdx.edu", password=None, role="Student")
->>>>>>> 9cffa1b (Add tables and objects for machine data, machine tags, and a training log)
     session.add(student1)
     student2 = class_models.User(
         psu_id="900000012", access="000012", fname="Frank",
@@ -84,29 +77,7 @@ if not (check_file):
     event_log42 = class_models.EventLog(fname=student3.firstname, lname=student3.lastname,
                                         badge=student3.badge, psu_id=student3.psu_id, event="check_out", timestamp=datetime.now())
     session.add(event_log42)
-<<<<<<< HEAD
     
-=======
-    base_student1 = class_models.User(psu_id="900000011", access="000011", fname="John", lname="Student", email="jstudent@pdx.edu", password=None, role="Student")
-    session.add(base_student1)
-    base_student2 = class_models.User(psu_id="900000012", access="000012", fname="Frank", lname="Student", email="fstudent@pdx.edu", password=None, role="Student")
-    session.add(base_student2)
-    base_student3 = class_models.User(psu_id="900000013", access="000013", fname="Emily", lname="Student", email="estudent@pdx.edu", password=None, role="Student")
-    session.add(base_student3)  
-    session.commit()
-
-    access_log1 = class_models.AccessLog(user_id=base_student1.id, checked_in_at=datetime.now() - timedelta(hours=1), checked_out_at=datetime.now())
-    session.add(access_log1)
-    access_log2 = class_models.AccessLog(user_id=base_student1.id, checked_in_at=datetime.now() - timedelta(hours=2, minutes=5), checked_out_at=datetime.now()  - timedelta(hours=2))
-    session.add(access_log2)
-    access_log3 = class_models.AccessLog(user_id=base_student2.id, checked_in_at=datetime.now() - timedelta(hours=1, minutes=5), checked_out_at=datetime.now() - - timedelta(minutes=5))
-    session.add(access_log3)
-    access_log4 = class_models.AccessLog(user_id=base_student3.id, checked_in_at=datetime.now() - timedelta(hours=1), checked_out_at=datetime.now())
-    session.add(access_log4)
->>>>>>> 1614586 (Remove unnescessary imports and files, add access log table and stub out access method)
-=======
-
->>>>>>> 9cffa1b (Add tables and objects for machine data, machine tags, and a training log)
     session.commit()
 
     # Add all machines to database
@@ -127,10 +98,6 @@ if not (check_file):
     session.commit()
 
     # LPFK S63 PCB Router
-<<<<<<< HEAD
-    machine1 = class_models.Machine(1, "LPKF S63 PCB Router")
-    machine1.trained_users.append(student1)
-=======
     machine1 = class_models.Machine(
         1,
         "LPKF S63 PCB Router",
@@ -138,15 +105,10 @@ if not (check_file):
         file_name=(prefix + "equipment_images/circuit_board_manufacturing/lpkf_s63_pcb_router.jpg")
     )
     machine1.categories.append(circuit_board_manufacturing)
->>>>>>> 9cffa1b (Add tables and objects for machine data, machine tags, and a training log)
     session.add(machine1)
     session.commit()
 
     # LPKF S104 PCB Router
-<<<<<<< HEAD
-    machine2 = class_models.Machine(2, "LPKF S104 PCB Router")
-    machine2.trained_users.append(student1)
-=======
     machine2 = class_models.Machine(
         2,
         "LPKF S104 PCB Router",
@@ -154,7 +116,6 @@ if not (check_file):
         file_name=(prefix + "equipment_images/circuit_board_manufacturing/lpkf_s104_pcb_router.jpg")
     )
     machine2.categories.append(circuit_board_manufacturing)
->>>>>>> 9cffa1b (Add tables and objects for machine data, machine tags, and a training log)
     session.add(machine2)
     session.commit()
 
