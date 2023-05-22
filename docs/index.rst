@@ -19,6 +19,7 @@ Contents
    :caption: Contents:
    
    README
+   AdminUsage
 
 Indices and tables
 ==================
