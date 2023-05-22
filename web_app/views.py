@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import access_logs, add_new_user, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, get_user_by_id, read_all, add_training
+from database.user_options import access_logs, add_new_user, get_user_by_psu_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, get_user_by_id, read_all, add_training
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators
@@ -154,7 +154,7 @@ def permissions():
     if request.method == "POST":
         try:
             user_id = request.form['id']
-            user = get_user_by_id(user_id)
+            user = get_user_by_psu_id(user_id)
             return redirect(url_for('views.permissionsStudent', id=user_id))
         except ValueError as e:
             flash(str(e), "error")
@@ -192,7 +192,7 @@ def waiver():
     
 @bp.route("/permissions/<id>/")
 def permissionsStudent(id):
-    user = get_user_by_id(id)
+    user = get_user_by_psu_id(id)
     user_machines = user.machines
     return render_template("permissionsStudent.html", user=user, user_machines=user_machines)
 
