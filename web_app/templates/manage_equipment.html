@@ -2,7 +2,7 @@
 <div class="manage-equipment-content">
   <div class="container">
     <div class="row">
-      <div class="col md-12">
+      <div class="col md-8">
         <div class="jumbotron p-3">
           <h2>
             Manage <b>Equipment</b>
@@ -62,7 +62,7 @@
                     <legend class="mb-1">Category:</legend>
                     <fieldset>
                       {% for category in categories %}
-                      <div><input type="radio" id="category_{{category.tag | format_category}}" name="category"
+                      <div><input type="checkbox" id="category_{{category.tag | format_category}}" name="category"
                           value="{{category.id}}" {% if category in row.categories %}checked{% endif %} /><label
                           for="category_{{category.tag | format_category}}">{{category.tag}}</label>
                       </div>
@@ -113,7 +113,7 @@
                     <legend class="mb-1">Category:</legend>
                     <fieldset>
                       {% for category in categories %}
-                      <div><input type="radio" id="category_{{category.tag | format_category}}" name="category"
+                      <div><input type="checkbox" id="category_{{category.tag | format_category}}" name="category"
                           value="{{category.id}}" /><label
                           for="category_{{category.tag | format_category}}">{{category.tag}}</label>
                       </div>
@@ -139,6 +139,98 @@
           </div>
         </div>
         <!-- End Add Equipment Modal -->
+      </div>
+      <div class="col md-4">
+        <div class="jumbotron p-3">
+          <h2>
+            Manage <b>Categories</b>
+            <button class="btn btn-success float-end" type="button" data-bs-toggle="modal" data-bs-target="#add_category_modal">
+              Add new Category
+            </button>
+          </h2>
+
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for category in categories %}
+              <tr>
+                <td><b>{{category.id}}</b></td>
+                <td>{{category.tag}}</td>
+                <td>
+                  <a href="/update-equipment/{{category.id}}" class="btn edit" data-bs-toggle="modal"
+                    data-bs-target="#edit_category_modal{{category.id}}" aria-label="Edit category"><i
+                      class="fa-solid fa-pen-to-square"></i></a>
+                  <a href="{{ url_for('views.remove_equipment', name=category.tag)}}" class="btn delete"
+                    onclick="return confirm('Are you sure you want to remove ' + '{{category.tag}}' + '?')"
+                    aria-label="Delete category"><i class="fa-solid fa-trash"></i></a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        {% for category in categories %}
+        <div id="edit_category_modal{{category.id}}" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title">Edit Category</h3>
+              </div>
+              <div class="modal-body">
+                <form action="{{url_for('views.update_equipment')}}" method="POST">
+                  <input type="hidden" name="category_id" value="{{category.id}}" />
+                  <div class="form-group">
+                    <label for="new_category_name" class="mb-1">Name:</label>
+                    <input type="text" class="form-control" id="new_category_name" name="new_category_name"
+                      value="{{category.tag}}" />
+                  </div>
+                  <div class="form-group">
+                    <button class="btn" type="submit">Update category</button>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+        <div id="add_category_modal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title">Add Category</h3>
+              </div>
+              <div class="modal-body">
+                <form action="{{url_for('views.insert_equipment')}}" method="POST">
+                  <div class="form-group">
+                    <label for="new_category_name" class="mb-1">Name:</label>
+                    <input type="text" class="form-control" id="new_category_name" name="new_category_name" />
+                  </div>
+                  <div class="form-group">
+                    <button class="btn" type="submit">Add Category</button>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
