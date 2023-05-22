@@ -191,6 +191,8 @@ def waiver():
 def permissionsStudent(id):
     user = get_user_by_psu_id(id)
     user_machines = user.machines
+    print(user_machines)
+    print(user)
     return render_template("permissionsStudent.html", user=user, user_machines=user_machines)
 
 

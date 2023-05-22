@@ -273,11 +273,11 @@ hr.h-color {
 }
 
 .permissionsStudent-content img.true {
-  filter: opacity(0.5) drop-shadow(0 0 0 green);
+  border: 5px solid green;
 }
 
 .permissionsStudent-content img.false {
-  filter: opacity(0.5) drop-shadow(0 0 0 red);
+  border: 5px solid red;
 }
 
 /* Equipment Overview */
