@@ -42,6 +42,9 @@ if not (check_file):
     session.add(base_manager)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f37f6a4 (ACTUALLY fix merge conflicts)
     student1 = class_models.User(psu_id="900000011", access="000011", fname="John", lname="Student", email="jstudent@pdx.edu", password=None, role="Student")
     session.add(student1)
     student2 = class_models.User(
@@ -88,6 +91,7 @@ if not (check_file):
                                         badge=student3.badge, psu_id=student3.psu_id, event="check_out", timestamp=datetime.now())
     session.add(event_log42)
     
+<<<<<<< HEAD
 =======
     base_student1 = class_models.User(psu_id="900000011", access="000011", fname="John", lname="Student", email="jstudent@pdx.edu", password=None, role="Student")
     session.add(base_student1)
@@ -106,6 +110,8 @@ if not (check_file):
     access_log4 = class_models.AccessLog(user_id=base_student3.id, checked_in_at=datetime.now() - timedelta(hours=1), checked_out_at=datetime.now())
     session.add(access_log4)
 >>>>>>> 1614586 (Remove unnescessary imports and files, add access log table and stub out access method)
+=======
+>>>>>>> f37f6a4 (ACTUALLY fix merge conflicts)
     session.commit()
 
     # Add all machines to database
