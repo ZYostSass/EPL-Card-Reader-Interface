@@ -64,13 +64,16 @@ if not (check_file):
     # LPKF Multipress S
     machine0 = class_models.Machine(0, "LPKF Multipress S")
     session.add(machine0)
+    machine0.trained_users.append(student1)
     session.commit()
     # LPFK S63 PCB Router
     machine1 = class_models.Machine(1, "LPKF S63 PCB Router")
+    machine1.trained_users.append(student1)
     session.add(machine1)
     session.commit()
     # LPKF S104 PCB Router
     machine2 = class_models.Machine(2, "LPKF S104 PCB Router")
+    machine2.trained_users.append(student1)
     session.add(machine2)
     session.commit()
     # Pick and Place

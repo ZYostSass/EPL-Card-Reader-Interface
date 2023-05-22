@@ -38,11 +38,8 @@ def login():
         # Verify password
         try:
             user = check_user_password(user_email, password)
-        except ValueError as e:
-            flash(e, "error")
-            user = None
-        except LookupError as e:
-            flash(e, "error")
+        except Exception as e:
+            flash(str(e), "error")
             user = None
 
         if user is None:
