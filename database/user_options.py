@@ -149,6 +149,9 @@ def remove_user(badge_number):
         database_init.session.delete(to_delete)
         database_init.session.commit()
 
+def all_categories():
+    return database_init.session.execute(select(class_models.MachineTag)).scalars().all()
+
 # Add new machines to the database
 def add_machine (name):
     # Check to see if the machine is already in the database

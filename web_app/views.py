@@ -1,3 +1,4 @@
+import base64
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
@@ -137,7 +138,10 @@ def event_log_csv():
 @bp.route("/equipOverview/")
 @manager_required
 def equipOverview():
-    return render_template("equipOverview.html")
+    categories = all_categories()
+    for category in categories:
+        category.clazz = category.tag.replace(" ", "-").lower()
+    return render_template("equipOverview.html", categories=categories)
 
 
 @bp.route("/equipOverview/student/")

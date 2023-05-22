@@ -1,3 +1,4 @@
+import base64
 from datetime import datetime
 from typing import List, Optional
 from sqlalchemy import Column, LargeBinary, Table, String, Integer, Boolean, ForeignKey
@@ -54,7 +55,7 @@ class User(Base):
         self.training_log = []
         if password is not None and role == "Student":
             raise ValueError("Invalid student configuration")
-        
+    
         if password is not None:
             self.pw_hash = hashpw(password, gensalt())
         
@@ -109,12 +110,12 @@ class Machine(Base):
         
         if file_name is not None:
             with open(file_name, "rb") as f:
-                self.machine_image = f.read()
+                self.machine_image = base64.b64encode(f.read())
         else:
             if not isinstance(machine_image, bytes):
                 raise ValueError("machine_image must be of type bytes")
             
-            self.machine_image = machine_image
+            self.machine_image = base64.b64encode(machine_image)
     
     def __repr__(self):
         return self.name
