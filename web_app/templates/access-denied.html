@@ -1,0 +1,12 @@
+{% extends "index.html" %} {% block content %}
+<div class="form-content px-3 pt-4">
+  <h2 class="fs-2 pe-2">Access Denied</h2>
+  <div>
+    Please speak to the lab manager or administrator.
+    <a href="{{ url_for('views.logout', next=next) }}" class="btn-primary psu-button">Log out</a>
+    <a href="{{ url_for('views.login', next=next) }}" class="btn-primary psu-button">Log In</a>
+  </div>
+  <!-- End Manual Entry-->
+</div>
+
+{% endblock %}

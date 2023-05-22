@@ -3,7 +3,7 @@ from database import class_models
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import datetime
+from datetime import datetime, timedelta
 
 path = os.getcwd()
 # print(path)
@@ -21,15 +21,40 @@ if not (check_file):
 
     # Create Base Admin
     # TODO - Fill in correct info
-    base_admin = class_models.User(id=100000000, access="000001", fname="John", lname="Admin", email="jadmin@pdx.edu", password=b"password", role="Admin", last_login=datetime.datetime.now())
+    base_admin = class_models.User(psu_id="900000000", access="000001", fname="John", lname="Admin", email="jadmin@pdx.edu", password=b"password", role="Admin")
     session.add(base_admin)
 
-    base_manager = class_models.User(id=200000000, access="000002", fname="John", lname="Manager", email="jmanager@pdx.edu", password=b"password", role="Manager", last_login=datetime.datetime.now())
+    base_manager = class_models.User(psu_id="900000001", access="000002", fname="John", lname="Manager", email="jmanager@pdx.edu", password=b"password", role="Manager")
     session.add(base_manager)
 
-    base_student = class_models.User(id=300000000, access="000003", fname="John", lname="Student", email="jstudent@pdx.edu", password=None, role="Student", last_login=datetime.datetime.now())
-    session.add(base_student)
+    student1 = class_models.User(psu_id="900000011", access="000011", fname="John", lname="Student", email="jstudent@pdx.edu", password=None, role="Student")
+    session.add(student1)
+    student2 = class_models.User(psu_id="900000012", access="000012", fname="Frank", lname="Student", email="fstudent@pdx.edu", password=None, role="Student")
+    session.add(student2)
+    student3 = class_models.User(psu_id="900000013", access="000013", fname="Emily", lname="Student", email="estudent@pdx.edu", password=None, role="Student")
+    session.add(student3)  
+    session.commit()
 
+    event_log11 = class_models.EventLog(fname=student1.firstname, lname=student1.lastname, badge=student1.badge, psu_id=student1.psu_id, event="check_in", timestamp=datetime.now() - timedelta(hours=1))
+    session.add(event_log11)
+    event_log12 = class_models.EventLog(fname=student1.firstname, lname=student1.lastname, badge=student1.badge, psu_id=student1.psu_id, event="check_out", timestamp=datetime.now())
+    session.add(event_log12)
+
+    event_log21 = class_models.EventLog(fname=student1.firstname, lname=student1.lastname, badge=student1.badge, psu_id=student1.psu_id, event="check_in", timestamp=datetime.now() - timedelta(hours=2, minutes=5))
+    session.add(event_log21)
+    event_log22 = class_models.EventLog(fname=student1.firstname, lname=student1.lastname, badge=student1.badge, psu_id=student1.psu_id, event="check_out", timestamp=datetime.now()  - timedelta(hours=2))
+    session.add(event_log22)
+
+    event_log31 = class_models.EventLog(fname=student2.firstname, lname=student2.lastname, badge=student2.badge, psu_id=student2.psu_id, event="check_in", timestamp=datetime.now() - timedelta(hours=1, minutes=5))
+    session.add(event_log31)
+    event_log32 = class_models.EventLog(fname=student2.firstname, lname=student2.lastname, badge=student2.badge, psu_id=student2.psu_id, event="check_out", timestamp=datetime.now() - timedelta(minutes=5))
+    session.add(event_log32)
+
+    event_log41 = class_models.EventLog(fname=student3.firstname, lname=student3.lastname, badge=student3.badge, psu_id=student3.psu_id, event="check_in", timestamp=datetime.now() - timedelta(hours=1))
+    session.add(event_log41)
+    event_log42 = class_models.EventLog(fname=student3.firstname, lname=student3.lastname, badge=student3.badge, psu_id=student3.psu_id, event="check_out", timestamp=datetime.now())
+    session.add(event_log42)
+    
     session.commit()
 
     # Add all machines to database
@@ -39,13 +64,16 @@ if not (check_file):
     # LPKF Multipress S
     machine0 = class_models.Machine(0, "LPKF Multipress S")
     session.add(machine0)
+    machine0.trained_users.append(student1)
     session.commit()
     # LPFK S63 PCB Router
     machine1 = class_models.Machine(1, "LPKF S63 PCB Router")
+    machine1.trained_users.append(student1)
     session.add(machine1)
     session.commit()
     # LPKF S104 PCB Router
     machine2 = class_models.Machine(2, "LPKF S104 PCB Router")
+    machine2.trained_users.append(student1)
     session.add(machine2)
     session.commit()
     # Pick and Place
@@ -119,10 +147,6 @@ if not (check_file):
     machine16 = class_models.Machine(16, "Thermocut 115/E")
     session.add(machine16)
     session.commit()
-
-
-    
-
     
 else:
     # Otherwise

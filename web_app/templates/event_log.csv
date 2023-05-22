@@ -1,0 +1,3 @@
+Access Badge ID,PSU ID,Name,Event,Timestamp (ISO 8601)
+{% if logs %}{% for event in logs %}{{event.badge}},{{event.psu_id}},{{event.fname}} {{event.lname}},{{event.event}},{{ event.timestamp.isoformat() }}
+{% endfor %} {% endif %}

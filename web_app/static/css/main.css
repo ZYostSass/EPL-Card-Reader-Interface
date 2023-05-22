@@ -107,7 +107,7 @@ hr.h-color {
   text-align: center;
 }
 
-.dashboard-menu .card button {
+.dashboard-menu .card a {
   display: inline-block;
   background: var(--lightPSUgreen);
   color: var(--white);
@@ -116,6 +116,7 @@ hr.h-color {
   border-radius: 10px;
   margin-top: 15px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .daily-user-log {
@@ -143,15 +144,48 @@ hr.h-color {
   margin: 0;
 }
 
-.daily-user-log .daily-user-log-data {
+.daily-user-log .data-row {
   display: flex;
-  justify-content: space-between;
+  flex-flow: row;
+}
+
+.data-title.access-id {
+  width: 145px;
+  text-align: center;
+}
+
+.data-title.psu-id {
+  width: 100px;
+  text-align: center;  
+}
+
+.data-title.names {
+  width: 250px;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.data-title.event {
+  width: 100px;
+  text-align: center;  
+}
+
+.data-title.time {
+  width: 100px;
+  text-align: center;  
+}
+
+
+
+.data {
+  margin-right: 10px;
 }
 
 .daily-user-log-data .data {
   display: flex;
   flex-direction: column;
-  margin: 0 15px;
 }
 
 .daily-user-log-data .data .data-list {
@@ -269,11 +303,11 @@ hr.h-color {
 }
 
 .permissionsStudent-content img.true {
-  filter: opacity(0.5) drop-shadow(0 0 0 green);
+  border: 5px solid green;
 }
 
 .permissionsStudent-content img.false {
-  filter: opacity(0.5) drop-shadow(0 0 0 red);
+  border: 5px solid red;
 }
 
 /* Equipment Overview */

@@ -8,10 +8,12 @@
 	# Do everything a Manager can do
 	# Change a user's access level
 
+from typing import Optional
 from bcrypt import checkpw
 from . import database_init
 from . import class_models
 from sqlalchemy import select, func
+from datetime import datetime
 
 # Helper Methods
 
@@ -21,11 +23,11 @@ def is_user_badge_present(badge):
     return database_init.session.execute(select(class_models.User)
         .where(class_models.User.badge == badge)).scalar_one_or_none()
 
-# Checks to see if a given user is in the database, via ID Number
+# Checks to see if a given user is in the database, via PSU ID
 # Returns result (either the user or None)
-def is_user_id_present(idnumber):
+def is_user_id_present(psu_id):
     return database_init.session.execute(select(class_models.User)
-        .where(class_models.User.id == idnumber)).scalar_one_or_none()
+        .where(class_models.User.psu_id == psu_id)).scalar_one_or_none()
 
 # Checks to see if a given machine is in the database, via name
 # Returns result (either the user or None)
@@ -40,13 +42,24 @@ def is_machine_present(name):
 # Can be used to access User members
 def checkin_user(badge):
     # Checks to see if the user is in the database
-    to_checkin = is_user_badge_present(badge)
+    user = is_user_badge_present(badge)
     # If not, leave
-    if to_checkin == None:
+    if user == None:
         raise LookupError(f"User with access number {badge} does not exist")
         return None
+    
+    # If they are, check them in
+    # TODO: Add checkouts to the log somewhere
+    log = class_models.EventLog.check_in(user)
+    database_init.session.add(log)
+    database_init.session.commit()
+    
     # Return the User checked in
-    return to_checkin
+    return user
+
+def access_logs():
+    # TODO: add time range filters
+    return database_init.session.execute(select(class_models.EventLog)).scalars().all()
 
 # Gets the first name, last name, and id number of a given badge number
 # Returns either None or the entire User
@@ -56,6 +69,14 @@ def get_user(badge):
         return None
     else:
         return to_display
+
+def get_user_by_psu_id(id): 
+    user = database_init.session.execute(select(class_models.User)
+        .where(class_models.User.psu_id == id)).scalar_one_or_none()
+    if user == None:
+        raise ValueError(f"User with PSU ID {id} is not in the database")
+    return user
+
 
 def get_user_by_id(id): 
     user = database_init.session.execute(select(class_models.User)
@@ -83,14 +104,14 @@ def check_user_password(email, password):
 # Manager Commands
 
 # Addes a new user, if the ID is not currently present    
-def add_new_user(idnumber, access, firstname, lastname, email, role, login):
+def add_new_user(psu_id, access, firstname, lastname, email, role):
     # Check if user already exists
-    to_check = is_user_id_present(idnumber)
+    to_check = is_user_id_present(psu_id)
     # Return if they do
     if to_check != None:
-        raise ValueError(f"User with ID {idnumber} is already in the database")
+        raise ValueError(f"User with ID {psu_id} is already in the database")
     # Otherwise, add the user to the database
-    user = class_models.User(idnumber, access, firstname, lastname, email, login, role)
+    user = class_models.User(psu_id, access, firstname, lastname, email, role)
     database_init.session.add(user)
     database_init.session.commit()
 
@@ -243,11 +264,13 @@ def read_all_online():
 
 # Admin Commands
 
-def change_user_access_level(idnumber, new_access_level):
-    result = is_user_id_present(idnumber)
-    if result == None:
+def change_user_access_level(idnumber, new_access_level, password):
+    user = is_user_id_present(idnumber)
+    if user == None:
         raise LookupError(f"User with ID {idnumber} does not exist")
-    result.role = new_access_level
+    if password is None and user.pw_hash is None:
+        raise ValueError("User does not have a password, please provide one")
+    user.promote(new_access_level, password)
     database_init.session.commit()
 
 # Purge the database of all Users and Machines

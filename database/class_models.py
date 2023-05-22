@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from typing import Optional
 from sqlalchemy import Column, Table, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
@@ -27,23 +27,22 @@ user_machine_join_table = Table(
     # Role
     # Last Log In datetime
     # List of machines the user is trained on (can be none) -> user_machine assosiation table
-
 class User(Base):
     __tablename__ = "user"
     # Declarative Form, prefered as of SQLAlchemy 2.0
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    psu_id: Mapped[str]
     badge: Mapped[str]
     firstname: Mapped[str]
     lastname: Mapped[str]
     email: Mapped[str]
     role: Mapped[str]
     pw_hash: Mapped[Optional[str]]
-    last_login: Mapped[datetime.datetime]
     # List of machines the user is trained on
     machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
     
-    def __init__(self, id, access, fname, lname, email, last_login, role, password = None):
-        self.id = id
+    def __init__(self, psu_id, access, fname, lname, email, role, password = None):
+        self.psu_id = psu_id
         self.badge = access
         self.firstname = fname
         self.lastname = lname
@@ -53,17 +52,55 @@ class User(Base):
         
         if password is not None:
             self.pw_hash = hashpw(password, gensalt())
+        
         self.role = role
-        self.last_login = last_login
     
     def __repr__(self):
         return f"{self.firstname} {self.lastname} ({self.role})"
     
     def has_admin(self):
-        return self.role is "Admin"
+        return self.role == "Admin"
     
     def has_manager(self):
         return self.role == "Manager" or self.role == "Admin"
+    
+    def promote(self, new_role, password):
+        if new_role != "Manager" and new_role != "Admin":
+            raise ValueError("Invalid role promotion")
+        self.role = new_role
+        if password is not None:
+            self.pw_hash = hashpw(bytes(password, 'utf-8'), gensalt())
+
+class EventLog(Base):
+    __tablename__ = "event_log"
+    # Declarative Form, prefered as of SQLAlchemy 2.0
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    fname: Mapped[str]
+    lname: Mapped[str]
+    badge: Mapped[str]
+    psu_id: Mapped[str]
+    event: Mapped[str]
+    timestamp: Mapped[datetime]
+
+    def __init__(self, fname, lname, badge, psu_id, event, timestamp):
+        self.fname = fname
+        self.lname = lname
+        self.badge = badge
+        self.psu_id = psu_id
+        self.event = event
+        self.timestamp = timestamp
+
+    def __repr__(self):
+        return f"{self.fname} {self.lname} ({self.badge}) {self.event} at {self.timestamp}"
+    
+    @staticmethod
+    def check_in(user: User):
+        return EventLog(user.firstname, user.lastname, user.badge, user.psu_id, "check_in", datetime.now())
+    
+    @staticmethod
+    def check_out(user: User):
+        return EventLog(user.firstname, user.lastname, user.badge, user.psu_id, "check_out", datetime.now())
+
 
 # Machine Table:
     # Primary Key: ID Number

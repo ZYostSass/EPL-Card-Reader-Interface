@@ -1,12 +1,10 @@
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import add_new_user, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, get_user_by_id, read_all, add_training
-#from .admin import login_required
-from . import db
+from database.user_options import access_logs, add_new_user, get_user_by_psu_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, get_user_by_id, read_all, add_training
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, validators
+from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
 # from wtforms.validators import DataRequired
 
@@ -40,11 +38,8 @@ def login():
         # Verify password
         try:
             user = check_user_password(user_email, password)
-        except ValueError as e:
-            flash(e, "error")
-            user = None
-        except LookupError as e:
-            flash(e, "error")
+        except Exception as e:
+            flash(str(e), "error")
             user = None
 
         if user is None:
@@ -71,7 +66,6 @@ admin_bp = Blueprint('admin_views', __name__, url_prefix='/admin')
 def manager_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        print(g.user.has_manager())
         if g.user is None or not g.user.has_manager():
             abort(403, description="This action is only allowed for managers or admins.")
         return f(*args, **kwargs)
@@ -80,7 +74,6 @@ def manager_required(f):
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # print(g.user.role)
         if g.user is None or not g.user.has_admin():
             abort(403, description="This action is only allowed for admins.")
         return f(*args, **kwargs)
@@ -95,40 +88,6 @@ def show_users():
   print(users)
   return render_template("admin/users.html", users=users)
 
-@bp.route("/<id>")
-@admin_required
-def edit_users(id):
-  # Now can access the currently logged in user with g.user
-  user = db.get_or_404(User, id)
-  return render_template("admin/update_user.html", user=user)
-
-
-@bp.route('/read-user/', defaults={'id': 1})
-@bp.route("/read-user/<id>")
-@manager_required
-def test_read(id):
-    user = db.get_or_404(User, id)
-    return render_template('read_user.html', user=user)
-
-
-# Inserting into the database
-@bp.route("/add-user/<name>")
-@manager_required
-def test_write(name):
-    user = User(
-        firstname=name,
-    )
-    db.session.add(user)
-    db.session.commit()
-
-    return render_template('added_user.html', user=user)
-
-# Adding new user into database from form
-# TODO: Only allow access to this page when logged in as an Admin or Manager
-
-# Zach: Set default role to always be student at this time.
-
-
 @bp.route("/add-user-form/", methods=['POST', 'GET'])
 @manager_required
 def add_user_form():
@@ -142,8 +101,8 @@ def add_user_form():
         user_email = request.form['email']
         try:
             # Potential TODO: Change role from Admin to Student for this form (not sure why it's Admin currently)
-            add_new_user(idnumber=user_id, access=user_badge, firstname=user_fname,
-                         lastname=user_lname, email=user_email, role="Student", login=datetime.datetime.now())
+            add_new_user(psu_id=user_id, access=user_badge, firstname=user_fname,
+                         lastname=user_lname, email=user_email, role="Student")
             flash("User Added Successfully", "success")
             return redirect(url_for('views.add_user_form'))
         except ValueError as e:
@@ -157,8 +116,22 @@ def add_user_form():
 @bp.route("/dashboard/")
 @manager_required
 def dashboard():
-    return render_template("dashboard.html")
+    # TODO: Filter these results by today
+    logs = access_logs()
+    return render_template("dashboard.html", logs=logs)
 
+#TODO: Add get parameters for time range
+@bp.route("/event-log-csv/")
+@manager_required
+def event_log_csv():
+    #TODO: get time range from get parameters and pass them here
+    logs = access_logs()
+    response = make_response(render_template("event_log.csv", logs=logs))
+    #TODO adjust file name based on time range
+    file_name = "event_log.csv"
+    response.headers["Content-Disposition"] = f"attachment; filename={file_name}"
+    response.headers["Content-Type"] = "text/csv"
+    return response
 
 @bp.route("/equipOverview/")
 @manager_required
@@ -178,7 +151,7 @@ def permissions():
     if request.method == "POST":
         try:
             user_id = request.form['id']
-            user = get_user_by_id(user_id)
+            user = get_user_by_psu_id(user_id)
             return redirect(url_for('views.permissionsStudent', id=user_id))
         except ValueError as e:
             flash(str(e), "error")
@@ -216,27 +189,11 @@ def waiver():
     
 @bp.route("/permissions/<id>/")
 def permissionsStudent(id):
-    user = get_user_by_id(id)
+    user = get_user_by_psu_id(id)
     user_machines = user.machines
+    print(user_machines)
+    print(user)
     return render_template("permissionsStudent.html", user=user, user_machines=user_machines)
-
-
-@bp.route("/account-creation-form/", methods=['POST', 'GET'])
-@manager_required
-def account_creation_form():
-    if request.method == "POST":
-        user_id = request.form['id']
-        user_fname = request.form['fname']
-        user_lname = request.form['lname']
-        user_email = request.form['email']
-        
-        #used method from user_options.py. 
-        add_new_user(user_id, 0,"Admin",  user_fname, user_lname)            
-        return("User data: is" + user_id + user_fname)
-
-    else:
-        return render_template("account_creation_form.html")
-
 
 @bp.route("/edit_user/")
 @manager_required
@@ -264,7 +221,8 @@ def remove_user_form():
 
 class PromoteForm(FlaskForm):
     id = StringField("Enter PSU ID", [validators.DataRequired()])
-    role = StringField("Update role", [validators.DataRequired()])
+    role = RadioField('Role', choices=[('Admin','Admin'),('Manager','Manager')], validators=[validators.DataRequired()])
+    password = StringField("Add a password")
     submit = SubmitField("Update")
 
 # Create a Promote Page
@@ -272,7 +230,7 @@ class PromoteForm(FlaskForm):
 
 @bp.route("/promote", methods=["POST", "GET"])
 @admin_required
-def PromoteUser():
+def promote_user():
     id = None
     role = None
     form = PromoteForm()
@@ -280,31 +238,20 @@ def PromoteUser():
     if form.validate_on_submit():
         id = form.id.data
         role = form.role.data
-        set_roles = ["student", "admin", "manager"]
+        password = form.password.data
+        if password == "":
+            password = None
+        print(role)
         if (role):
-            change_user_access_level(id, role)
-            flash("Successfully updated")
-            return redirect('/promote')
+            try:
+                change_user_access_level(id, role, password)
+                flash("Successfully updated")
+                return redirect('/promote')
+            except Exception as e:
+                flash(str(e), "error")
+                return render_template("promote_user.html", id=id, role=role, form=form)
 
     return render_template("promote_user.html", id=id, role=role, form=form)
-
-
-@bp.route("/promote-dummy", methods=["GET", "POST"])
-def add_promote_dummy_data():
-    for x in range(3):
-        add_new_user(x + 1, x, "A", "Nguyen", "123@pdx.edu", "student")
-        # user = User(
-        #     id = x,
-        #     bagde= 1234,
-        #     role = 'student',
-        #     fname= 'A',
-        #     lname= "Nguyen",
-        #     email = '123@pdx.edu',
-        # )
-        # db.session.add(user)
-        # db.session.commit()
-
-    return render_template("dashboard.html")
 
 
 @bp.route('/manage-equipment/')
