@@ -4,7 +4,11 @@
     <h2>Equipment Overview</h2>
   </div>
   {% for category in categories %}
+<<<<<<< HEAD
   <div class="{{category.tag | format_category}}">
+=======
+  <div class="{{category.clazz}}">
+>>>>>>> 5885cda (Make equipment over view page dynamic)
     <h3>{{category.tag}}</h3>
     <div class="row row-cols-2 row-cols-md-4 g-4">
       {% for machine in category.machines %}
@@ -22,6 +26,7 @@
     </div>
   </div>
   {% endfor %}
+<<<<<<< HEAD
   {% if uncategorized|length > 0 %}
   <div class="uncategorized">
     <h3>Uncategorized</h3>
@@ -41,5 +46,7 @@
     </div>
   </div>
   {% endif %}
+=======
+>>>>>>> 5885cda (Make equipment over view page dynamic)
 </div>
 {% endblock %}
