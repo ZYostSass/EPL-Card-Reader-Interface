@@ -42,7 +42,7 @@ class User(Base):
     machines: AssociationProxy[List["Machine"]] = association_proxy(
         "training_log",
         "machine",
-        creator=lambda machine_obj: TrainingLog(machine=machine_obj, timestamp=datetime.now())
+        creator=lambda machine_obj: TrainingLog(machine=machine_obj, trained_at=datetime.now())
     )
     
     def __init__(self, psu_id, access, fname, lname, email, role, password = None):
@@ -52,7 +52,7 @@ class User(Base):
         self.lastname = lname
         self.email = email
         self.training_log = []
-        if password is not None and role is "Student":
+        if password is not None and role == "Student":
             raise ValueError("Invalid student configuration")
         
         if password is not None:

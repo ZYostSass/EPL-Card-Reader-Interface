@@ -93,8 +93,8 @@ if not (check_file):
         file_name=(prefix + "equipment_images/circuit_board_manufacturing/lpkf_multipress_s.jpg")
     )
     machine0.categories.append(circuit_board_manufacturing)
+    student1.machines.append(machine0)
     session.add(machine0)
-    machine0.trained_users.append(student1)
     session.commit()
 
     # LPFK S63 PCB Router
