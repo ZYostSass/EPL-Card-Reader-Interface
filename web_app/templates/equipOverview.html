@@ -4,7 +4,7 @@
     <h2>Equipment Overview</h2>
   </div>
   {% for category in categories %}
-  <div class="{{category.clazz}}">
+  <div class="{{category.tag | format_category}}">
     <h3>{{category.tag}}</h3>
     <div class="row row-cols-2 row-cols-md-4 g-4">
       {% for machine in category.machines %}
