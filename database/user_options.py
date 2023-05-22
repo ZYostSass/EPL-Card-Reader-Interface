@@ -98,7 +98,6 @@ def get_user_by_psu_id(id):
         raise ValueError(f"User with PSU ID {id} is not in the database")
     return user
 
-
 def get_user_by_id(id): 
     user = database_init.session.execute(select(class_models.User)
         .where(class_models.User.id == id)).scalar_one_or_none()
