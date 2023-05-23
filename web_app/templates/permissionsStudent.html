@@ -24,42 +24,5 @@
     <h3>No recorded training</h3>
   </div>
   {% endif %}
-  {% if categories|length > 0 or uncategorized|length > 0 %}
-  <div>
-    <h3>Not trained on:</h3>
-    {% if categories|length > 0 %}
-      {% for category in categories %}
-      <div class="{{category.tag | format_category}}">
-        <h3>{{category.tag}}</h3>
-        <div class="row row-cols-2 row-cols-md-4 g-4">
-          {% for machine in category.machines %}
-          <div class="col equipment">
-            <div class="card">
-              <h4>{{machine.name}}</h4>
-              <img src="{{machine.machine_image | base64_to_data_url}}" alt="{{machine.name}}" class="false" />
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-      {% endfor %}
-    {% endif %}
-    {% if uncategorized|length > 0 %}
-    <div class="uncategorized">
-      <h3>Uncategorized</h3>
-      <div class="row row-cols-2 row-cols-md-4 g-4">
-        {% for machine in uncategorized %}
-        <div class="col equipment">
-          <div class="card">
-            <h4>{{machine.name}}</h4>
-            <img src="{{machine.machine_image | base64_to_data_url}}" alt="{{machine.name}}" class="false" />
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    {% endif %}
-    </div>
-  {% endif %}
 </div>
 {% endblock %}
