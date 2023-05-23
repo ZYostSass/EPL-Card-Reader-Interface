@@ -2,7 +2,7 @@ import base64
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import access_logs, add_new_user, all_categories, get_user_by_psu_id, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, update_category_by_id
+from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user_by_psu_id, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, update_category_by_id
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
@@ -194,10 +194,14 @@ def waiver():
 @manager_required
 def permissionsStudent(id):
     user = get_user_by_psu_id(id)
-    user_machines = user.machines
-    print(user_machines)
-    print(user)
-    return render_template("permissionsStudent.html", user=user, user_machines=user_machines)
+    categories = all_categories()
+    uncategorized = uncategorized_machines()
+    for category in categories:
+        category.machines = list(filter(lambda machine: machine not in user.machines, category.machines))
+        if category.machines == []:
+            categories.remove(category)
+    uncategorized = list(filter(lambda machine: machine not in user.machines, uncategorized))
+    return render_template("permissionsStudent.html", user=user, categories=categories, uncategorized=uncategorized)
 
 @bp.route("/edit_user/")
 @manager_required
@@ -369,21 +373,21 @@ def training_session():
     all_machine_data = read_all_machines()
     return render_template('training_session.html', machines=all_machine_data)
 
-@bp.route('/training-session/<int:machine_id>/<path:name>', methods= ['GET', 'POST'])
+@bp.route('/training-session/<int:machine_id>/', methods= ['GET', 'POST'])
 @manager_required
-def training_session_details(machine_id, name):
+def training_session_details(machine_id):
     if request.method == 'POST':
-        
         try:
             # TODO (if time): Function call to get badge number by scanning in
             # Otherwise, proceed with getting inputs via manual entry
             user_id = request.form['user_id']
             add_training(user_id, machine_id)
             flash(f"Training for user with PSU ID {user_id} updated successfully", "success")
-            return redirect(url_for('views.training_session_details', machine_id=machine_id, name=name))
+            return redirect(url_for('views.training_session_details', machine_id=machine_id))
         except ValueError as e:
             flash(str(e), "error")
-            return redirect(url_for('views.training_session_details', machine_id=machine_id, name=name))
+            return redirect(url_for('views.training_session_details', machine_id=machine_id))
 
     else:
-        return render_template('training_session_details.html', machine_id=machine_id, name=name)
+        machine = get_machine(machine_id)
+        return render_template('training_session_details.html', machine=machine)
