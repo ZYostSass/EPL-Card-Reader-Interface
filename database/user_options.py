@@ -12,7 +12,7 @@ from typing import Optional
 from bcrypt import checkpw
 from . import database_init
 from . import class_models
-from sqlalchemy import select, func
+from sqlalchemy import literal_column, select, func, text
 from datetime import datetime
 
 # Helper Methods
@@ -33,7 +33,16 @@ def is_user_id_present(psu_id):
 # Returns result (either the user or None)
 def is_machine_present(name):
     return database_init.session.execute(select(class_models.Machine)
-        .where(class_models.Machine.name == name)).scalar_one_or_none()
+        .where(class_models.Machine.name == name)).scalar_one_or_none()    
+
+def get_machine(id):
+    return database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.id == id)).scalar_one_or_none()
+
+def get_category(id):
+    return database_init.session.execute(select(class_models.MachineTag)
+        .where(class_models.MachineTag.id == id)).scalar_one_or_none()
+
 
 # Universal Commands
 
@@ -141,40 +150,82 @@ def remove_user(badge_number):
 def all_categories():
     return database_init.session.execute(select(class_models.MachineTag)).scalars().all()
 
-# Add new machines to the database
-def add_machine (name):
-    # Check to see if the machine is already in the database
-    machine = is_machine_present(name)
-    # If it is, leave
-    if machine != None:
-        raise ValueError(f"{name} is already in the database")
-    # Otherwise, add it to the end of the database
-    max_id = database_init.session.query(func.max(class_models.Machine.id)).scalar()
-    next_id = (max_id or 0) + 1
+def uncategorized_machines():
+    subq = select(literal_column("machine_id")).select_from(text("machine_tag_association"))
+    return database_init.session.execute(select(class_models.Machine).where(class_models.Machine.id.not_in(subq))).scalars().all()
 
-    to_add = class_models.Machine(next_id, name)
-    database_init.session.add(to_add)
+
+# Add new machines to the database
+def add_machine(name, link, categories, img):
+    print(img)
+    if img is not None and img.filename != "":
+        img = img.read()
+        print(type(img))
+        machine = class_models.Machine(name=name, epl_link=link, machine_image=img)
+    else:
+        machine = class_models.Machine(name=name, epl_link=link)
+    for category in categories:
+        if category is not None:
+            machine.categories.append(get_category(category))
+
+    database_init.session.add(machine)
     database_init.session.commit()
 
 # Edit a given machine's name
-def edit_machine(name, new_name):
+def edit_machine(id, name, link, categories, img):
     # Check to see if the machine is already in the database
-    machine = is_machine_present(name)
-    # If it isn't, leave
+    machine = get_machine(id)
+    
     if machine == None:
-        raise LookupError(f"Machine with name {name} does not exist")
-    # Otherwise, edit it
-    machine.name = new_name
+        raise LookupError(f"Machine with id {id} does not exist")
+
+    machine.name = name
+    machine.epl_link = link
+
+    machine.categories.clear()
+    for category in categories:
+        if category is not None:
+            machine.categories.append(get_category(category))
+
+    if img is not None and img.filename != "":
+        machine.set_image(img.read())
+
     database_init.session.commit()
 
 # Remove a machine from the database
-def remove_machine(name):
+def remove_machine(id):
     # Check to see if the machine is already in the database
-    machine = is_machine_present(name)
+    machine = get_machine(id)
     # If it is, leave
     if machine == None:
-        raise LookupError(f"Machine with name {name} does not exist")
+        raise LookupError(f"Machine with id {id} does not exist")
     database_init.session.delete(machine)
+    database_init.session.commit()
+
+def update_category_by_id(id, name):
+    category = get_category(id)
+
+    if category == None:
+        raise LookupError(f"Category with id {id} does not exist")
+    
+    category.tag = name
+
+    database_init.session.commit()
+
+
+def insert_category(name):
+    category = class_models.MachineTag(tag=name)
+    database_init.session.add(category)
+    database_init.session.commit()
+
+# Remove a machine from the database
+def remove_category_by_id(id):
+    # Check to see if the machine is already in the database
+    category = get_category(id)
+    # If it is, leave
+    if category == None:
+        raise LookupError(f"Category with id {id} does not exist")
+    database_init.session.delete(category)
     database_init.session.commit()
 
 # Add trainings to a passed User

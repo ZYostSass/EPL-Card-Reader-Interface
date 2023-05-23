@@ -139,7 +139,8 @@ def event_log_csv():
 @manager_required
 def equipOverview():
     categories = all_categories()
-    return render_template("equipOverview.html", categories=categories)
+    uncategorized = uncategorized_machines()
+    return render_template("equipOverview.html", categories=categories, uncategorized=uncategorized)
 
 
 @bp.route("/equipOverview/student/")
@@ -262,42 +263,97 @@ def manage_equipment():
     return render_template("manage_equipment.html", machines=all_machine_data, categories=categories)
 
 
-@bp.route('/update-equipment/', methods=['GET', 'POST'])
+@bp.route('/update-equipment/', methods=['POST'])
 @manager_required
 def update_equipment():
-    if request.method == "POST":
-        equipment_name = request.form.get("equipment_name")
-        new_equipment_name = request.form.get("new_equipment_name")
-
+    equipment_id = request.form.get("equipment_id")
+    equipment_name = request.form.get("equipment_name")
+    equipment_link = request.form.get("epl_link")
+    category_ids = request.form.getlist("categories")
+    img = request.files.get("equipment_image")
+    if equipment_id is None or equipment_id == "":
+        flash("Malformed request, missing equipment_id", "error")
+    elif equipment_name is None or equipment_name == "":
+        flash("Equipment name cannot be empty", "error")
+    else:
         try:
-            edit_machine(equipment_name, new_equipment_name)
+            edit_machine(int(equipment_id), equipment_name, equipment_link, category_ids, img)
             flash("Equipment Updated Successfully", "success")
         except ValueError as e:
             flash(str(e), "error")
 
-        return redirect(url_for('views.manage_equipment'))
-
+    return redirect(url_for('views.manage_equipment'))
 
 @bp.route('/insert-equipment/', methods=['POST'])
 @manager_required
 def insert_equipment():
-    if request.method == 'POST':
-        equipment_name = request.form['equipment_name']
-
+    equipment_name = request.form['equipment_name']
+    equipment_link = request.form['epl_link']
+    if equipment_link == "":
+        equipment_link = None
+    category_ids = request.form.getlist('categories')
+    img = request.files.get('equipment_image')
+    if equipment_name is None or equipment_name == "":
+        flash("Equipment name cannot be empty", "error")
+    else:
         try:
-            add_machine(equipment_name)
+            add_machine(equipment_name, equipment_link, category_ids, img)
             flash("Equipment Added Successfully", "success")
         except ValueError as e:
             flash(str(e), "error")
 
-        return redirect(url_for('views.manage_equipment'))
+    return redirect(url_for('views.manage_equipment'))
 
 
-@bp.route('/remove-equipment/<name>', methods=['GET', 'POST'])
+@bp.route('/remove-equipment/<id>', methods=['GET', 'POST'])
 @manager_required
-def remove_equipment(name):
+def remove_equipment(id):
     try:
-        remove_machine(name)
+        remove_machine(id)
+        flash("Equipment Removed Successfully", "success")
+    except ValueError as e:
+        flash(str(e), "error")
+
+    return redirect(url_for('views.manage_equipment'))
+
+
+@bp.route('/update_category/', methods=['POST'])
+@manager_required
+def update_category():
+    id = request.form['category_id']
+    name = request.form['category_name']
+    if name is None or name == "" or id is None or id == "":
+        flash("Category name or ID cannot be empty", "error")
+    else:
+        try:
+            update_category_by_id(id, name)
+            flash("Category updated Successfully", "success")
+        except ValueError as e:
+            flash(str(e), "error")
+
+    return redirect(url_for('views.manage_equipment'))
+
+
+@bp.route('/insert_category/', methods=['POST'])
+@manager_required
+def insert_category():
+    name = request.form['category_name']
+    if name is None or name == "":
+        flash("Category name cannot be empty", "error")
+    else:
+        try:
+            insert_category(name)
+            flash("Category Added Successfully", "success")
+        except ValueError as e:
+            flash(str(e), "error")
+
+    return redirect(url_for('views.manage_equipment'))
+
+@bp.route('/remove-category/<id>', methods=['GET', 'POST'])
+@manager_required
+def remove_category(id):
+    try:
+        remove_category_by_id(id)
         flash("Equipment Removed Successfully", "success")
     except ValueError as e:
         flash(str(e), "error")
