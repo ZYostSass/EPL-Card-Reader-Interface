@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.debug = True
 app.config["SECRET_KEY"] = "dev"
 app.config["EXPLAIN_TEMPLATE_LOADING"] = True
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 # 16 MB
 
 try:
   os.makedirs(app.instance_path)
@@ -50,5 +51,8 @@ def format_category(value):
 # The following was written by chatgpt:
 @app.template_filter('base64_to_data_url')
 def base64_to_data_url(value):
-    data = value.decode('utf-8')
+    if value is not None:
+      data = value.decode('utf-8')
+    else:
+      data = ""
     return f"data:image/jpg;base64,{data}"

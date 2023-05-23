@@ -92,26 +92,25 @@ class Machine(Base):
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str]
-    machine_image: Mapped[bytes] = mapped_column(LargeBinary, deferred=True) # Lazily load the image
-    epl_link: Mapped[str] = mapped_column(deferred=True) # Lazily load the link
+    machine_image: Mapped[Optional[bytes]] = mapped_column(LargeBinary, deferred=True, nullable=True) # Lazily load the image
+    epl_link: Mapped[Optional[str]] = mapped_column(deferred=True) # Lazily load the link
     # List of Users that are trained on this machine
     trained_users: Mapped[List[TrainingLog]] = relationship(back_populates="machine")
     # Categories associated with each machine
     categories: Mapped[List["MachineTag"]] = relationship(secondary=machine_tag_association, back_populates="machines")
     
-    def __init__(self, id, name, epl_link, file_name = None, machine_image = None):
-        self.id = id
+    def __init__(self, name, epl_link, file_name = None, machine_image = None):
         self.name = name
         self.epl_link = epl_link
         self.categories = []
         self.trained_users = []
-        if file_name is None and machine_image is None:
+        if file_name is not None and machine_image is not None:
             raise ValueError("Must provide either file_name or machine_image")
         
         if file_name is not None:
             with open(file_name, "rb") as f:
                 self.machine_image = base64.b64encode(f.read())
-        else:
+        elif machine_image is not None:
             if not isinstance(machine_image, bytes):
                 raise ValueError("machine_image must be of type bytes")
             
@@ -119,6 +118,10 @@ class Machine(Base):
     
     def __repr__(self):
         return self.name
+    
+    def set_image(self, image: bytes):
+        self.machine_image = base64.b64encode(image)
+
     
 
 class MachineTag(Base):

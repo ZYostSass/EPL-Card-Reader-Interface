@@ -87,7 +87,6 @@ if not (check_file):
 
     # LPKF Multipress S
     machine0 = class_models.Machine(
-        0,
         "LPKF Multipress S",
         "https://psu-epl.github.io/doc/equip/misc/LPKF_MultipressS/",
         file_name=(prefix + "equipment_images/circuit_board_manufacturing/lpkf_multipress_s.jpg")
@@ -99,7 +98,6 @@ if not (check_file):
 
     # LPFK S63 PCB Router
     machine1 = class_models.Machine(
-        1,
         "LPKF S63 PCB Router",
         "https://psu-epl.github.io/doc/equip/router/LPKF/",
         file_name=(prefix + "equipment_images/circuit_board_manufacturing/lpkf_s63_pcb_router.jpg")
@@ -110,7 +108,6 @@ if not (check_file):
 
     # LPKF S104 PCB Router
     machine2 = class_models.Machine(
-        2,
         "LPKF S104 PCB Router",
         "https://psu-epl.github.io/doc/equip/router/LPKF_S104/",
         file_name=(prefix + "equipment_images/circuit_board_manufacturing/lpkf_s104_pcb_router.jpg")
@@ -121,7 +118,6 @@ if not (check_file):
 
     # Pick and Place
     machine3 = class_models.Machine(
-        3,
         "Pick and Place",
         "https://psu-epl.github.io/doc/equip/misc/pickAndPlace/",
         file_name=(prefix + "equipment_images/circuit_board_manufacturing/pick_and_place.jpg")
@@ -132,7 +128,6 @@ if not (check_file):
 
     # Soldering Equipment
     machine4 = class_models.Machine(
-        4,
         "Soldering Equipment",
         "https://psu-epl.github.io/doc/equip/solder/Soldering-Equipment",
         file_name=(prefix + "equipment_images/circuit_board_manufacturing/soldering_equipment.jpg")
@@ -143,7 +138,6 @@ if not (check_file):
 
     # T200N Desktop Solder Oven
     machine5 = class_models.Machine(
-        5,
         "T200N Desktop Solder Oven",
         "https://psu-epl.github.io/doc/equip/solder/oven/",
         file_name=(prefix + "equipment_images/circuit_board_manufacturing/t200n_desktop_solder_oven.jpg")
@@ -154,7 +148,6 @@ if not (check_file):
 
     # Test and Measurement
     machine6 = class_models.Machine(
-        6,
         "Test and Measurement",
         "https://psu-epl.github.io/doc/equip/testing/",
         file_name=(prefix + "equipment_images/circuit_board_manufacturing/test_and_measurement.jpg")
@@ -168,7 +161,6 @@ if not (check_file):
 
     # Form 3 SLA Printer
     machine7 = class_models.Machine(
-        7,
         "Form 3 SLA Printer",
         "https://psu-epl.github.io/doc/equip/printer/form2/",
         file_name=(prefix + "equipment_images/3d_printers/form_3_sla_printer.jpg")
@@ -178,7 +170,6 @@ if not (check_file):
     session.commit()
     # Ultimaker3 Extended 3D Printer
     machine8 = class_models.Machine(
-        8,
         "Ultimaker3 Extended 3D Printer",
         "https://psu-epl.github.io/doc/equip/printer/UM3/",
         file_name=(prefix + "equipment_images/3d_printers/ultimaker3_extended_3d_printer.jpg")
@@ -192,7 +183,6 @@ if not (check_file):
 
     # Drill Press
     machine9 = class_models.Machine(
-        9,
         "Drill Press",
         "https://psu-epl.github.io/doc/equip/machining/drillPress/",
         file_name=(prefix + "equipment_images/machining_equipment/drill_press.jpg")
@@ -202,7 +192,6 @@ if not (check_file):
     session.commit()
     # Little Machine Shop Lathe
     machine10 = class_models.Machine(
-        10,
         "Little Machine Shop Lathe",
         "https://psu-epl.github.io/doc/equip/machining/lathe/",
         file_name=(prefix + "equipment_images/machining_equipment/little_machine_shop_lathe.jpg")
@@ -212,7 +201,6 @@ if not (check_file):
     session.commit()
     # Little Machine Shop Mill
     machine11 = class_models.Machine(
-        11,
         "Little Machine Shop Mill",
         "https://psu-epl.github.io/doc/equip/machining/mill/",
         file_name=(prefix + "equipment_images/machining_equipment/little_machine_shop_mill.jpg")
@@ -222,7 +210,6 @@ if not (check_file):
     session.commit()
     # WAZER
     machine12 = class_models.Machine(
-        12,
         "WAZER",
         "https://psu-epl.github.io/doc/equip/machining/wazer/",
         file_name=(prefix + "equipment_images/machining_equipment/wazer.jpg")
@@ -236,7 +223,6 @@ if not (check_file):
 
     # QD-1390 Laser Cutter
     machine13 = class_models.Machine(
-        13,
         "QD-1390 Laser Cutter",
         "https://psu-epl.github.io/doc/equip/laser/QD-1390/",
         file_name=(prefix + "equipment_images/laser_cutters/qd-1390_laser_cutter.jpg")
@@ -251,7 +237,6 @@ if not (check_file):
 
     # EZFORM SV 1217
     machine14 = class_models.Machine(
-        14,
         "EZFORM SV 1217",
         "https://psu-epl.github.io/doc/equip/misc/EZFORM_SV_1217/",
         file_name=(prefix + "equipment_images/miscellaneous/ezform_sv_1217.jpg")
@@ -261,7 +246,6 @@ if not (check_file):
     session.commit()
     # Silhouette Cameo
     machine15 = class_models.Machine(
-        15,
         "Silhouette Cameo",
         "https://psu-epl.github.io/doc/equip/misc/cameo/",
         file_name=(prefix + "equipment_images/miscellaneous/silhouette_cameo.jpg")
@@ -271,7 +255,6 @@ if not (check_file):
     session.commit()
     # Thermocut 115/E
     machine16 = class_models.Machine(
-        16,
         "Thermocut 115/E",
         "https://psu-epl.github.io/doc/equip/misc/Thermocut/",
         file_name=(prefix + "equipment_images/miscellaneous/thermocut_115e.jpg")
