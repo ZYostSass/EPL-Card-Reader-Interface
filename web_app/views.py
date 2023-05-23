@@ -80,6 +80,20 @@ def admin_required(f):
     return decorated_function
 
 
+max_timeout = datetime.timedelta(0, 0, 0, 0, 0, 20, 0)
+
+def check_time():
+        
+    t1 = g.user.last_active.time()
+    t2 = datetime.now()
+    if t1 < t2:
+        g.user.last_active = datetime.now()
+    elif (t1 - t2) > max_timeout:
+        logout()
+    else:
+        g.user.last_active = datetime.now() 
+
+
 @admin_bp.route("/")
 @admin_required
 def show_users():
@@ -117,6 +131,7 @@ def add_user_form():
 @manager_required
 def dashboard():
     # TODO: Filter these results by today
+    #check_time()
     logs = access_logs()
     return render_template("dashboard.html", logs=logs)
 

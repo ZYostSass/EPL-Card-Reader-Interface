@@ -38,6 +38,7 @@ class User(Base):
     email: Mapped[str]
     role: Mapped[str]
     pw_hash: Mapped[Optional[str]]
+    last_active = datetime(2000, 1, 1, 0, 0, 0, 0)
     # List of machines the user is trained on
     machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
     
@@ -70,6 +71,7 @@ class User(Base):
         self.role = new_role
         if password is not None:
             self.pw_hash = hashpw(bytes(password, 'utf-8'), gensalt())
+        
 
 class EventLog(Base):
     __tablename__ = "event_log"
