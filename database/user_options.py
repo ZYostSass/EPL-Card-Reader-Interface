@@ -182,12 +182,12 @@ def add_training(user_badge, machine_id):
     database_init.session.commit()
 
 # Remove trainings to a passed User
-def remove_training(user_id, machine_id):
+def remove_training(user_badge, machine_id):
     # Check to see if the user is in the database
-    to_untrain = is_user_id_present(user_id)
+    to_untrain = is_user_badge_present(user_badge)
     # If they aren't, leave
     if to_untrain == None:
-        raise LookupError(f"User with ID {user_id} does not exist")
+        raise LookupError(f"User with Badge {user_badge} does not exist")
     # Check to see if the machine is in the database
     # Works off of machine ID rather than name
     machine = database_init.session.execute(select(class_models.Machine)

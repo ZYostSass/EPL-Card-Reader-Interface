@@ -315,8 +315,7 @@ def training_session_details(machine_id, name):
     if request.method == 'POST':
         
         try:
-            # TODO (if time): Function call to get badge number by scanning in
-            # Otherwise, proceed with getting inputs via manual entry
+    
             user_badge = request.form['badge']
             add_training(user_badge, machine_id)
             flash(f"Training for user with Badge {user_badge} updated successfully", "success")
