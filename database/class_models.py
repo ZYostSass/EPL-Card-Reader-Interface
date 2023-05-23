@@ -8,6 +8,16 @@ from bcrypt import checkpw, gensalt, hashpw
 class Base(DeclarativeBase):
     pass
 
+# Key Value Table for storing global settings:
+class KeyValue(Base):
+    __tablename__ = "key_value"
+    key: Mapped[str] = mapped_column(primary_key=True)
+    value: Mapped[str]
+
+# Well known keys:
+LOGOUT_TIME = "LOGOUT_TIME" # int, minutes
+
+
 # Bi-directional join table for many-to-many relationships
 # using sqlalchemy.Column construct
     # Primary Key: User ID -> user.id
@@ -38,7 +48,6 @@ class User(Base):
     email: Mapped[str]
     role: Mapped[str]
     pw_hash: Mapped[Optional[str]]
-    last_active = datetime(2000, 1, 1, 0, 0, 0, 0)
     # List of machines the user is trained on
     machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
     

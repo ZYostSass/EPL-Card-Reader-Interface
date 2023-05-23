@@ -1,10 +1,13 @@
 from flask import Flask, g, session
 #from card_reader.reader import CardReader
 import os
+from database.class_models import LOGOUT_TIME
 
-from database.user_options import get_user_by_id
+from database.user_options import get_int_key, get_user_by_id, get_key
+from datetime import datetime, timedelta
 
-
+#TODO: Store this in a seperate database table
+LOGOUT_TIME_DEFAULT = 30 # minutes
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev"
@@ -36,9 +39,19 @@ def add_current_role():
 @app.before_request
 def set_user_global():
     user_id = session.get("user_id")
+    last_login_time = session.get("user_active_at")
+    log_out_time = get_int_key(LOGOUT_TIME)
 
-    if user_id is None:
+    if log_out_time is None:
+       log_out_time = LOGOUT_TIME_DEFAULT
+       
+    if user_id is None or last_login_time is None:
+        g.user = None
+    elif last_login_time < (datetime.now() - timedelta(minutes=log_out_time)):
+        session.pop("user_id", None)
+        session.pop("user_active_at", None)
         g.user = None
     else:
+        session["user_active_at"] = datetime.datetime.now()
         user = get_user_by_id(user_id)
         g.user = user
