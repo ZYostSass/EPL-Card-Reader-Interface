@@ -6,8 +6,8 @@
       <h1>Student</h1>
       <p>Add and edit users</p>
       <div class="card-buttons">
-        <a href="{{ url_for('views.add_user_form')}}"><button>Add</button></a>
-        <a href="{{ url_for('views.edit_user')}}"><button>Edit</button></a>
+        <a href="{{ url_for('views.add_user_form')}}">Add</a>
+        <a href="{{ url_for('views.edit_user')}}">Edit</a>
       </div>
     </div>
     <div class="card col-4">
@@ -15,9 +15,7 @@
       <h1>Equipment</h1>
       <p>Manage equipment</p>
       <div class="card-buttons">
-        <a href="{{ url_for('views.manage_equipment')}}"
-          ><button>Manage</button></a
-        >
+        <a href="{{ url_for('views.manage_equipment')}}">Manage</a>
       </div>
     </div>
     <div class="card col-4">
@@ -25,36 +23,35 @@
       <h1>Training</h1>
       <p>Update training for users</p>
       <div class="card-buttons">
-        <button>Update</button>
+        <a href="{{ url_for('views.training_session')}}">
+          Update
+        </a>
       </div>
     </div>
     <div class="daily-user-log">
       <div class="title">
         <i class="fa-solid fa-clock"></i>
         <h1>Recent users</h1>
+        <a style="max-width: 150px; margin-left: 20px;"class="btn-primary psu-button" href="{{ url_for('views.event_log_csv') }}">Export to CSV</a>
       </div>
       <div class="daily-user-log-data">
-        <div class="data access-id">
-          <span class="data-title">Access Badge ID</span>
-          <!-- TODO: Implement way to insert user ID here at scan in -->
-          <span class="data-list">123456</span>
-        </div>
-        <div class="data psu-id">
-          <span class="data-title">PSU ID</span>
-          <!-- TODO: Implement way to insert user PSU ID here at scan in -->
-          <span class="data-list">123456789</span>
-        </div>
-        <div class="data names">
-          <span class="data-title">Name</span>
-          <!-- TODO: Implement way to insert user names here at scan in -->
-          <span class="data-list">John Doe</span>
-        </div>
-        <div class="data check-in-time">
-          <span class="data-title">Check-in Time</span>
-          <!-- TODO: Implement way to insert user check-in times here at scan in -->
-          <span class="data-list">10:00AM</span>
+        <div class="data-row header-row">
+          <span class="data data-title access-id">Access Badge ID</span>
+          <span class="data data-title psu-id">PSU ID</span>
+          <span class="data data-title names">Name</span>
+          <span class="data data-title event">Event</span>
+          <span class="data data-title time">Time</span>
         </div>
       </div>
+      {% if logs %}{% for event in logs %}
+      <div class="data-row header-row">
+        <span class="data data-title access-id">{{event.badge}}</span>
+        <span class="data data-title psu-id">{{event.psu_id}}</span>
+        <span class="data data-title names">{{event.fname}} {{event.lname}}</span>
+        <span class="data data-title event">{{event.event}}</span>
+        <span class="data data-title time">{{ event.timestamp.strftime('%H:%M:%S') }}</span>
+      </div>
+      {% endfor %} {% endif %}
     </div>
   </div>
 </section>

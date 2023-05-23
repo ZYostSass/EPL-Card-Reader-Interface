@@ -1,3 +1,4 @@
+{% if no_navbar != True %}
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container-fluid">
     <div class="d-flex justify-content-between d-md-none d-block">
@@ -29,10 +30,25 @@
       id="navbarSupportedContent"
     >
       <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">My Account</a>
+          {% if g.user is not none %}
+          <li class="nav-item">
+            <div style="color: white; margin-right: 10px;">Logged in as: {{ g.user }}</div>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url_for('views.logout') }}" type="submit" class="btn-primary psu-button" id="submit-btn">
+              Log Out
+            </a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a href="{{ url_for('views.login') }}" type="submit" class="btn-primary psu-button" id="submit-btn">
+              Log In
+            </a>      
+          </li>
+          {% endif %}
         </li>
       </ul>
     </div>
   </div>
 </nav>
+{% endif %}

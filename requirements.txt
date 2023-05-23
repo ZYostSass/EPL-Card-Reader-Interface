@@ -1,5 +1,6 @@
 Flask
-Flask-SQLAlchemy
-Flask-Migrate
-flask_seeder
+SQLAlchemy
 pyserial
+WTForms
+Flask-WTF
+bcrypt
