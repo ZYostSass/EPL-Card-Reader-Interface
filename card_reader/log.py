@@ -7,30 +7,40 @@ filename = 'log.csv'
 
 #run this when appending data to logfile. 
 def logFile(data):
-       with open('log.csv', 'a', newline='') as f:
+   with open('CardReaderOutputLog.csv', 'a', newline='') as f:
     writer = csv.writer(f)
     #fake data
-    fakedata = ['fname', 'lname', 'psuid', 'userid', data,  datetime.date.today()]
-    
-    #need to add call to database to grab correct info, then create writable object for writer. 
+    fakedata = [ data,  datetime.date.today()]
     writer.writerow(fakedata)
+    
+    f.close()
         
 
 
-#run this if the log file is empty        
+#initializes log with appropriate information as header
 def initLog():
-    field = ['fname' , 'lname', 'PSUID', 'CardNumber', 'date/time']
+    field = ['CardNumber', 'date/time']
     
-    exampleData = ['John', 'Doe', '123123', '123123', '123123', 'datetime' ] 
+    exampleData = ['123123', 'datetime' ] 
     
     with open(filename, 'w') as csvfile:
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(field)
         csvwriter.writerow(exampleData)
-        
-def main():
-    initLog()
-    logFile('12345')
+    
+    csvfile.close()
+       
+       
+##print to console.  
+def printLog():
+    
+    print("=====Card Reader Rutput Log======")
+    
+    with open('log.csv', 'r', newline='') as f:
+        reader = csv.reader(f)
+        for row in reader:
+           print(row) 
+            
+            
+#run all available functions (debugging) 
 
-if __name__ == "__main__":
-    main()
