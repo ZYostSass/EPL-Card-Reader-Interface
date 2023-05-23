@@ -85,6 +85,8 @@ def get_user_by_id(id):
         raise ValueError(f"User with PSU ID {id} is not in the database")
     return user
 
+
+
 def check_user_password(email, password):
     if email is None or password is None:
         return None
@@ -116,12 +118,12 @@ def add_new_user(psu_id, access, firstname, lastname, email, role):
     database_init.session.commit()
 
 # Removes a user from the database, if they are present
-def remove_user(idnumber):
+def remove_user(badge_number):
     # Looks for the User with a matching ID
-    to_delete = is_user_id_present(idnumber)
+    to_delete = is_user_badge_present(badge_number)
     # If not found, return
     if to_delete is None:
-        raise ValueError(f"User with PSU ID {idnumber} does not exist")
+        raise ValueError(f"User with bagde {badge_number} does not exist")
     # Else, remove from the database
     else:
         database_init.session.delete(to_delete)
