@@ -6,11 +6,25 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
+from web_app.user_timeout import betterTimeout, set_time
 # from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
 # bp.config['SECRET_KEY'] = "asdfghjkl"
+def timer(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if betterTimeout() == False:
+            abort(403, description="Session has expired, please log in again")
+        return f(*args, **kwargs)
+    return decorated_function
 
+def time_stamp(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        set_time()
+        return f(*args, **kwargs) 
+    return decorated_function
 
 @bp.route("/")
 def index():
@@ -30,6 +44,7 @@ def access_denied(e):
 
 
 @bp.route("/login", methods=['POST', 'GET'])
+@time_stamp
 def login():
     if request.method == "POST":
         user_email = request.form['email']
@@ -80,6 +95,7 @@ def admin_required(f):
     return decorated_function
 
 
+<<<<<<< HEAD
 max_timeout = datetime.timedelta(0, 0, 0, 0, 0, 20, 0)
 
 def check_time():
@@ -94,6 +110,10 @@ def check_time():
         g.user.last_active = datetime.now() 
 
 
+=======
+
+        
+>>>>>>> d982947 (structure of code functions, decorators work.)
 @admin_bp.route("/")
 @admin_required
 def show_users():
@@ -129,6 +149,7 @@ def add_user_form():
 
 @bp.route("/dashboard/")
 @manager_required
+@timer
 def dashboard():
     # TODO: Filter these results by today
     #check_time()
