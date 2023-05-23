@@ -3,7 +3,7 @@ from flask import Flask, g, session
 import os
 from database.class_models import LOGOUT_TIME
 
-from database.user_options import get_int_key, get_user_by_id, get_key
+from database.user_options import get_int_key, get_user_by_id
 from datetime import datetime, timedelta
 
 #TODO: Store this in a seperate database table
