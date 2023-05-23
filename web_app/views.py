@@ -286,6 +286,7 @@ def update_equipment():
 def insert_equipment():
     if request.method == 'POST':
         equipment_name = request.form['equipment_name']
+        
 
         try:
             add_machine(equipment_name)
