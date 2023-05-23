@@ -7,7 +7,7 @@ filename = 'log.csv'
 
 #run this when appending data to logfile. 
 def logFile(data):
-   with open('log.csv', 'a', newline='') as f:
+       with open('log.csv', 'a', newline='') as f:
     writer = csv.writer(f)
     #fake data
     fakedata = ['fname', 'lname', 'psuid', 'userid', data,  datetime.date.today()]
