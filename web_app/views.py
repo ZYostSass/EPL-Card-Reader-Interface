@@ -194,7 +194,14 @@ def waiver():
 @manager_required
 def permissionsStudent(id):
     user = get_user_by_psu_id(id)
-    return render_template("permissionsStudent.html", user=user)
+    categories = all_categories()
+    uncategorized = uncategorized_machines()
+    for category in categories:
+        category.machines = list(filter(lambda machine: machine not in user.machines, category.machines))
+        if category.machines == []:
+            categories.remove(category)
+    uncategorized = list(filter(lambda machine: machine not in user.machines, uncategorized))
+    return render_template("permissionsStudent.html", user=user, categories=categories, uncategorized=uncategorized)
 
 @bp.route("/edit_user/")
 @manager_required
