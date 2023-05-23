@@ -402,7 +402,6 @@ def training_session():
 def training_session_details(machine_id):
     if request.method == 'POST':
         try:
-
             user_badge = request.form['badge']
             add_training(user_badge, machine_id)
             flash(
