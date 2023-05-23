@@ -100,6 +100,7 @@ def admin_required(f):
         
 @admin_bp.route("/")
 @admin_required
+@timer
 def show_users():
   # Now can access the user with g.user
   users = read_all()
@@ -108,6 +109,7 @@ def show_users():
 
 @bp.route("/add-user-form/", methods=['POST', 'GET'])
 @manager_required
+@timer
 def add_user_form():
     if request.method == "POST":
         # TODO (if time): Function call to get badge number by scanning in
@@ -142,6 +144,7 @@ def dashboard():
 #TODO: Add get parameters for time range
 @bp.route("/event-log-csv/")
 @manager_required
+@timer
 def event_log_csv():
     #TODO: get time range from get parameters and pass them here
     logs = access_logs()
@@ -154,6 +157,7 @@ def event_log_csv():
 
 @bp.route("/equipOverview/")
 @manager_required
+@timer
 def equipOverview():
     categories = all_categories()
     return render_template("equipOverview.html", categories=categories)
@@ -161,12 +165,14 @@ def equipOverview():
 
 @bp.route("/equipOverview/student/")
 @manager_required
+@timer
 def equipStudent():
     return render_template("equipStudent.html")
 
 
 @bp.route("/permissions/", methods=['POST', 'GET'])
 @manager_required
+@timer
 def permissions():
     if request.method == "POST":
         try:
@@ -182,6 +188,7 @@ def permissions():
 
 @bp.route("/waiver/")
 @manager_required
+@timer
 def waiver():
     return render_template('waiver.html')
 
@@ -209,6 +216,7 @@ def waiver():
     
 @bp.route("/permissions/<id>/")
 @manager_required
+@timer
 def permissionsStudent(id):
     user = get_user_by_psu_id(id)
     user_machines = user.machines
@@ -218,12 +226,14 @@ def permissionsStudent(id):
 
 @bp.route("/edit_user/")
 @manager_required
+@timer
 def edit_user():
     return render_template('edit_user.html')
 
 
 @bp.route('/remove-user/', methods=['GET', 'POST'])
 @manager_required
+@timer
 def remove_user_form():
     if request.method == "POST":
         user_id = request.form['id']
@@ -251,6 +261,7 @@ class PromoteForm(FlaskForm):
 
 @bp.route("/promote", methods=["POST", "GET"])
 @admin_required
+@timer
 def promote_user():
     id = None
     role = None
@@ -277,6 +288,7 @@ def promote_user():
 
 @bp.route('/manage-equipment/')
 @manager_required
+@timer
 def manage_equipment():
     all_machine_data = read_all_machines()
     categories = all_categories()
@@ -285,6 +297,7 @@ def manage_equipment():
 
 @bp.route('/update-equipment/', methods=['GET', 'POST'])
 @manager_required
+@timer
 def update_equipment():
     if request.method == "POST":
         equipment_name = request.form.get("equipment_name")
@@ -301,6 +314,7 @@ def update_equipment():
 
 @bp.route('/insert-equipment/', methods=['POST'])
 @manager_required
+@timer
 def insert_equipment():
     if request.method == 'POST':
         equipment_name = request.form['equipment_name']
@@ -317,6 +331,7 @@ def insert_equipment():
 
 @bp.route('/remove-equipment/<name>', methods=['GET', 'POST'])
 @manager_required
+@timer
 def remove_equipment(name):
     try:
         remove_machine(name)
@@ -328,12 +343,14 @@ def remove_equipment(name):
 
 @bp.route('/training-session/')
 @manager_required
+@timer
 def training_session():
     all_machine_data = read_all_machines()
     return render_template('training_session.html', machines=all_machine_data)
 
 @bp.route('/training-session/<int:machine_id>/<path:name>', methods= ['GET', 'POST'])
 @manager_required
+@timer
 def training_session_details(machine_id, name):
     if request.method == 'POST':
         
