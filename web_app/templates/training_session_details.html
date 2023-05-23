@@ -1,7 +1,7 @@
 {% extends "index.html" %} {% block content %}
 <div class="training-session-details-content px-3 pt-4">
   <h2 class="fs-5 pe-2">
-    Training Session for <b class="equipment-name">{{ name|escape }}</b>
+    Training Session for <b class="equipment-name">{{ machine.name|escape }}</b>
   </h2>
   <!-- Card Prompt -->
   <div class="card-prompt">
@@ -11,7 +11,7 @@
   <!-- End Card Prompt -->
   <!-- Manual Entry -->
   <form
-    action="{{ url_for('views.training_session_details', machine_id=machine_id, name=name)}}"
+    action="{{ url_for('views.training_session_details', machine_id=machine.id)}}"
     method="POST"
     class="m-5"
   >

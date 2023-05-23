@@ -190,11 +190,18 @@ def card_data():
     return jsonify(card_number=card_number, facility_code=facility_code)
 
     
-@bp.route("/permissions/<badge>/")
-def permissionsStudent(badge):
-    user = get_user(badge)
-    user_machines = user.machines
-    return render_template("permissionsStudent.html", user=user, user_machines=user_machines)
+@bp.route("/permissions/<id>/")
+@manager_required
+def permissionsStudent(id):
+    user = get_user_by_psu_id(id)
+    categories = all_categories()
+    uncategorized = uncategorized_machines()
+    for category in categories:
+        category.machines = list(filter(lambda machine: machine not in user.machines, category.machines))
+        if category.machines == []:
+            categories.remove(category)
+    uncategorized = list(filter(lambda machine: machine not in user.machines, uncategorized))
+    return render_template("permissionsStudent.html", user=user, categories=categories, uncategorized=uncategorized)
 
 @bp.route("/edit_user/")
 @manager_required
@@ -366,11 +373,10 @@ def training_session():
     all_machine_data = read_all_machines()
     return render_template('training_session.html', machines=all_machine_data)
 
-@bp.route('/training-session/<int:machine_id>/<path:name>', methods= ['GET', 'POST'])
+@bp.route('/training-session/<int:machine_id>/', methods= ['GET', 'POST'])
 @manager_required
-def training_session_details(machine_id, name):
+def training_session_details(machine_id):
     if request.method == 'POST':
-        
         try:
     
             user_badge = request.form['badge']
@@ -379,7 +385,8 @@ def training_session_details(machine_id, name):
             return redirect(url_for('views.training_session_details', machine_id=machine_id, name=name))
         except ValueError as e:
             flash(str(e), "error")
-            return redirect(url_for('views.training_session_details', machine_id=machine_id, name=name))
+            return redirect(url_for('views.training_session_details', machine_id=machine_id))
 
     else:
-        return render_template('training_session_details.html', machine_id=machine_id, name=name)
+        machine = get_machine(machine_id)
+        return render_template('training_session_details.html', machine=machine)

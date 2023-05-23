@@ -1,4 +1,5 @@
 import base64
+import datetime
 from flask import Flask, g, session
 from card_reader.reader import CardReader
 import os
@@ -46,7 +47,17 @@ def set_user_global():
 
 @app.template_filter('format_category')
 def format_category(value):
-    return value.replace(" ", "-").lower()
+    if value is not None:
+      return value.replace("_", " ").title()
+    return "NONE"
+
+@app.template_filter('format_trained_at')
+def format_trained_at(value):
+    if value is not None and isinstance(value, datetime.datetime):
+      data = value.strftime("%Y-%m-%d")
+    else:
+      data = "NONE"
+    return data
 
 # The following was written by chatgpt:
 @app.template_filter('base64_to_data_url')
