@@ -20,6 +20,7 @@ Contents
    README
    AdminEquipmentOptions
    AdminStudentOptions
+   AdminEquipmentTrainingOptions
 
 Indices and tables
 ==================

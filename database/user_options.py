@@ -217,6 +217,8 @@ def edit_machine(name, new_name):
 def remove_machine(name):
     """
     Removes a machine from the database if it is present.
+
+    Args: name of the machine.
     """
 
     machine = is_machine_present(name)
@@ -230,6 +232,12 @@ def remove_machine(name):
 def add_training(user_id, machine_id):
     """
     Adds a training for a user on a given machine.
+    
+    Args: Primary key of user_ID, machine_id.
+
+    Errors: If user's PSUID is incorrect/doesn't exist, or the machine doesn't exist.
+    Otherwise, takes the user_id and appends the selected machine onto their approved list.
+    
     """
 
     to_train = is_user_id_present(user_id)
@@ -338,7 +346,7 @@ Admin Commands
 def change_user_access_level(idnumber, new_access_level, password):
     """
     Changes the access level of a user.
-    
+
     param: idnumber is the PSUID, new_access_level is 'Manager' or 'Admin'
     will require the newly assigned user to create a password for future use.
     """
