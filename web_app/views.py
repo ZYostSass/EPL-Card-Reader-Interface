@@ -202,7 +202,7 @@ def edit_user():
 
 
 @bp.route('/remove-user/', methods=['GET', 'POST'])
-# @manager_required
+@manager_required
 def remove_user_form():
     if request.method == "POST":
         user_badge = request.form['badge']
@@ -317,9 +317,9 @@ def training_session_details(machine_id, name):
         try:
             # TODO (if time): Function call to get badge number by scanning in
             # Otherwise, proceed with getting inputs via manual entry
-            user_id = request.form['user_id']
-            add_training(user_id, machine_id)
-            flash(f"Training for user with PSU ID {user_id} updated successfully", "success")
+            user_badge = request.form['badge']
+            add_training(user_badge, machine_id)
+            flash(f"Training for user with Badge {user_badge} updated successfully", "success")
             return redirect(url_for('views.training_session_details', machine_id=machine_id, name=name))
         except ValueError as e:
             flash(str(e), "error")
