@@ -116,4 +116,3 @@ class CardReader:
 
     def close(self):
         self.ser.close()
-"""
