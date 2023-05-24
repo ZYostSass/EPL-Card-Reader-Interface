@@ -21,6 +21,7 @@ Contents
    AdminEquipmentOptions
    AdminStudentOptions
    AdminEquipmentTrainingOptions
+   DashboardOptions
 
 Indices and tables
 ==================

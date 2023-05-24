@@ -4,14 +4,15 @@ from sqlalchemy import Column, Table, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
 from bcrypt import checkpw, gensalt, hashpw
 
-# Replaced depreciated 'Base = declarative_base()'
 class Base(DeclarativeBase):
+    """Base class for SQLAlchemy models."""
     pass
 
-# Bi-directional join table for many-to-many relationships
-# using sqlalchemy.Column construct
-    # Primary Key: User ID -> user.id
-    # Primary Key: Machine ID -> machine.id
+""" Bi-directional join table for many-to-many relationships
+    using sqlalchemy.Column construct
+    Primary Key: User ID -> user.id
+    Primary Key: Machine ID -> machine.id
+"""
 user_machine_join_table = Table(
     "user_machine_table",
     Base.metadata,
@@ -19,17 +20,22 @@ user_machine_join_table = Table(
     Column("machine_id", ForeignKey("machine.id"), primary_key=True),
 )
 
-# User Table:
-	# Primary Key: ID Number
-	# First Name
-	# Last Name
-    # Email
-    # Role
-    # Last Log In datetime
-    # List of machines the user is trained on (can be none) -> user_machine assosiation table
+
 class User(Base):
+    """
+    User Table:
+	 Primary Key: ID Number
+	 First Name
+	 Last Name
+     Email
+     Role
+     Last Log In datetime
+     List of machines the user is trained on (can be none) -> user_machine assosiation table
+    """
     __tablename__ = "user"
-    # Declarative Form, prefered as of SQLAlchemy 2.0
+    """
+    Declarative Form, prefered as of SQLAlchemy 2.0
+    """
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     psu_id: Mapped[str]
     badge: Mapped[str]
@@ -38,7 +44,9 @@ class User(Base):
     email: Mapped[str]
     role: Mapped[str]
     pw_hash: Mapped[Optional[str]]
-    # List of machines the user is trained on
+    """
+    List of machines the user is trained on
+    """
     machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
     
     def __init__(self, psu_id, access, fname, lname, email, role, password = None):
@@ -73,7 +81,9 @@ class User(Base):
 
 class EventLog(Base):
     __tablename__ = "event_log"
-    # Declarative Form, prefered as of SQLAlchemy 2.0
+    """
+    Declarative Form, prefered as of SQLAlchemy 2.0
+    """
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     fname: Mapped[str]
     lname: Mapped[str]
@@ -101,12 +111,13 @@ class EventLog(Base):
     def check_out(user: User):
         return EventLog(user.firstname, user.lastname, user.badge, user.psu_id, "check_out", datetime.now())
 
-
-# Machine Table:
-    # Primary Key: ID Number
-    # Name
-    # Trained Users list (can be none) -> user_machine assosiation table
 class Machine(Base):
+    """
+    Machine Table:
+    Primary Key: ID Number
+    Name
+    Trained Users list (can be none) -> user_machine assosiation table
+    """
     __tablename__ = "machine"
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True)

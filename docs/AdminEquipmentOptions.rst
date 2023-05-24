@@ -5,6 +5,7 @@ Manage
 -------
 
 Will display a list of all current machines in the database including their ID and name.
+The machine database is dynamic and machine functionality is driven by the database.
 
 The Machine Class 
 -------------------
