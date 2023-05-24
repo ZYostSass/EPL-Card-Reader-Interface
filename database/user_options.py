@@ -211,7 +211,7 @@ def update_category_by_id(id, name):
     database_init.session.commit()
 
 
-def insert_category(name):
+def insert_category_name(name):
     category = class_models.MachineTag(tag=name)
     database_init.session.add(category)
     database_init.session.commit()
