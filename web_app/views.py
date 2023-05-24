@@ -361,7 +361,7 @@ def insert_category():
 def remove_category(id):
     try:
         remove_category_by_id(id)
-        flash("Equipment Removed Successfully", "success")
+        flash("Category Removed Successfully", "success")
     except ValueError as e:
         flash(str(e), "error")
 
