@@ -12,7 +12,7 @@ from typing import Optional
 from bcrypt import checkpw
 from . import database_init
 from . import class_models
-from sqlalchemy import literal_column, select, func, text
+from sqlalchemy import and_, literal_column, select, func, text
 from datetime import datetime
 
 # Helper Methods
@@ -153,6 +153,14 @@ def all_categories():
 def uncategorized_machines():
     subq = select(literal_column("machine_id")).select_from(text("machine_tag_association"))
     return database_init.session.execute(select(class_models.Machine).where(class_models.Machine.id.not_in(subq))).scalars().all()
+
+def all_categories_without_user(user_id):
+    return database_init.session.execute(select(class_models.MachineTag)).scalars().all()
+
+def uncategorized_machines_without_user(user_id):
+    subq_machines = select(literal_column("machine_id")).select_from(text("machine_tag_association"))
+    subq_user_machines = select(class_models.TrainingLog.machine_id).where(class_models.TrainingLog.user_id == user_id)
+    return database_init.session.execute(select(class_models.Machine).where(and_(class_models.Machine.id.not_in(subq_machines), class_models.Machine.id.not_in(subq_user_machines)))).scalars().all()
 
 
 # Add new machines to the database
