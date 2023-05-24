@@ -22,8 +22,9 @@ def index():
         if request.args.get('next') is not None:
             next = request.args.get('next')
         return redirect(url_for('views.login', next=next))
-    else: 
+    else:
         return redirect(url_for('views.dashboard'))
+
 
 @bp.errorhandler(403)
 def access_denied(e):
@@ -62,6 +63,7 @@ def logout():
     session.pop('user_id', None)
     return redirect(url_for('views.index', next=request.args.get('next')))
 
+
 admin_bp = Blueprint('admin_views', __name__, url_prefix='/admin')
 
 
@@ -72,6 +74,7 @@ def manager_required(f):
             abort(403, description="This action is only allowed for managers or admins.")
         return f(*args, **kwargs)
     return decorated_function
+
 
 def admin_required(f):
     @wraps(f)
@@ -85,10 +88,11 @@ def admin_required(f):
 @admin_bp.route("/")
 @admin_required
 def show_users():
-  # Now can access the user with g.user
-  users = read_all()
-  print(users)
-  return render_template("admin/users.html", users=users)
+    # Now can access the user with g.user
+    users = read_all()
+    print(users)
+    return render_template("admin/users.html", users=users)
+
 
 @bp.route("/add-user-form/", methods=['POST', 'GET'])
 @manager_required
@@ -122,18 +126,21 @@ def dashboard():
     logs = access_logs()
     return render_template("dashboard.html", logs=logs)
 
-#TODO: Add get parameters for time range
+# TODO: Add get parameters for time range
+
+
 @bp.route("/event-log-csv/")
 @manager_required
 def event_log_csv():
-    #TODO: get time range from get parameters and pass them here
+    # TODO: get time range from get parameters and pass them here
     logs = access_logs()
     response = make_response(render_template("event_log.csv", logs=logs))
-    #TODO adjust file name based on time range
+    # TODO adjust file name based on time range
     file_name = "event_log.csv"
     response.headers["Content-Disposition"] = f"attachment; filename={file_name}"
     response.headers["Content-Type"] = "text/csv"
     return response
+
 
 @bp.route("/equipOverview/")
 @manager_required
@@ -180,6 +187,7 @@ def card_test():
 # https://tedboy.github.io/flask/generated/flask.jsonify.html
 # https://api.jquery.com/ (Used in card_test.html to update page)
 
+
 @bp.route("/card_data/")
 def card_data():
     card_data = card_reader.get_data()
@@ -189,7 +197,7 @@ def card_data():
         card_number, facility_code = None, None
     return jsonify(card_number=card_number, facility_code=facility_code)
 
-    
+
 @bp.route("/permissions/<badge>/")
 @manager_required
 def permissionsStudent(badge):
@@ -197,20 +205,21 @@ def permissionsStudent(badge):
     categories = all_categories()
     uncategorized = uncategorized_machines_without_user(user.id)
 
-    categories = [
-        category
-        for category in categories
-        if any(machine not in user.machines for machine in category.machines)
-    ]
-
+    # Filter the categories and machines
+    filtered_categories = []
     for category in categories:
-        category.machines = [
+        filtered_machines = [
             machine
             for machine in category.machines
             if machine not in user.machines
         ]
+        if filtered_machines:
+            filtered_category = MachineTag(tag=category.tag)
+            filtered_category.machines = filtered_machines
+            filtered_categories.append(filtered_category)
 
-    return render_template("permissionsStudent.html", user=user, categories=categories, uncategorized=uncategorized)
+    return render_template("permissionsStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
+
 
 @bp.route("/edit_user/")
 @manager_required
@@ -238,7 +247,8 @@ def remove_user_form():
 
 class PromoteForm(FlaskForm):
     id = StringField("Enter PSU ID", [validators.DataRequired()])
-    role = RadioField('Role', choices=[('Admin','Admin'),('Manager','Manager')], validators=[validators.DataRequired()])
+    role = RadioField('Role', choices=[
+                      ('Admin', 'Admin'), ('Manager', 'Manager')], validators=[validators.DataRequired()])
     password = StringField("Add a password")
     submit = SubmitField("Update")
 
@@ -293,12 +303,14 @@ def update_equipment():
         flash("Equipment name cannot be empty", "error")
     else:
         try:
-            edit_machine(int(equipment_id), equipment_name, equipment_link, category_ids, img)
+            edit_machine(int(equipment_id), equipment_name,
+                         equipment_link, category_ids, img)
             flash("Equipment Updated Successfully", "success")
         except ValueError as e:
             flash(str(e), "error")
 
     return redirect(url_for('views.manage_equipment'))
+
 
 @bp.route('/insert-equipment/', methods=['POST'])
 @manager_required
@@ -365,6 +377,7 @@ def insert_category():
 
     return redirect(url_for('views.manage_equipment'))
 
+
 @bp.route('/remove-category/<id>', methods=['GET', 'POST'])
 @manager_required
 def remove_category(id):
@@ -376,21 +389,24 @@ def remove_category(id):
 
     return redirect(url_for('views.manage_equipment'))
 
+
 @bp.route('/training-session/')
 @manager_required
 def training_session():
     all_machine_data = read_all_machines()
     return render_template('training_session.html', machines=all_machine_data)
 
-@bp.route('/training-session/<int:machine_id>/', methods= ['GET', 'POST'])
+
+@bp.route('/training-session/<int:machine_id>/', methods=['GET', 'POST'])
 @manager_required
 def training_session_details(machine_id):
     if request.method == 'POST':
         try:
-    
+
             user_badge = request.form['badge']
             add_training(user_badge, machine_id)
-            flash(f"Training for user with Badge {user_badge} updated successfully", "success")
+            flash(
+                f"Training for user with Badge {user_badge} updated successfully", "success")
             return redirect(url_for('views.training_session_details', machine_id=machine_id))
         except ValueError as e:
             flash(str(e), "error")
