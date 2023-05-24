@@ -80,8 +80,8 @@ class User(Base):
 machine_tag_association = Table(
     "machine_tag_association",
     Base.metadata,
-    Column("machine_id", ForeignKey("machine.id"), primary_key=True),
-    Column("tag_id", ForeignKey("machine_tag.id"), primary_key=True),
+    Column("machine_id", ForeignKey("machine.id", ondelete="CASCADE"), primary_key=True),
+    Column("tag_id", ForeignKey("machine_tag.id", ondelete="CASCADE"), primary_key=True),
 )
 
 # Machine Table:
@@ -97,7 +97,7 @@ class Machine(Base):
     # List of Users that are trained on this machine
     trained_users: Mapped[List[TrainingLog]] = relationship(back_populates="machine", cascade="all, delete", passive_deletes=True)
     # Categories associated with each machine
-    categories: Mapped[List["MachineTag"]] = relationship(secondary=machine_tag_association, back_populates="machines")
+    categories: Mapped[List["MachineTag"]] = relationship(secondary=machine_tag_association, back_populates="machines", cascade="all, delete", passive_deletes=True)
     
     def __init__(self, name, epl_link, file_name = None, machine_image = None):
         self.name = name
@@ -128,7 +128,7 @@ class MachineTag(Base):
     __tablename__ = "machine_tag"
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    machines: Mapped[List[Machine]] = relationship(secondary=machine_tag_association, back_populates="categories")
+    machines: Mapped[List[Machine]] = relationship(secondary=machine_tag_association, back_populates="categories", cascade="all, delete", passive_deletes=True)
     tag: Mapped[str]
     
     def __init__(self, tag):
