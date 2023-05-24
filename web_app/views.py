@@ -6,6 +6,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
+from . import card_reader
 # from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
@@ -167,24 +168,23 @@ def waiver():
 
 
 # Route for the card reader test page
-# @bp.route("/card_test/", methods=['GET'])
-# def card_test():
-#  return render_template('card_test.html')
+@bp.route("/card_test/", methods=['GET'])
+def card_test():
+    return render_template('card_test.html')
 # Route for checking the queue where card data gets read to
 # Using flask.make_response and flask.jsonify to create an http response header.
 # https://tedboy.github.io/flask/generated/flask.make_response.html
 # https://tedboy.github.io/flask/generated/flask.jsonify.html
 # https://api.jquery.com/ (Used in card_test.html to update page)
 
-# @bp.route("/card_data/")
-# def card_data():
-#     card_data = card_reader.get_data()
-#     if card_data is not None:
-#         card_number, facility_code = card_data
-#     else:
-#         card_number, facility_code = None, None
-
-#     return jsonify(card_number=card_number, facility_code=facility_code)
+@bp.route("/card_data/")
+def card_data():
+    card_data = card_reader.get_data()
+    if card_data is not None:
+        card_number, facility_code = card_data
+    else:
+        card_number, facility_code = None, None
+    return jsonify(card_number=card_number, facility_code=facility_code)
 
     
 @bp.route("/permissions/<badge>/")
