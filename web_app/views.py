@@ -153,9 +153,9 @@ def equipStudent():
 def permissions():
     if request.method == "POST":
         try:
-            user_id = request.form['id']
-            user = get_user_by_psu_id(user_id)
-            return redirect(url_for('views.permissionsStudent', id=user_id))
+            user_badge = request.form['badge']
+            user = get_user(user_badge)
+            return redirect(url_for('views.permissionsStudent', badge=user_badge))
         except ValueError as e:
             flash(str(e), "error")
             return render_template("permissions.html")
@@ -190,10 +190,10 @@ def waiver():
 #     return jsonify(card_number=card_number, facility_code=facility_code)
 
     
-@bp.route("/permissions/<id>/")
+@bp.route("/permissions/<badge>/")
 @manager_required
-def permissionsStudent(id):
-    user = get_user_by_psu_id(id)
+def permissionsStudent(badge):
+    user = get_user(badge)
     categories = all_categories()
     uncategorized = uncategorized_machines_without_user(user.id)
 
@@ -212,6 +212,7 @@ def permissionsStudent(id):
 
     return render_template("permissionsStudent.html", user=user, categories=categories, uncategorized=uncategorized)
 
+
 @bp.route("/edit_user/")
 @manager_required
 def edit_user():
@@ -222,9 +223,9 @@ def edit_user():
 @manager_required
 def remove_user_form():
     if request.method == "POST":
-        user_id = request.form['id']
+        user_badge = request.form['badge']
         try:
-            remove_user(user_id)
+            remove_user(user_badge)
             flash("User Removed Successfully", "success")
             return redirect(url_for('views.remove_user_form'))
         except ValueError as e:
@@ -389,10 +390,11 @@ def training_session_details(machine_id):
         try:
             # TODO (if time): Function call to get badge number by scanning in
             # Otherwise, proceed with getting inputs via manual entry
-            user_id = request.form['user_id']
-            add_training(user_id, machine_id)
-            flash(f"Training for user with PSU ID {user_id} updated successfully", "success")
+            user_badge = request.form['badge']
+            add_training(user_badge, machine_id)
+            flash(f"Training for user with Badge {user_badge} updated successfully", "success")
             return redirect(url_for('views.training_session_details', machine_id=machine_id))
+
         except ValueError as e:
             flash(str(e), "error")
             return redirect(url_for('views.training_session_details', machine_id=machine_id))

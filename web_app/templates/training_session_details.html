@@ -17,19 +17,19 @@
   >
     <h3>Enter Manually</h3>
     <div class="mb-3">
-      <label for="user_id" class="form-label">PSU ID</label>
+      <label for="badge" class="form-label">Badge Number</label>
       <input
         type="text"
         class="form-control"
-        name="user_id"
-        id="user_id"
-        value="{{ user_id }}"
-        maxlength="9"
+        name="badge"
+        id="badge"
+        value="{{ badge }}"
+        maxlength="6"
         inputmode="numeric"
-        pattern="[0-9]{9}"
+        pattern="[0-6]{6}"
         required
       />
-      <div id="idHelp" class="form-text">Must be a 9 digit number</div>
+      <div id="idHelp" class="form-text">Must be a 6 digit number</div>
     </div>
     <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
   </form>

@@ -103,6 +103,8 @@ def get_user_by_id(id):
         raise ValueError(f"User with {id} is not in the database")
     return user
 
+
+
 def check_user_password(email, password):
     if email is None or password is None:
         return None
@@ -134,12 +136,12 @@ def add_new_user(psu_id, access, firstname, lastname, email, role):
     database_init.session.commit()
 
 # Removes a user from the database, if they are present
-def remove_user(idnumber):
+def remove_user(badge_number):
     # Looks for the User with a matching ID
-    to_delete = is_user_id_present(idnumber)
+    to_delete = is_user_badge_present(badge_number)
     # If not found, return
     if to_delete is None:
-        raise ValueError(f"User with PSU ID {idnumber} does not exist")
+        raise ValueError(f"User with badge {badge_number} does not exist")
     # Else, remove from the database
     else:
         database_init.session.delete(to_delete)
@@ -235,12 +237,12 @@ def remove_category_by_id(id):
     database_init.session.commit()
 
 # Add trainings to a passed User
-def add_training(user_id, machine_id):
+def add_training(user_badge, machine_id):
     # Check to see if the user is in the database
-    to_train = is_user_id_present(user_id)
+    to_train = is_user_badge_present(user_badge)
     # If they aren't, leave
     if to_train == None:
-        raise LookupError(f"User with ID {user_id} does not exist")
+        raise LookupError(f"User with Badge {user_badge} does not exist")
     # Check to see if the machine is in the database
     machine = database_init.session.execute(select(class_models.Machine)
         .where(class_models.Machine.id == machine_id)).scalar_one_or_none()
@@ -251,12 +253,12 @@ def add_training(user_id, machine_id):
     database_init.session.commit()
 
 # Remove trainings to a passed User
-def remove_training(user_id, machine_id):
+def remove_training(user_badge, machine_id):
     # Check to see if the user is in the database
-    to_untrain = is_user_id_present(user_id)
+    to_untrain = is_user_badge_present(user_badge)
     # If they aren't, leave
     if to_untrain == None:
-        raise LookupError(f"User with ID {user_id} does not exist")
+        raise LookupError(f"User with Badge {user_badge} does not exist")
     # Check to see if the machine is in the database
     # Works off of machine ID rather than name
     machine = database_init.session.execute(select(class_models.Machine)
