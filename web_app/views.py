@@ -7,7 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
-from . import card_reader
+#from . import card_reader
 # from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
