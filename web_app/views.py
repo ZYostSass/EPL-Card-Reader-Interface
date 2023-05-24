@@ -2,7 +2,7 @@ import base64
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, update_category_by_id
+from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
@@ -195,12 +195,21 @@ def waiver():
 def permissionsStudent(id):
     user = get_user_by_psu_id(id)
     categories = all_categories()
-    uncategorized = uncategorized_machines()
+    uncategorized = uncategorized_machines_without_user(user.id)
+
+    categories = [
+        category
+        for category in categories
+        if any(machine not in user.machines for machine in category.machines)
+    ]
+
     for category in categories:
-        category.machines = list(filter(lambda machine: machine not in user.machines, category.machines))
-        if category.machines == []:
-            categories.remove(category)
-    uncategorized = list(filter(lambda machine: machine not in user.machines, uncategorized))
+        category.machines = [
+            machine
+            for machine in category.machines
+            if machine not in user.machines
+        ]
+
     return render_template("permissionsStudent.html", user=user, categories=categories, uncategorized=uncategorized)
 
 @bp.route("/edit_user/")
