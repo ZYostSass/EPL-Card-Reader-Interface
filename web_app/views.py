@@ -349,7 +349,7 @@ def insert_category():
         flash("Category name cannot be empty", "error")
     else:
         try:
-            insert_category(name)
+            insert_category_name(name)
             flash("Category Added Successfully", "success")
         except ValueError as e:
             flash(str(e), "error")
