@@ -103,8 +103,6 @@ def get_user_by_id(id):
         raise ValueError(f"User with {id} is not in the database")
     return user
 
-
-
 def check_user_password(email, password):
     if email is None or password is None:
         return None
@@ -153,9 +151,6 @@ def all_categories():
 def uncategorized_machines():
     subq = select(literal_column("machine_id")).select_from(text("machine_tag_association"))
     return database_init.session.execute(select(class_models.Machine).where(class_models.Machine.id.not_in(subq))).scalars().all()
-
-def all_categories_without_user(user_id):
-    return database_init.session.execute(select(class_models.MachineTag)).scalars().all()
 
 def uncategorized_machines_without_user(user_id):
     subq_machines = select(literal_column("machine_id")).select_from(text("machine_tag_association"))
@@ -237,12 +232,12 @@ def remove_category_by_id(id):
     database_init.session.commit()
 
 # Add trainings to a passed User
-def add_training(user_badge, machine_id):
+def add_training(badge, machine_id):
     # Check to see if the user is in the database
-    to_train = is_user_badge_present(user_badge)
+    to_train = get_user(badge)
     # If they aren't, leave
     if to_train == None:
-        raise LookupError(f"User with Badge {user_badge} does not exist")
+        raise LookupError(f"User with ID {badge} does not exist")
     # Check to see if the machine is in the database
     machine = database_init.session.execute(select(class_models.Machine)
         .where(class_models.Machine.id == machine_id)).scalar_one_or_none()
