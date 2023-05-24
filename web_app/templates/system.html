@@ -1,0 +1,9 @@
+{% extends "index.html" %} {% block content %}
+
+<div>
+    {% if current_role == "Admin" %}
+    <a class="psu-button" href="{{url_for('views.reset_database')}}">Reset Database (THIS CANNOT BE UNDONE)</a>
+    {% endif %}
+</div>
+
+{% endblock %}
