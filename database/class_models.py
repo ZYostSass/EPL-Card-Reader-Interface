@@ -1,23 +1,23 @@
+import base64
 from datetime import datetime
-from typing import Optional
-from sqlalchemy import Column, Table, String, Integer, Boolean, ForeignKey
+from typing import List, Optional
+from sqlalchemy import Column, LargeBinary, Table, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.ext.associationproxy import AssociationProxy
 from bcrypt import checkpw, gensalt, hashpw
 
 # Replaced depreciated 'Base = declarative_base()'
 class Base(DeclarativeBase):
     pass
 
-# Bi-directional join table for many-to-many relationships
-# using sqlalchemy.Column construct
-    # Primary Key: User ID -> user.id
-    # Primary Key: Machine ID -> machine.id
-user_machine_join_table = Table(
-    "user_machine_table",
-    Base.metadata,
-    Column("user_id", ForeignKey("user.id"), primary_key=True),
-    Column("machine_id", ForeignKey("machine.id"), primary_key=True),
-)
+class TrainingLog(Base):
+    __tablename__ = "training_log"
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
+    machine_id: Mapped[int] = mapped_column(ForeignKey("machine.id", ondelete="CASCADE"), primary_key=True)
+    trained_at: Mapped[datetime] 
+    machine: Mapped["Machine"] = relationship(back_populates="trained_users")
+    user: Mapped["User"] = relationship(back_populates="training_log")
 
 # User Table:
 	# Primary Key: ID Number
@@ -39,7 +39,12 @@ class User(Base):
     role: Mapped[str]
     pw_hash: Mapped[Optional[str]]
     # List of machines the user is trained on
-    machines: Mapped[Optional[list["Machine"]]] = relationship(secondary = user_machine_join_table, back_populates="trained_users")
+    training_log: Mapped[List["TrainingLog"]] = relationship(back_populates="user", cascade="all, delete", passive_deletes=True)
+    machines: AssociationProxy[List["Machine"]] = association_proxy(
+        "training_log",
+        "machine",
+        creator=lambda machine_obj: TrainingLog(machine=machine_obj, trained_at=datetime.now())
+    )
     
     def __init__(self, psu_id, access, fname, lname, email, role, password = None):
         self.psu_id = psu_id
@@ -47,9 +52,10 @@ class User(Base):
         self.firstname = fname
         self.lastname = lname
         self.email = email
-        if password is not None and role is "Student":
+        self.training_log = []
+        if password is not None and role == "Student":
             raise ValueError("Invalid student configuration")
-        
+    
         if password is not None:
             self.pw_hash = hashpw(password, gensalt())
         
@@ -71,6 +77,64 @@ class User(Base):
         if password is not None:
             self.pw_hash = hashpw(bytes(password, 'utf-8'), gensalt())
 
+machine_tag_association = Table(
+    "machine_tag_association",
+    Base.metadata,
+    Column("machine_id", ForeignKey("machine.id", ondelete="CASCADE"), primary_key=True),
+    Column("tag_id", ForeignKey("machine_tag.id", ondelete="CASCADE"), primary_key=True),
+)
+
+# Machine Table:
+    # Primary Key: ID Number
+    # Name
+class Machine(Base):
+    __tablename__ = "machine"
+    # Declarative Form, prefered as of SQLAlchemy 2.0
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str]
+    machine_image: Mapped[Optional[bytes]] = mapped_column(LargeBinary, deferred=True, nullable=True) # Lazily load the image
+    epl_link: Mapped[Optional[str]] = mapped_column(deferred=True) # Lazily load the link
+    # List of Users that are trained on this machine
+    trained_users: Mapped[List[TrainingLog]] = relationship(back_populates="machine", cascade="all, delete", passive_deletes=True)
+    # Categories associated with each machine
+    categories: Mapped[List["MachineTag"]] = relationship(secondary=machine_tag_association, back_populates="machines", cascade="all, delete", passive_deletes=True)
+    
+    def __init__(self, name, epl_link, file_name = None, machine_image = None):
+        self.name = name
+        self.epl_link = epl_link
+        self.categories = []
+        self.trained_users = []
+        if file_name is not None and machine_image is not None:
+            raise ValueError("Must provide either file_name or machine_image")
+        
+        if file_name is not None:
+            with open(file_name, "rb") as f:
+                self.machine_image = base64.b64encode(f.read())
+        elif machine_image is not None:
+            if not isinstance(machine_image, bytes):
+                raise ValueError("machine_image must be of type bytes")
+            
+            self.machine_image = base64.b64encode(machine_image)
+    
+    def __repr__(self):
+        return self.name
+    
+    def set_image(self, image: bytes):
+        self.machine_image = base64.b64encode(image)
+
+    
+
+class MachineTag(Base):
+    __tablename__ = "machine_tag"
+    # Declarative Form, prefered as of SQLAlchemy 2.0
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    machines: Mapped[List[Machine]] = relationship(secondary=machine_tag_association, back_populates="categories", cascade="all, delete", passive_deletes=True)
+    tag: Mapped[str]
+    
+    def __init__(self, tag):
+        self.tag = tag
+        self.machines = []
+    
 class EventLog(Base):
     __tablename__ = "event_log"
     # Declarative Form, prefered as of SQLAlchemy 2.0
@@ -100,59 +164,3 @@ class EventLog(Base):
     @staticmethod
     def check_out(user: User):
         return EventLog(user.firstname, user.lastname, user.badge, user.psu_id, "check_out", datetime.now())
-
-
-# Machine Table:
-    # Primary Key: ID Number
-    # Name
-    # Trained Users list (can be none) -> user_machine assosiation table
-class Machine(Base):
-    __tablename__ = "machine"
-    # Declarative Form, prefered as of SQLAlchemy 2.0
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str]
-    # List of Users that are trained on this machine
-    trained_users: Mapped[Optional[list["User"]]] = relationship(secondary = user_machine_join_table, back_populates="machines")
-    
-    def __init__(self, id, name):
-        self.id = id
-        self.name = name
-    
-    def __repr__(self):
-        return self.name
-
-# Holding off on deleting this for now
-"""    
-class UserMachine(Base):
-    __tablename__ = "usermachine"
-    # Declarative Form, prefered as of SQLAlchemy 2.0
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped["User"] = mapped_column(ForeignKey("user.id")), relationship(back_populates="user.id")
-    #machine_id: Mapped[int] = mapped_column(ForeignKey("machine.id"))
-    last_trained: Mapped[datetime.datetime]
-
-    # Imperative Form, legacy since SQLAlchemy 1.4
-    #id = Column(Integer, primary_key=True)
-    #student_id = Column(Integer, ForeignKey('student.id'))
-    #machine_id = Column(Integer, ForeignKey('machine.id'))
-    #last_trained = Column(datetime.datetime)
-    
-    def __init__(self, student, machine, date):
-        self.student = student
-        self.machine = machine
-        self.last_trained = date
-    
-    def __repr__(self):
-        return f"{self.student} was last trained on {self.machine} on {self.last_trained}"
-    
-# Define the association table for the many-to-many relationship between Student and Machine
-# This is equivalent to defining the UserMachine class
-#students_machines = Table('students_machines',
-    #Column('student_id', Integer, ForeignKey('student.id'), primary_key=True),
-    #Column('machine_id', Integer, ForeignKey('machine.id'), primary_key=True)
-#)
-
-#training = StudentMachine(student=student1, machine=machine2, date=datetime.now())
-#student1.trainings.append(training)
-#machine2.trainings.append(training)
-"""

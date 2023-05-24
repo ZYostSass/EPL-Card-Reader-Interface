@@ -1,14 +1,16 @@
+import base64
+import datetime
 from flask import Flask, g, session
 #from card_reader.reader import CardReader
 import os
 
 from database.user_options import get_user_by_id
 
-
-
 app = Flask(__name__)
+app.debug = True
 app.config["SECRET_KEY"] = "dev"
 app.config["EXPLAIN_TEMPLATE_LOADING"] = True
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 # 16 MB
 
 try:
   os.makedirs(app.instance_path)
@@ -42,3 +44,26 @@ def set_user_global():
     else:
         user = get_user_by_id(user_id)
         g.user = user
+
+@app.template_filter('format_category')
+def format_category(value):
+    if value is not None:
+      return value.replace("_", " ").title()
+    return "NONE"
+
+@app.template_filter('format_trained_at')
+def format_trained_at(value):
+    if value is not None and isinstance(value, datetime.datetime):
+      data = value.strftime("%Y-%m-%d")
+    else:
+      data = "NONE"
+    return data
+
+# The following was written by chatgpt:
+@app.template_filter('base64_to_data_url')
+def base64_to_data_url(value):
+    if value is not None:
+      data = value.decode('utf-8')
+    else:
+      data = ""
+    return f"data:image/jpg;base64,{data}"
