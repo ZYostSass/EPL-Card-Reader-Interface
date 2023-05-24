@@ -1,9 +1,17 @@
 import os.path
 from database import class_models
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
+from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime, timedelta
+
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
+
 
 path = os.getcwd()
 # print(path)
@@ -16,6 +24,7 @@ if not (check_file):
 
     # Initialize Session
     engine = create_engine("sqlite:///database.db")
+
     class_models.Base.metadata.create_all(engine)
     Session = sessionmaker(engine)
     session = Session()

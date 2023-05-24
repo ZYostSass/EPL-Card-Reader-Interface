@@ -13,8 +13,8 @@ class Base(DeclarativeBase):
 
 class TrainingLog(Base):
     __tablename__ = "training_log"
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), primary_key=True)
-    machine_id: Mapped[int] = mapped_column(ForeignKey("machine.id"), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
+    machine_id: Mapped[int] = mapped_column(ForeignKey("machine.id", ondelete="CASCADE"), primary_key=True)
     trained_at: Mapped[datetime] 
     machine: Mapped["Machine"] = relationship(back_populates="trained_users")
     user: Mapped["User"] = relationship(back_populates="training_log")
@@ -39,7 +39,7 @@ class User(Base):
     role: Mapped[str]
     pw_hash: Mapped[Optional[str]]
     # List of machines the user is trained on
-    training_log: Mapped[List["TrainingLog"]] = relationship(back_populates="user")
+    training_log: Mapped[List["TrainingLog"]] = relationship(back_populates="user", cascade="all, delete", passive_deletes=True)
     machines: AssociationProxy[List["Machine"]] = association_proxy(
         "training_log",
         "machine",
@@ -95,7 +95,7 @@ class Machine(Base):
     machine_image: Mapped[Optional[bytes]] = mapped_column(LargeBinary, deferred=True, nullable=True) # Lazily load the image
     epl_link: Mapped[Optional[str]] = mapped_column(deferred=True) # Lazily load the link
     # List of Users that are trained on this machine
-    trained_users: Mapped[List[TrainingLog]] = relationship(back_populates="machine")
+    trained_users: Mapped[List[TrainingLog]] = relationship(back_populates="machine", cascade="all, delete", passive_deletes=True)
     # Categories associated with each machine
     categories: Mapped[List["MachineTag"]] = relationship(secondary=machine_tag_association, back_populates="machines")
     
