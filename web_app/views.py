@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import access_logs, add_new_user, get_user_by_psu_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, get_user_by_id, read_all, add_training
+from database.user_options import access_logs, add_new_user, get_user_by_psu_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, get_user, read_all, add_training
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
@@ -150,9 +150,9 @@ def equipStudent():
 def permissions():
     if request.method == "POST":
         try:
-            user_id = request.form['id']
-            user = get_user_by_psu_id(user_id)
-            return redirect(url_for('views.permissionsStudent', id=user_id))
+            user_badge = request.form['badge']
+            user = get_user(user_badge)
+            return redirect(url_for('views.permissionsStudent', badge=user_badge))
         except ValueError as e:
             flash(str(e), "error")
             return render_template("permissions.html")
@@ -187,9 +187,9 @@ def waiver():
 #     return jsonify(card_number=card_number, facility_code=facility_code)
 
     
-@bp.route("/permissions/<id>/")
-def permissionsStudent(id):
-    user = get_user_by_psu_id(id)
+@bp.route("/permissions/<badge>/")
+def permissionsStudent(badge):
+    user = get_user(badge)
     user_machines = user.machines
     print(user_machines)
     print(user)
@@ -205,9 +205,9 @@ def edit_user():
 @manager_required
 def remove_user_form():
     if request.method == "POST":
-        user_id = request.form['id']
+        user_badge = request.form['badge']
         try:
-            remove_user(user_id)
+            remove_user(user_badge)
             flash("User Removed Successfully", "success")
             return redirect(url_for('views.remove_user_form'))
         except ValueError as e:
@@ -315,11 +315,10 @@ def training_session_details(machine_id, name):
     if request.method == 'POST':
         
         try:
-            # TODO (if time): Function call to get badge number by scanning in
-            # Otherwise, proceed with getting inputs via manual entry
-            user_id = request.form['user_id']
-            add_training(user_id, machine_id)
-            flash(f"Training for user with PSU ID {user_id} updated successfully", "success")
+    
+            user_badge = request.form['badge']
+            add_training(user_badge, machine_id)
+            flash(f"Training for user with Badge {user_badge} updated successfully", "success")
             return redirect(url_for('views.training_session_details', machine_id=machine_id, name=name))
         except ValueError as e:
             flash(str(e), "error")
