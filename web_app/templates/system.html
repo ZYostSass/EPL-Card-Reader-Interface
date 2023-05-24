@@ -1,9 +1,34 @@
 {% extends "index.html" %} {% block content %}
 
-<div>
+<div style="margin:20px">
     {% if current_role == "Admin" %}
     <a class="psu-button" href="{{url_for('views.reset_database')}}">Reset Database (THIS CANNOT BE UNDONE)</a>
     {% endif %}
 </div>
 
+<div style="margin:20px">
+    {{card_reader_info}}
+</div>
+
+<div style="margin:20px">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    function fetchData() {
+      $.getJSON('/card_data', function(data) {
+          if (data.card_number && data.facility_code) {
+            $('#card-number').text(data.card_number);
+            $('#facility-code').text(data.facility_code);
+          } else {
+            $('#card-number').text('No data received.');
+            $('#facility-code').text('');
+          }
+      });
+    }
+    </script>
+  <h3>Card Reader Test</h3>
+  <p>Card Number: <span id="card-number"></span></p>
+  <p>Facility Code: <span id="facility-code"></span></p>
+  <button onclick="fetchData()">Get Data</button>
+
+</div>
 {% endblock %}

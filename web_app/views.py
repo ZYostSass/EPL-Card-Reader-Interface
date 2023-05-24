@@ -177,18 +177,6 @@ def waiver():
     return render_template('waiver.html')
 
 
-# Route for the card reader test page
-@bp.route("/card_test/", methods=['GET'])
-def card_test():
-    return render_template('card_test.html')
-# Route for checking the queue where card data gets read to
-# Using flask.make_response and flask.jsonify to create an http response header.
-# https://tedboy.github.io/flask/generated/flask.make_response.html
-# https://tedboy.github.io/flask/generated/flask.jsonify.html
-# https://api.jquery.com/ (Used in card_test.html to update page)
-
-
-"""
 @bp.route("/card_data/")
 def card_data():
     card_data = card_reader.get_data()
@@ -197,7 +185,7 @@ def card_data():
     else:
         card_number, facility_code = None, None
     return jsonify(card_number=card_number, facility_code=facility_code)
-"""
+
 @bp.route("/permissions/<badge>/")
 @manager_required
 def permissionsStudent(badge):
@@ -418,7 +406,8 @@ def training_session_details(machine_id):
 @bp.route('/system/')
 @manager_required
 def system():
-    return render_template('system.html')
+    card_reader_info = card_reader.ports()
+    return render_template('system.html', card_reader_info=card_reader_info)
 
 @bp.route('/reset-database/')
 @admin_required
