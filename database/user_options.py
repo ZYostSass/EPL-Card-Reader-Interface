@@ -342,6 +342,6 @@ def change_user_access_level(idnumber, new_access_level, password):
     database_init.session.commit()
 
 # Purge the database of all Users and Machines
-def purge_database():
-    # I hope you're happy
-    class_models.Base.metadata.drop_all()
+def reset_the_database():
+    class_models.Base.metadata.drop_all(database_init.engine)
+    database_init.init_database(database_init.session)
