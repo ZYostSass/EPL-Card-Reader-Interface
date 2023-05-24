@@ -190,10 +190,10 @@ def card_data():
     return jsonify(card_number=card_number, facility_code=facility_code)
 
     
-@bp.route("/permissions/<id>/")
+@bp.route("/permissions/<badge>/")
 @manager_required
-def permissionsStudent(id):
-    user = get_user_by_psu_id(id)
+def permissionsStudent(badge):
+    user = get_user(badge)
     categories = all_categories()
     uncategorized = uncategorized_machines_without_user(user.id)
 
