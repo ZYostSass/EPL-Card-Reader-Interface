@@ -1,7 +1,7 @@
 import serial
 import serial.tools.list_ports
 
-
+"""
 class CardReader:
     # Constructor takes baud_rate and optionally a port path
     # Instead of relying on input for the port path, it now
@@ -68,3 +68,4 @@ class CardReader:
 
     def close(self):
         self.ser.close()
+"""
