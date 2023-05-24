@@ -42,8 +42,12 @@ def set_user_global():
     if user_id is None:
         g.user = None
     else:
-        user = get_user_by_id(user_id)
-        g.user = user
+        try:
+          user = get_user_by_id(user_id)
+          g.user = user
+        except:
+          session.pop("user_id")
+          g.user = None
 
 @app.template_filter('format_category')
 def format_category(value):
