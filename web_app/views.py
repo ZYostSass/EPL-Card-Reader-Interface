@@ -6,7 +6,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
-from . import card_reader
+#from . import card_reader
 # from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
@@ -177,6 +177,7 @@ def card_test():
 # https://tedboy.github.io/flask/generated/flask.jsonify.html
 # https://api.jquery.com/ (Used in card_test.html to update page)
 
+"""
 @bp.route("/card_data/")
 def card_data():
     card_data = card_reader.get_data()
@@ -185,7 +186,7 @@ def card_data():
     else:
         card_number, facility_code = None, None
     return jsonify(card_number=card_number, facility_code=facility_code)
-
+"""
     
 @bp.route("/permissions/<badge>/")
 def permissionsStudent(badge):

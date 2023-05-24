@@ -1,6 +1,6 @@
 import serial
 import time
-from reader import CardReader
+#from reader import CardReader
 
 def main():
     port = "/dev/ttyUSB0"

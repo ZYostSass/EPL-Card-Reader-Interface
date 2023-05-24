@@ -1,5 +1,5 @@
 from flask import Flask, g, session
-from card_reader.reader import CardReader
+#from card_reader.reader import CardReader
 import os
 
 from database.user_options import get_user_by_id
@@ -16,7 +16,7 @@ except OSError:
   pass
 
 # Commented out until card reader fix for other OS
-card_reader = CardReader() # Note- add option for timeout prefs?
+# card_reader = CardReader() # Note- add option for timeout prefs?
 
 from .views import admin_bp
 
