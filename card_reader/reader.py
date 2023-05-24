@@ -1,5 +1,3 @@
-import glob
-import sys
 import threading
 import time
 import serial
@@ -12,19 +10,20 @@ def start_card_reader():
         target=make_card_loop,
         name="EPL Card Reader",
         daemon=True,
-        args=card_reader_lock
+        args=[card_reader_lock]
     )
     card_reader_thread.start()
     return card_reader_lock
 
 def make_card_loop(lock: threading.Lock):
-    card_reader = CardReader()
+    # card_reader = CardReader()
     while True:
-        data = card_reader.get_data()
-        if data is not None:
-            lock.acquire()
-            print("GOT DATA")
-            print(data)
+        
+        # data = card_reader.get_data()
+        # if data is not None:
+        #     lock.acquire()
+        #     print("GOT DATA")
+        #     print(data)
         time.sleep(0.1)
         
 
@@ -45,8 +44,8 @@ class CardReader:
         print("HERE4")
         self.baud_rate = baud_rate
         print("HERE5")
-        self.ser = serial.Serial(
-            port=self.port, baudrate=self.baud_rate, timeout=1)
+        # self.ser = serial.Serial(
+            # port=self.port, baudrate=self.baud_rate, timeout=1)
         print("HERE6")
 
     def ports(self):

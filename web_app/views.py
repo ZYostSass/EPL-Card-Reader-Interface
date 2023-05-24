@@ -7,7 +7,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
-from . import card_reader
 import os
 # from wtforms.validators import DataRequired
 
