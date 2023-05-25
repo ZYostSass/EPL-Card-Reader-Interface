@@ -8,3 +8,24 @@ $('.open-btn').on('click', function () {
 $('.close-btn').on('click', function () {
   $('.sidebar').removeClass('active');
 });
+
+// Login window popup
+const center = document.querySelector('.center');
+const loginPopup = document.querySelector('.btn.btn-primary.login-popup');
+
+loginPopup.addEventListener('click', () => {
+  if (center.classList.contains('active-popup')) {
+    closePopup(center);
+  }
+  else {
+    openPopup(center);
+  }
+});
+
+function openPopup(popup) {
+  popup.classList.add('active-popup');
+}
+
+function closePopup(popup) {
+  popup.classList.remove('active-popup');
+}
