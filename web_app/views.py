@@ -241,8 +241,12 @@ def card_data():
 @manager_required
 def permissionsStudent(badge):
     user = get_user(badge)
-    categories = all_categories()
-    uncategorized = uncategorized_machines_without_user(user.id)
+    if user is None:
+        return render_template("user_not_found.html", card_number=badge)  
+    user_machines = user.machines
+    print(user_machines)
+    print(user)
+    return render_template("permissionsStudent.html", user=user, user_machines=user_machines)
 
     # Filter the categories and machines
     filtered_categories = []
