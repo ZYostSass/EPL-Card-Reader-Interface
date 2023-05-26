@@ -57,6 +57,10 @@ def login():
 
     return render_template("login.html")
 
+@bp.route("/student-checkin")
+def student_checkin():
+    return render_template("student_checkin.html")
+
 
 @bp.route("/logout")
 def logout():

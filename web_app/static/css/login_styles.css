@@ -20,6 +20,10 @@ body {
   overflow: hidden;
 }
 
+.hidden {
+  display: none;
+}
+
 /* Navigation Bar */
 header {
   position: fixed;
@@ -48,7 +52,7 @@ header .logo i {
   color: var(--white);
 }
 
-.navigation .checkin-popup {
+.navigation a {
   position: relative;
   border: none;
   background-color: transparent;
@@ -60,7 +64,7 @@ header .logo i {
   transition: 0.25s;
 }
 
-.navigation .checkin-popup::after {
+.navigation a::after {
   content: '';
   position: absolute;
   left: 0;
@@ -74,8 +78,8 @@ header .logo i {
   transition: transform 0.5s;
 }
 
-.navigation .checkin-popup:hover::after,
-.navigation .checkin-popup:focus::after {
+.navigation a:hover::after,
+.navigation a:focus::after {
   transform-origin: left;
   transform: scaleX(1);
 }
@@ -199,4 +203,110 @@ input[type='submit'] {
 input[type='submit']:hover {
   border-color: var(--lightPSUgreen);
   transition: 0.5s;
+}
+
+/* Student Check-in */
+.student-checkin-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 60%;
+  height: 50%;
+  background: var(--bootstrapLight);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  transition: transform 0.5s ease, height 0.2s ease;
+}
+
+.student-checkin-content.active-popup {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.check-in {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.check-in .icon-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 45px;
+  width: 45px;
+  color: var(--lightPSUgreen);
+  font-size: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.check-in .card-prompt {
+  width: 70%;
+}
+
+.check-in .card-prompt h3 {
+  width: 100%;
+  background: var(--white);
+  padding: 1em;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  font-size: 20px;
+  text-align: center;
+}
+
+.check-in .card-prompt h4 {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid var(--dimGray);
+  margin: 60px 0 30px;
+  line-height: 0.1em;
+}
+
+.check-in .card-prompt h4 span {
+  background-color: var(--bootstrapLight);
+  padding: 0 10px;
+}
+
+.check-in form {
+  width: 70%;
+  background: var(--white);
+  padding: 1em;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.check-in form h3 {
+  text-align: center;
+  font-size: 20px;
+  margin: 0 0 20px 0;
+}
+
+.check-in #idHelp {
+  color: var(--dimGray);
+}
+
+.check-in form button {
+  width: 100%;
+  background: var(--lightPSUgreen);
+  border: 1px solid var(--PSUgreen);
+  color: var(--white);
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.check-in form button:hover {
+  background: var(--lightPSUgreen);
+  border-color: var(--lightPSUgreen);
+}
+
+.check-in input:focus {
+  border: 1px solid var(--lightPSUgreen);
+  box-shadow: 0 0 10px var(--lightPSUgreen);
 }
