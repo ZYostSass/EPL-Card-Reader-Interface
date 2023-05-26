@@ -17,7 +17,7 @@ body {
     hsl(74deg 35% 36%) 100%
   );
   background-attachment: fixed;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .hidden {
@@ -211,7 +211,7 @@ input[type='submit']:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
-  width: 60%;
+  width: 65%;
   height: 50%;
   background: var(--bootstrapLight);
   padding: 40px;
@@ -229,10 +229,10 @@ input[type='submit']:hover {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 50vh;
+  height: 100%;
 }
 
-.check-in .icon-close {
+.icon-close {
   position: absolute;
   top: 0;
   right: 0;
@@ -309,4 +309,74 @@ input[type='submit']:hover {
 .check-in input:focus {
   border: 1px solid var(--lightPSUgreen);
   box-shadow: 0 0 10px var(--lightPSUgreen);
+}
+
+/* Student Checkin Equipment */
+.student-checkin-equipment-content {
+  margin: 20px 0;
+}
+
+.student-checkin-equipment-content .student-info {
+  position: relative;
+  top: -20px;
+  background: var(--white);
+  padding: 20px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.scrollable-content {
+  height: 500px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: var(--bootstrapLight);
+}
+
+.scrollable-content::-webkit-scrollbar {
+  width: 12px;
+  background-color: var(--bootstrapLight);
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba (0, 0, 0, 0.3);
+  background-color: var(--lightPSUgreen);
+}
+
+.student-checkin-equipment-content h3 {
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 20px;
+}
+
+.student-checkin-equipment-content .col.equipment .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  padding: 1em;
+}
+
+.student-checkin-equipment-content img {
+  width: 100%;
+  max-width: 200px;
+  height: 200px;
+}
+
+.student-checkin-equipment-content h4 {
+  font-size: 0.75em;
+}
+
+.student-checkin-equipment-content img.true {
+  border: 5px solid green;
+}
+
+.student-checkin-equipment-content img.false {
+  border: 5px solid red;
 }

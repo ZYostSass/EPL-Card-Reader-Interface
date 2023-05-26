@@ -55,7 +55,6 @@ def checkin_user(badge):
     # If not, leave
     if user == None:
         raise LookupError(f"User with access number {badge} does not exist")
-        return None
     
     # If they are, check them in
     # TODO: Add checkouts to the log somewhere
