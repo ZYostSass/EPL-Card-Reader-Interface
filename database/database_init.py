@@ -22,6 +22,19 @@ if not (check_file):
     # Create a base version
     # Create the first entry as an Admin
 
+    # This comment block is the result of attempting to separate the two tables (users and machines)
+    # appart in the database file. As it stands currently, the user_machine_join_table prevents this
+    # from working as desired. This block may be of future assistance, and was found at the following link:
+    # https://gist.github.com/lmyyao/37157fff3ba90889d7c1e0f9dc774253
+
+    #user_engine = create_engine("sqlite:///users.db")
+    #machine_engine = create_engine("sqlite:///machines.db")
+    #class_models.Base.metadata.create_all(bind=user_engine)
+    #class_models.Base2.metadata.create_all(bind=machine_engine)
+    #Session = sessionmaker(twophase=True)
+    #Session.configure(binds={class_models.User: user_engine, class_models.Machine: machine_engine})
+    #session = Session()
+
     # Initialize Session
     engine = create_engine("sqlite:///database.db")
 
@@ -288,8 +301,3 @@ else:
     session = Session()
 
     print("Files Found")
-
-# TODO - Format for Flask
-# New user has all training set to False
-# Admins can edit info as needed
-# Last login
