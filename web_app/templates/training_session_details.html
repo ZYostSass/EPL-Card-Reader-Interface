@@ -5,8 +5,10 @@
   </h2>
   <!-- Card Prompt -->
   <div class="card-prompt">
-    <h3>Scan PSU ID card</h3>
-    <h4><span>OR</span></h4>
+    <div class="card-prompt">
+      <h3><a href="/card_data/" class="btn btn-primary" id="scan-btn">Scan PSU ID card</a></h3>
+      <h4><span>OR</span></h4>
+    </div>
   </div>
   <!-- End Card Prompt -->
   <!-- Manual Entry -->
@@ -35,4 +37,20 @@
   </form>
   <!-- End Manual Entry -->
 </div>
+
+<script>
+  document.getElementById("scan-btn").addEventListener("click", function(event) {
+    event.preventDefault();  // Prevent default link behavior
+    fetch("/card_data/")  // Make the request to the card_data route
+      .then(response => response.json())  // Parse the JSON response
+      .then(data => {
+        if (data.card_number) {
+          window.location.href = "/training-session/{{ machine_id }}/{{ name }}/" + data.card_number + "/";
+        } 
+      })
+      .catch(error => {
+        console.log(error);  // Handle any errors
+      });
+  });
+</script>
 {% endblock %}
