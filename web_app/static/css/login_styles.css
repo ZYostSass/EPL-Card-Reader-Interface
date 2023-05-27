@@ -306,6 +306,11 @@ input[type='submit']:hover {
   border-color: var(--lightPSUgreen);
 }
 
+.check-in form button:focus {
+  background-color: var(--lightPSUgreen);
+  border-color: var(--PSUgreen);
+}
+
 .check-in input:focus {
   border: 1px solid var(--lightPSUgreen);
   box-shadow: 0 0 10px var(--lightPSUgreen);
@@ -318,14 +323,19 @@ input[type='submit']:hover {
 
 .student-checkin-equipment-content .student-info {
   position: relative;
+  width: 95%;
   top: -20px;
   background: var(--white);
   padding: 20px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 
+.student-checkin-equipment-content h2 {
+  color: var(--PSUgreen);
+}
+
 .scrollable-content {
-  height: 500px;
+  height: 35vh;
   overflow-y: scroll;
   overflow-x: hidden;
 }

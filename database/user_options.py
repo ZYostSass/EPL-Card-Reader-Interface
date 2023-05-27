@@ -47,7 +47,7 @@ def get_category(id):
 # Universal Commands
 
 # Takes parsed card data and inputs it into the database
-# Returns either None or the User
+# Returns either a LookupError or the User
 # Can be used to access User members
 def checkin_user(badge):
     # Checks to see if the user is in the database
