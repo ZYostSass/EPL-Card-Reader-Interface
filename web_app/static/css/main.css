@@ -156,7 +156,7 @@ hr.h-color {
 
 .data-title.psu-id {
   width: 100px;
-  text-align: center;  
+  text-align: center;
 }
 
 .data-title.names {
@@ -169,15 +169,13 @@ hr.h-color {
 
 .data-title.event {
   width: 100px;
-  text-align: center;  
+  text-align: center;
 }
 
 .data-title.time {
   width: 100px;
-  text-align: center;  
+  text-align: center;
 }
-
-
 
 .data {
   margin-right: 10px;
@@ -201,11 +199,11 @@ hr.h-color {
 }
 
 /* Permissions */
-.permissions-content .card-prompt {
+.card-prompt {
   margin: 40px 0 0 48px;
 }
 
-.permissions-content .card-prompt h3 {
+.card-prompt h3 {
   width: 50%;
   background: var(--white);
   padding: 1em;
@@ -214,7 +212,7 @@ hr.h-color {
   text-align: center;
 }
 
-.permissions-content .card-prompt h4 {
+.card-prompt h4 {
   width: 50%;
   text-align: center;
   border-bottom: 1px solid var(--dimGray);
@@ -222,7 +220,7 @@ hr.h-color {
   line-height: 0.1em;
 }
 
-.permissions-content .card-prompt h4 span {
+.card-prompt h4 span {
   background-color: var(--bootstrapLight);
   padding: 0 10px;
 }
@@ -360,32 +358,6 @@ hr.h-color {
 }
 
 /* Add User Form */
-.form-content .card-prompt {
-  margin: 40px 0 0 48px;
-}
-
-.form-content .card-prompt h3 {
-  width: 50%;
-  background: var(--white);
-  padding: 1em;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-  font-size: 20px;
-  text-align: center;
-}
-
-.form-content .card-prompt h4 {
-  width: 50%;
-  text-align: center;
-  border-bottom: 1px solid var(--dimGray);
-  margin: 60px 0 60px;
-  line-height: 0.1em;
-}
-
-.form-content .card-prompt h4 span {
-  background-color: var(--bootstrapLight);
-  padding: 0 10px;
-}
-
 .form-content form {
   width: 50%;
   background: var(--white);
@@ -403,7 +375,8 @@ hr.h-color {
   color: var(--dimGray);
 }
 
-.form-content form button, .psu-button {
+.form-content form button,
+.psu-button {
   width: 100%;
   background: var(--lightPSUgreen);
   border: 1px solid var(--PSUgreen);
@@ -415,7 +388,8 @@ hr.h-color {
   text-decoration: none;
 }
 
-.form-content form button:hover, .psu-button:hover {
+.form-content form button:hover,
+.psu-button:hover {
   background: var(--lightPSUgreen);
   border: 1px solid var(--PSUgreen);
   box-shadow: 0 0 2px var(--PSUgreen);
@@ -495,32 +469,6 @@ hr.h-color {
 }
 
 /* Training Session Details */
-.training-session-details-content .card-prompt {
-  margin: 40px 0 0 48px;
-}
-
-.training-session-details-content .card-prompt h3 {
-  width: 50%;
-  background: var(--white);
-  padding: 1em;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-  font-size: 20px;
-  text-align: center;
-}
-
-.training-session-details-content .card-prompt h4 {
-  width: 50%;
-  text-align: center;
-  border-bottom: 1px solid var(--dimGray);
-  margin: 60px 0 60px;
-  line-height: 0.1em;
-}
-
-.training-session-details-content .card-prompt h4 span {
-  background-color: var(--bootstrapLight);
-  padding: 0 10px;
-}
-
 .training-session-details-content form {
   width: 50%;
   background: var(--white);
