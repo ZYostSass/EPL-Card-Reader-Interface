@@ -7,16 +7,12 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
-#from . import card_reader
 # from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
-# bp.config['SECRET_KEY'] = "asdfghjkl"
-
 
 @bp.route("/")
 def index():
-    print(g.user)
     if g.user is None:
         next = url_for("views.dashboard")
         if request.args.get('next') is not None:
@@ -49,6 +45,7 @@ def login():
             return render_template("login.html")
         else:
             session["user_id"] = user.id
+            session["user_active_at"] = datetime.datetime.now()
             redirect_arg = request.args.get('next')
             if redirect_arg is None:
                 return redirect("/", code=302)
@@ -61,6 +58,7 @@ def login():
 @bp.route("/logout")
 def logout():
     session.pop('user_id', None)
+    session.pop('user_active_at', None)
     return redirect(url_for('views.index', next=request.args.get('next')))
 
 
@@ -85,6 +83,8 @@ def admin_required(f):
     return decorated_function
 
 
+
+        
 @admin_bp.route("/")
 @admin_required
 def show_users():
@@ -123,6 +123,7 @@ def add_user_form():
 @manager_required
 def dashboard():
     # TODO: Filter these results by today
+    #check_time()
     logs = access_logs()
     return render_template("dashboard.html", logs=logs)
 
@@ -220,7 +221,7 @@ def permissionsStudent(badge):
 
     return render_template("permissionsStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
 
-
+    
 @bp.route("/edit_user/")
 @manager_required
 def edit_user():

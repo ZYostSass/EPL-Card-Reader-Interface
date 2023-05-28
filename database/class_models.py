@@ -11,6 +11,26 @@ from bcrypt import checkpw, gensalt, hashpw
 class Base(DeclarativeBase):
     pass
 
+# Key Value Table for storing global settings:
+class KeyValue(Base):
+    __tablename__ = "key_value"
+    key: Mapped[str] = mapped_column(primary_key=True)
+    value: Mapped[str]
+
+# Well known keys:
+LOGOUT_TIME = "LOGOUT_TIME" # int, minutes
+
+
+# Bi-directional join table for many-to-many relationships
+# using sqlalchemy.Column construct
+    # Primary Key: User ID -> user.id
+    # Primary Key: Machine ID -> machine.id
+user_machine_join_table = Table(
+    "user_machine_table",
+    Base.metadata,
+    Column("user_id", ForeignKey("user.id"), primary_key=True),
+    Column("machine_id", ForeignKey("machine.id"), primary_key=True),
+)
 class TrainingLog(Base):
     __tablename__ = "training_log"
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
@@ -76,6 +96,7 @@ class User(Base):
         self.role = new_role
         if password is not None:
             self.pw_hash = hashpw(bytes(password, 'utf-8'), gensalt())
+        
 
 machine_tag_association = Table(
     "machine_tag_association",

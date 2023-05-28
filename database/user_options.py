@@ -103,6 +103,16 @@ def get_user_by_id(id):
         raise ValueError(f"User with {id} is not in the database")
     return user
 
+def get_int_key(key): 
+    try:
+        value =  database_init.session.execute(select(class_models.KeyValue)
+            .where(class_models.KeyValue.key == key)).scalar_one_or_none()
+        return int(value.value)
+    except:
+        return None
+    
+
+
 def check_user_password(email, password):
     if email is None or password is None:
         return None
