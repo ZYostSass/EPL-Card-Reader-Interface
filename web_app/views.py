@@ -61,6 +61,7 @@ def login():
             return render_template("login.html")
         else:
             session["user_id"] = user.id
+            session["user_active_at"] = datetime.datetime.now()
             redirect_arg = request.args.get('next')
             if redirect_arg is None:
                 return redirect("/", code=302)

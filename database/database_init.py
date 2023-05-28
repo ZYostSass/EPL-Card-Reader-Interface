@@ -19,6 +19,10 @@ if not (check_file):
     Session = sessionmaker(engine)
     session = Session()
 
+    logout_time = class_models.KeyValue(key=class_models.LOGOUT_TIME, value="30")
+    session.add(logout_time)
+    session.commit()
+
     # Create Base Admin
     # TODO - Fill in correct info
     base_admin = class_models.User(psu_id="900000000", access="000001", fname="John", lname="Admin", email="jadmin@pdx.edu", password=b"password", role="Admin")
