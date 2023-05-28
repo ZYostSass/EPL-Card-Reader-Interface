@@ -2,7 +2,7 @@ import base64
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id
+from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id, checkin_user
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
@@ -415,3 +415,40 @@ def training_session_details(machine_id):
     else:
         machine = get_machine(machine_id)
         return render_template('training_session_details.html', machine=machine)
+
+@bp.route('/checkin/', methods=['GET', 'POST'])
+@manager_required
+def checkin():
+    if request.method == 'POST':
+        try:
+            user_badge = request.form['badge']
+            user = get_user(user_badge)
+            return redirect(url_for('views.checkinStudent', badge=user_badge))
+        except ValueError as e:
+            flash(str(e), "error")
+            return render_template("permissions.html")
+    else:
+        return render_template("checkin.html")
+    
+@bp.route('/checkin/<badge>')
+@manager_required
+def checkinStudent(badge):
+    user = get_user(badge)
+    checkin_user(badge)
+    categories = all_categories()
+    uncategorized = uncategorized_machines_without_user(user.id)
+
+    # Filter the categories and machines
+    filtered_categories = []
+    for category in categories:
+        filtered_machines = [
+            machine
+            for machine in category.machines
+            if machine not in user.machines
+        ]
+        if filtered_machines:
+            filtered_category = MachineTag(tag=category.tag)
+            filtered_category.machines = filtered_machines
+            filtered_categories.append(filtered_category)
+    
+    return render_template("checkinStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)

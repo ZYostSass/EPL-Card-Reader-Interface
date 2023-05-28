@@ -229,14 +229,14 @@ hr.h-color {
   padding: 0 10px;
 }
 
-.permissions-content form {
+.badge-form {
   width: 50%;
   background: var(--white);
   padding: 1em;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 
-.permissions-content form h3 {
+.badge-form h3 {
   text-align: center;
   font-size: 20px;
   margin: 0 0 20px 0;
@@ -246,7 +246,7 @@ hr.h-color {
   color: var(--dimGray);
 }
 
-.permissions-content form button {
+.badge-form button {
   width: 100%;
   background: var(--lightPSUgreen);
   border: 1px solid var(--PSUgreen);
@@ -257,12 +257,12 @@ hr.h-color {
   cursor: pointer;
 }
 
-.permissions-content form button:hover {
+.badge-form button:hover {
   background: var(--lightPSUgreen);
   border-color: var(--lightPSUgreen);
 }
 
-.permissions-content input:focus {
+.badge-form input:focus {
   border: 1px solid var(--lightPSUgreen);
   box-shadow: 0 0 10px var(--lightPSUgreen);
 }
@@ -272,7 +272,7 @@ hr.h-color {
   margin: 20px 0;
 }
 
-.permissionsStudent-content .student-info {
+.student-info {
   position: relative;
   top: -20px;
   background: var(--white);
@@ -513,6 +513,59 @@ hr.h-color {
 
 .training-session-details-content b.equipment-name {
   color: var(--lightPSUgreen);
+}
+
+/* Checkin Student */
+.checkinStudent-content {
+  margin: 20px 0;
+}
+
+.checkinStudent-content .equipment-info {
+  padding: 50px;
+}
+
+.checkinStudent-content .student-info {
+  position: relative;
+  top: -20px;
+  background: var(--white);
+  padding: 20px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.checkinStudent-content h3 {
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 20px;
+}
+
+.checkinStudent-content .col.equipment .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  padding: 1em;
+}
+
+.checkinStudent-content img {
+  width: 100%;
+  max-width: 200px;
+  height: 200px;
+}
+
+.checkinStudent-content h4 {
+  font-size: 0.75em;
+}
+
+.checkinStudent-content img.true {
+  border: 5px solid green;
+  border-radius: 5px;
+}
+
+.checkinStudent-content img.false {
+  border: 5px solid red;
+  border-radius: 5px;
 }
 
 /* Media Queries */
