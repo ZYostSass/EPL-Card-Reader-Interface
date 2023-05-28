@@ -17,11 +17,19 @@ body {
     hsl(74deg 35% 36%) 100%
   );
   background-attachment: fixed;
-  /* overflow: hidden; */
 }
 
 .hidden {
   display: none;
+}
+
+/* Flash messages */
+.flash-messages {
+  margin-top: 100px;
+}
+
+.flash-messages button {
+  z-index: 1000;
 }
 
 /* Navigation Bar */
@@ -385,8 +393,10 @@ input[type='submit']:hover {
 
 .student-checkin-equipment-content img.true {
   border: 5px solid green;
+  border-radius: 10px;
 }
 
 .student-checkin-equipment-content img.false {
   border: 5px solid red;
+  border-radius: 10px;
 }
