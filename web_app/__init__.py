@@ -1,3 +1,5 @@
+import base64
+import datetime
 from flask import Flask, g, session
 #from card_reader.reader import CardReader
 import os
@@ -10,8 +12,10 @@ from datetime import datetime, timedelta
 LOGOUT_TIME_DEFAULT = 30 # minutes
 
 app = Flask(__name__)
+app.debug = True
 app.config["SECRET_KEY"] = "dev"
 app.config["EXPLAIN_TEMPLATE_LOADING"] = True
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 # 16 MB
 
 try:
   os.makedirs(app.instance_path)
@@ -19,7 +23,7 @@ except OSError:
   pass
 
 # Commented out until card reader fix for other OS
-#card_reader = CardReader(baud_rate=9600) # Note- add option for timeout prefs?
+# card_reader = CardReader() # Note- add option for timeout prefs?
 
 from .views import admin_bp
 
@@ -55,3 +59,26 @@ def set_user_global():
         session["user_active_at"] = datetime.datetime.now()
         user = get_user_by_id(user_id)
         g.user = user
+
+@app.template_filter('format_category')
+def format_category(value):
+    if value is not None:
+      return value.replace("_", " ").title()
+    return "NONE"
+
+@app.template_filter('format_trained_at')
+def format_trained_at(value):
+    if value is not None and isinstance(value, datetime.datetime):
+      data = value.strftime("%Y-%m-%d")
+    else:
+      data = "NONE"
+    return data
+
+# The following was written by chatgpt:
+@app.template_filter('base64_to_data_url')
+def base64_to_data_url(value):
+    if value is not None:
+      data = value.decode('utf-8')
+    else:
+      data = ""
+    return f"data:image/jpg;base64,{data}"
