@@ -48,15 +48,23 @@ def set_user_global():
 
     if log_out_time is None:
        log_out_time = LOGOUT_TIME_DEFAULT
-       
+
     if user_id is None or last_login_time is None:
         g.user = None
-    elif last_login_time < (datetime.now() - timedelta(minutes=log_out_time)):
+        session.pop("user_id", None)
+        session.pop("user_active_at", None)
+        return  
+    
+    diff = datetime.now() - timedelta(minutes=log_out_time)
+    diff = diff.replace(tzinfo = None)
+    last_login_time = last_login_time.replace(tzinfo = None)
+
+    if last_login_time < diff:
         session.pop("user_id", None)
         session.pop("user_active_at", None)
         g.user = None
     else:
-        session["user_active_at"] = datetime.datetime.now()
+        session["user_active_at"] = datetime.now()
         user = get_user_by_id(user_id)
         g.user = user
 

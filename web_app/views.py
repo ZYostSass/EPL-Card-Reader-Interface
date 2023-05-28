@@ -58,6 +58,7 @@ def login():
 @bp.route("/logout")
 def logout():
     session.pop('user_id', None)
+    session.pop('user_active_at', None)
     return redirect(url_for('views.index', next=request.args.get('next')))
 
 
@@ -221,15 +222,6 @@ def permissionsStudent(badge):
     return render_template("permissionsStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
 
     
-@bp.route("/permissions/<id>/")
-@manager_required
-def permissionsStudent(id):
-    user = get_user_by_psu_id(id)
-    user_machines = user.machines
-    print(user_machines)
-    print(user)
-    return render_template("permissionsStudent.html", user=user, user_machines=user_machines)
-
 @bp.route("/edit_user/")
 @manager_required
 def edit_user():
