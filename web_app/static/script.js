@@ -1,6 +1,3 @@
-// Add color overlay on equipment images
-$('ul.list-unstyled > li > a[href="' + document.location.pathname + '"]').parent().addClass('active');
-
 // Collapsible sidebar
 $('.open-btn').on('click', function () {
   $('.sidebar').addClass('active');
@@ -8,3 +5,65 @@ $('.open-btn').on('click', function () {
 $('.close-btn').on('click', function () {
   $('.sidebar').removeClass('active');
 });
+
+// Login window popup
+const center = document.querySelector('.center');
+const loginPopup = document.querySelector('.btn.btn-primary.login-popup');
+
+loginPopup.addEventListener('click', () => {
+  if (center.classList.contains('active-popup')) {
+    closePopup(center);
+  }
+  else {
+    openPopup(center);
+  }
+});
+
+
+// Student checkin popup
+const studentCheckin = document.querySelector(".student-checkin-content");
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (document.URL.includes('/student-checkin')) {
+    if (studentCheckin.classList.contains('active-popup')) {
+      closePopup(studentCheckin);
+    }
+    else {
+      openPopup(studentCheckin);
+    }
+  }
+});
+
+
+// Student Checkin Close
+const iconClose = document.querySelector('.icon-close')
+
+iconClose.addEventListener('click', function(event) {
+  closePopup(studentCheckin);
+});
+
+center.addEventListener('click', function(event) {
+  event.stopPropagation();
+});
+
+studentCheckin.addEventListener('click', function(event) {
+  event.stopPropagation();
+});
+
+function openPopup(popup) {
+  popup.classList.add('active-popup');
+  setTimeout(function() {
+    popup.classList.remove('hidden');
+  }, 300);
+}
+
+function closePopup(popup) {
+  popup.classList.remove('active-popup');
+  setTimeout(function() {
+    popup.classList.add('hidden');
+  }, 300);
+}
+
+
+
+
