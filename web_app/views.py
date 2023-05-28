@@ -454,3 +454,40 @@ def training_session_details(machine_id):
     else:
         machine = get_machine(machine_id)
         return render_template('training_session_details.html', machine=machine)
+
+@bp.route('/checkin/', methods=['GET', 'POST'])
+@manager_required
+def checkin():
+    if request.method == 'POST':
+        try:
+            user_badge = request.form['badge']
+            user = get_user(user_badge)
+            return redirect(url_for('views.checkinStudent', badge=user_badge))
+        except ValueError as e:
+            flash(str(e), "error")
+            return render_template("permissions.html")
+    else:
+        return render_template("checkin.html")
+    
+@bp.route('/checkin/<badge>')
+@manager_required
+def checkinStudent(badge):
+    user = get_user(badge)
+    checkin_user(badge)
+    categories = all_categories()
+    uncategorized = uncategorized_machines_without_user(user.id)
+
+    # Filter the categories and machines
+    filtered_categories = []
+    for category in categories:
+        filtered_machines = [
+            machine
+            for machine in category.machines
+            if machine not in user.machines
+        ]
+        if filtered_machines:
+            filtered_category = MachineTag(tag=category.tag)
+            filtered_category.machines = filtered_machines
+            filtered_categories.append(filtered_category)
+    
+    return render_template("checkinStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
