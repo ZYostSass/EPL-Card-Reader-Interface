@@ -1,31 +1,31 @@
+import os
 import threading
 import time
 import serial
 import serial.tools.list_ports
 
-
 def start_card_reader():
     card_reader_lock = threading.Lock()
+    card_reader_event = threading.Event()
     card_reader_thread = threading.Thread(
         target=make_card_loop,
         name="EPL Card Reader",
         daemon=True,
-        args=[card_reader_lock]
+        args=[card_reader_lock, card_reader_event]
     )
     card_reader_thread.start()
-    return card_reader_lock
+    return (card_reader_lock, card_reader_event)
 
-def make_card_loop(lock: threading.Lock):
-    # card_reader = CardReader()
-    while True:
-        
-        # data = card_reader.get_data()
-        # if data is not None:
-        #     lock.acquire()
-        #     print("GOT DATA")
-        #     print(data)
+def make_card_loop(consumer_lock: threading.Lock, event: threading.Event):
+    card_reader = CardReader(fake=True)
+    while True:        
+        consumer_lock.acquire()
+        data = card_reader.get_data()
+        if data is not None:
+            print(data) #TODO: Use austin's print log stuff here
+            event.set()
+        consumer_lock.release()
         time.sleep(0.1)
-        
 
 
 class CardReader:
@@ -33,49 +33,32 @@ class CardReader:
     # Instead of relying on input for the port path, it now
     # locates the card reader by either a passed in device name
     # or the default value.
-    def __init__(self, port=None, baud_rate=9600, device_name=None):
-        print("HERE1")
+    def __init__(self, fake=False, port=None, baud_rate=9600, device_name=None):
+        if fake:
+            self.fake = fake
+            return
+        self.fake = None
         if port:
-            print("HERE2")
             self.port = port
         else:
-            print("HERE3")
             self.port = self.set_port(device_name)
-        print("HERE4")
         self.baud_rate = baud_rate
-        print("HERE5")
-        # self.ser = serial.Serial(
-            # port=self.port, baudrate=self.baud_rate, timeout=1)
-        print("HERE6")
-
-    def ports(self):
-        result = []
-        for p in serial.tools.list_ports.comports():
-            result.append(p)
-        return result
+        self.ser = serial.Serial(
+            port=self.port, baudrate=self.baud_rate, timeout=1)
 
     # Uses the serial tools library to get a list of ports and
     # searches for the name of the reader.
     # If found, this is passed to the constructor and set
     # Otherwise raises an Exception - validate the port name in use
     def set_port(self, device_name=None):
-        print("HERE7")
         if not device_name:
-            print("HERE8")
             device_name = 'USB to UART'
-        print("HERE9")
         ports = serial.tools.list_ports.comports()
-        print("HERE10")
         for port in ports:
-            print("HERE11")
             if device_name in port.name or device_name in port.description:
-                print("HERE12")
                 return port.device
-        print("HERE13")
         for port in ports:
-            print("HERE14")
             if '/dev/' in port.device or '/dev/' in port.name or '/dev/' in port.description:
-                print("HERE15")
                 return port.device
         raise Exception("No port found at " + device_name)
 
@@ -85,7 +68,21 @@ class CardReader:
     # A None response indicates no data in buffer
     # TODO: add proper error handling
     def get_data(self):
-        if self.ser.in_waiting > 0:
+        if self.fake is not None:
+            try:
+                with open("fake-data.txt", "r") as f:
+                    text = f.read()
+                    items = text.split(",")
+                    result = (int(items[0]), int(items[1]))
+                    if result != self.fake:
+                        self.fake = result
+                        return result
+                    else:
+                        return None
+            except Exception as e:
+                return None
+
+        elif self.ser.in_waiting > 0:
             data = self.ser.readline().decode().strip()
             clean = data[4:]
             clean_int = int(clean, 16)

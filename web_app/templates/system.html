@@ -7,20 +7,19 @@
 </div>
 
 <div style="margin:20px">
-    {{card_reader_info}}
 </div>
 
 <div style="margin:20px">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
+    setInterval(fetchData, .1)
     function fetchData() {
       $.getJSON('/card_data', function(data) {
+        console.dir(data);
           if (data.card_number && data.facility_code) {
+            console.log(data.card_number)
             $('#card-number').text(data.card_number);
             $('#facility-code').text(data.facility_code);
-          } else {
-            $('#card-number').text('No data received.');
-            $('#facility-code').text('');
           }
       });
     }
@@ -28,7 +27,6 @@
   <h3>Card Reader Test</h3>
   <p>Card Number: <span id="card-number"></span></p>
   <p>Facility Code: <span id="facility-code"></span></p>
-  <button onclick="fetchData()">Get Data</button>
 
 </div>
 {% endblock %}

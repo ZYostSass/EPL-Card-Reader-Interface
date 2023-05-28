@@ -8,6 +8,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
 import os
+from . import card_reader
 # from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
@@ -405,8 +406,7 @@ def training_session_details(machine_id):
 @bp.route('/system/')
 @manager_required
 def system():
-    card_reader_info = card_reader.ports()
-    return render_template('system.html', card_reader_info=card_reader_info)
+    return render_template('system.html')
 
 @bp.route('/reset-database/')
 @admin_required

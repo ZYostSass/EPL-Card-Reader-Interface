@@ -18,7 +18,8 @@ except OSError:
   pass
 
 # Commented out until card reader fix for other OS
-card_reader_event = start_card_reader()
+start_card_reader()
+card_reader = CardReader(fake=True)
 
 from .views import admin_bp
 
