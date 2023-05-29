@@ -26,20 +26,4 @@
   </form>
 </div>
 
-<script>
-  document.getElementById("scan-btn").addEventListener("click", function(event) {
-    event.preventDefault();  // Prevent default link behavior
-    fetch("/card_data/")  // Make the request to the card_data route
-      .then(response => response.json())  // Parse the JSON response
-      .then(data => {
-        if (data.card_number) {
-          window.location.href = "/permissions/" + data.card_number + "/";  // Redirect to the permissions route with card_number as a parameter
-        }
-      })
-      .catch(error => {
-        console.log(error);  // Handle any errors
-      });
-  });
-</script>
-
 {% endblock %}

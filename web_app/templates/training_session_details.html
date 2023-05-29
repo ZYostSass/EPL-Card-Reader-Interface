@@ -38,19 +38,4 @@
   <!-- End Manual Entry -->
 </div>
 
-<script>
-  document.getElementById("scan-btn").addEventListener("click", function(event) {
-    event.preventDefault();  // Prevent default link behavior
-    fetch("/card_data/")  // Make the request to the card_data route
-      .then(response => response.json())  // Parse the JSON response
-      .then(data => {
-        if (data.card_number) {
-          window.location.href = "/training-session/{{ machine_id }}/{{ name }}/" + data.card_number + "/";
-        } 
-      })
-      .catch(error => {
-        console.log(error);  // Handle any errors
-      });
-  });
-</script>
 {% endblock %}
