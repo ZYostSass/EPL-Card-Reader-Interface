@@ -237,7 +237,6 @@ def card_data():
 @bp.route("/permissions/<badge>/")
 @manager_required
 def permissionsStudent(badge):
-    badge = badge.zfill(6)
     user = get_user(badge)
     categories = all_categories()
     uncategorized = uncategorized_machines_without_user(user.id)
