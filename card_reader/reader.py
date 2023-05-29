@@ -1,13 +1,18 @@
 import serial
 import serial.tools.list_ports
 
-"""
+
 class CardReader:
     # Constructor takes baud_rate and optionally a port path
     # Instead of relying on input for the port path, it now
     # locates the card reader by either a passed in device name
     # or the default value.
-    def __init__(self, port=None, baud_rate=9600, device_name=None):
+    def __init__(self, fake=True, port=None, baud_rate=9600, device_name=None):
+        if fake:
+            self.fake = fake
+            return
+        
+        self.fake = None
         if port:
             self.port = port
         else:
@@ -38,7 +43,23 @@ class CardReader:
     # A None response indicates no data in buffer
     # TODO: add proper error handling
     def get_data(self):
-        if self.ser.in_waiting > 0:
+        print(self.fake)
+        if self.fake is not None:
+            try:
+                with open("fake-data.txt", "r") as f:
+                    text = f.read()
+                    items = text.split(",")
+                    print(items)
+                    result = (int(items[0]), int(items[1]))
+                    if result != self.fake:
+                        self.fake = result
+                        return result
+                    else:
+                        return None
+            except Exception as e:
+                return None
+
+        elif self.ser.in_waiting > 0:
             data = self.ser.readline().decode().strip()
             clean = data[4:]
             clean_int = int(clean, 16)
@@ -68,4 +89,3 @@ class CardReader:
 
     def close(self):
         self.ser.close()
-"""

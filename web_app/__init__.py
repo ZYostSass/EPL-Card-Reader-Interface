@@ -1,7 +1,7 @@
 import base64
 import datetime
 from flask import Flask, g, session
-#from card_reader.reader import CardReader
+from card_reader.reader import CardReader
 import os
 from database.class_models import LOGOUT_TIME
 
@@ -23,7 +23,7 @@ except OSError:
   pass
 
 # Commented out until card reader fix for other OS
-# card_reader = CardReader() # Note- add option for timeout prefs?
+card_reader = CardReader(fake=app.debug) # Note- add option for timeout prefs?
 
 from .views import admin_bp
 
@@ -76,7 +76,7 @@ def format_category(value):
 
 @app.template_filter('format_trained_at')
 def format_trained_at(value):
-    if value is not None and isinstance(value, datetime.datetime):
+    if value is not None and isinstance(value, datetime):
       data = value.strftime("%Y-%m-%d")
     else:
       data = "NONE"

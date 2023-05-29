@@ -20,6 +20,7 @@ from datetime import datetime
 # Checks to see if a given user is in the database, via badge number
 # Returns result (either the user or None)
 def is_user_badge_present(badge):
+    badge = badge.zfill(6)
     return database_init.session.execute(select(class_models.User)
         .where(class_models.User.badge == badge)).scalar_one_or_none()
 
@@ -50,6 +51,7 @@ def get_category(id):
 # Returns either a LookupError or the User
 # Can be used to access User members
 def checkin_user(badge):
+    badge = badge.zfill(6)
     # Checks to see if the user is in the database
     user = is_user_badge_present(badge)
     # If not, leave
@@ -69,19 +71,10 @@ def access_logs():
     # TODO: add time range filters
     return database_init.session.execute(select(class_models.EventLog)).scalars().all()
 
-class DisplayAccessLog:
-    user: class_models.User
-    time_in: datetime
-    time_out: Optional[datetime]
-
-    def __init__(self, user, time_in, time_out):
-        self.user = user
-        self.time_in = time_in
-        self.time_out = time_out
-
 # Gets the first name, last name, and id number of a given badge number
 # Returns either None or the entire User
 def get_user(badge):
+    badge = badge.zfill(6)
     to_display = is_user_badge_present(badge)
     if to_display == None:
         return None
@@ -144,6 +137,7 @@ def add_new_user(psu_id, access, firstname, lastname, email, role):
 
 # Removes a user from the database, if they are present
 def remove_user(badge_number):
+    badge_number = badge_number.zfill(6)
     # Looks for the User with a matching ID
     to_delete = is_user_badge_present(badge_number)
     # If not found, return
@@ -242,6 +236,7 @@ def remove_category_by_id(id):
 
 # Add trainings to a passed User
 def add_training(badge, machine_id):
+    badge = badge.zfill(6)
     # Check to see if the user is in the database
     to_train = get_user(badge)
     # If they aren't, leave
@@ -258,6 +253,7 @@ def add_training(badge, machine_id):
 
 # Remove trainings to a passed User
 def remove_training(user_badge, machine_id):
+    user_badge = user_badge.zfill(6)
     # Check to see if the user is in the database
     to_untrain = is_user_badge_present(user_badge)
     # If they aren't, leave
@@ -288,6 +284,7 @@ def read_all():
 
 # Edit User badge
 def edit_user_badge(idnumber, new_badge):
+    new_badge = new_badge.zfill(6)
     # Ensure the user is in the database, via ID
     to_edit = is_user_id_present(idnumber)
     # If not, raise an error
