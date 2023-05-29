@@ -2,13 +2,15 @@ import base64
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id, checkin_user
+from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, process_badge, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id, checkin_user
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
 from . import card_reader
 # from wtforms.validators import DataRequired
+
+from . import live_checkin
 
 bp = Blueprint('views', __name__)
 
@@ -59,10 +61,8 @@ def login():
 def student_checkin():
     if request.method == "POST":
         user_badge = request.form['badge']
-        user = get_user(user_badge)
-
         try:
-            user = checkin_user(user_badge)
+            checkin_user(user_badge)
             return redirect(url_for('views.student_checkin_equipment', badge=user_badge))
 
         except LookupError as e:
@@ -227,13 +227,14 @@ def card_test():
 
 @bp.route("/card_data/")
 def card_data():
-    card_data = card_reader.get_data()
+    card_data = card_reader.get_data(old=True)
     if card_data is not None:
-        card_number, facility_code = card_data
+        card_number, facility_code = card_data        
         checkin_user(card_number)
     else:
         card_number, facility_code = None, None
     
+    card_number = process_badge(card_number)
     return jsonify(card_number=card_number, facility_code=facility_code)
 
 @bp.route("/permissions/<badge>/")

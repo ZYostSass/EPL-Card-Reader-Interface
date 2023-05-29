@@ -3,7 +3,7 @@ from database import class_models
 
 from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from datetime import datetime, timedelta
 
 @event.listens_for(Engine, "connect")
@@ -13,9 +13,14 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor.close()
 
 
-path = os.getcwd()
-# print(path)
 check_file = os.path.isfile("database.db")
+engine = create_engine("sqlite:///database.db")
+class_models.Base.metadata.create_all(engine)
+session_factory = sessionmaker(engine)
+Session = scoped_session(session_factory)
+session = Session()
+
+print("Database file exists: " + str(check_file))
 if not (check_file):
     prefix = "web_app/static/"
     # If database files don't exist
@@ -23,12 +28,8 @@ if not (check_file):
     # Create the first entry as an Admin
 
     # Initialize Session
-    engine = create_engine("sqlite:///database.db")
 
-    class_models.Base.metadata.create_all(engine)
-    Session = sessionmaker(engine)
-    session = Session()
-
+    print("Seeding database")
     logout_time = class_models.KeyValue(key=class_models.LOGOUT_TIME, value="30")
     session.add(logout_time)
     session.commit()
@@ -280,18 +281,3 @@ if not (check_file):
     log3 = class_models.TrainingLog(user=student2, machine=machine5, trained_at=datetime.now() - timedelta(days=1))
     session.add_all([log1, log2, log3])
     session.commit()
-
-else:
-    # Otherwise
-    # Load the files into memory
-    engine = create_engine("sqlite:///database.db")
-    class_models.Base.metadata.create_all(engine)
-    Session = sessionmaker(engine)
-    session = Session()
-
-    print("Files Found")
-
-# TODO - Format for Flask
-# New user has all training set to False
-# Admins can edit info as needed
-# Last login
