@@ -230,8 +230,10 @@ def card_data():
     card_data = card_reader.get_data()
     if card_data is not None:
         card_number, facility_code = card_data
+        checkin_user(card_number)
     else:
         card_number, facility_code = None, None
+    
     return jsonify(card_number=card_number, facility_code=facility_code)
 
 @bp.route("/permissions/<badge>/")
