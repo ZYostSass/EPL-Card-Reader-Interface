@@ -14,7 +14,6 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 
 
 path = os.getcwd()
-# print(path)
 check_file = os.path.isfile("database.db")
 if not (check_file):
     prefix = "web_app/static/"
@@ -22,8 +21,8 @@ if not (check_file):
     # Create a base version
     # Create the first entry as an Admin
 
-    # This comment block is the result of attempting to separate the two tables (users and machines)
-    # appart in the database file. As it stands currently, the user_machine_join_table prevents this
+    # The following comment block is the result of attempting to separate the two tables (users and machines)
+    # apart in the database file. As it stands currently, the TrainingLog join table prevents this
     # from working as desired. This block may be of future assistance, and was found at the following link:
     # https://gist.github.com/lmyyao/37157fff3ba90889d7c1e0f9dc774253
 
