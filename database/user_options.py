@@ -123,7 +123,7 @@ def remove_user(badge_number):
     to_delete = is_user_badge_present(badge_number)
     # If not found, return
     if to_delete is None:
-        raise ValueError(f"User with bagde {badge_number} does not exist")
+        raise ValueError(f"User with badge {badge_number} does not exist")
     # Else, remove from the database
     else:
         database_init.session.delete(to_delete)
