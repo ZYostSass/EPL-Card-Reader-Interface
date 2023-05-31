@@ -65,6 +65,10 @@ hr.h-color {
   color: var(--white);
 }
 
+.navbar-nav .logged-user-info {
+  color: var(--white);
+}
+
 /* Dashboard */
 .dashboard {
   position: relative;
@@ -146,6 +150,11 @@ hr.h-color {
 .daily-user-log .title h1 {
   font-size: 125%;
   margin: 0;
+}
+
+.daily-user-log .title a {
+  max-width: 150px;
+  margin-left: auto;
 }
 
 .daily-user-log .data-row {
