@@ -23,16 +23,18 @@
       <h1>Training</h1>
       <p>Update training for users</p>
       <div class="card-buttons">
-        <a href="{{ url_for('views.training_session')}}">
-          Update
-        </a>
+        <a href="{{ url_for('views.training_session')}}"> Update </a>
       </div>
     </div>
     <div class="daily-user-log">
       <div class="title">
         <i class="fa-solid fa-clock"></i>
         <h1>Recent users</h1>
-        <a style="max-width: 150px; margin-left: 20px;"class="btn-primary psu-button" href="{{ url_for('views.event_log_csv') }}">Export to CSV</a>
+        <a
+          class="btn-primary psu-button"
+          href="{{ url_for('views.event_log_csv') }}"
+          >Export to CSV</a
+        >
       </div>
       <div class="daily-user-log-data">
         <div class="data-row header-row">
@@ -47,9 +49,13 @@
       <div class="data-row header-row">
         <span class="data data-title access-id">{{event.badge}}</span>
         <span class="data data-title psu-id">{{event.psu_id}}</span>
-        <span class="data data-title names">{{event.fname}} {{event.lname}}</span>
+        <span class="data data-title names"
+          >{{event.fname}} {{event.lname}}</span
+        >
         <span class="data data-title event">{{event.event}}</span>
-        <span class="data data-title time">{{ event.timestamp.strftime('%H:%M:%S') }}</span>
+        <span class="data data-title time"
+          >{{ event.timestamp.strftime('%H:%M:%S') }}</span
+        >
       </div>
       {% endfor %} {% endif %}
     </div>
