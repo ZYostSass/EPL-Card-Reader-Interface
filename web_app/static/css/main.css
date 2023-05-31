@@ -220,6 +220,22 @@ hr.h-color {
   margin: 40px 0 0 48px;
 }
 
+#scan-btn {
+  width: 50%;
+  background: var(--lightPSUgreen);
+  border: 1px solid var(--PSUgreen);
+  color: var(--white);
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+#scan-btn:hover {
+  background: var(--lightPSUgreen);
+  border-color: var(--lightPSUgreen);
+}
+
 .card-prompt h3 {
   width: 50%;
   background: var(--white);
