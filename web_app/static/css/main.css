@@ -57,16 +57,20 @@ hr.h-color {
   background: var(--PSUgreen);
 }
 
-.nav-item {
-  text-align: right;
-}
-
 .navbar i {
   color: var(--white);
 }
 
+.navbar-nav {
+  display: flex;
+  align-items: center;
+}
+
 .navbar-nav .logged-user-info {
   color: var(--white);
+  font-weight: 500;
+  position: absolute;
+  left: 20px;
 }
 
 /* Dashboard */
@@ -589,6 +593,23 @@ hr.h-color {
 
   #side_nav.active {
     margin-left: 0;
+  }
+
+  /* Navbar */
+
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-item {
+    margin-left: auto;
+  }
+
+  .nav-item .logged-user-info {
+    order: -1;
+    margin-right: auto;
+    top: 60%;
   }
 
   /* Dashboard */
