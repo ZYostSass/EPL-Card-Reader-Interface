@@ -150,7 +150,7 @@ def remove_user(badge_number):
 
 # Update user's information 
 def update_user_option(id, badge, fname, lname, email):
-    user = is_user_badge_present(badge)
+    user = get_user(badge)
     if user is not None:
         user.id = id
         user.badge = badge

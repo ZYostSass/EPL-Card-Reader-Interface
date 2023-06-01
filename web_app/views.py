@@ -280,6 +280,7 @@ def remove_user_form():
 
 
 @bp.route('/update-user/', methods=['GET', 'POST'])
+@manager_required
 def update_user():
     if request.method == "POST":
         user_badge = request.form['badge']
@@ -296,6 +297,7 @@ def update_user():
     else:
         return render_template("update_user.html")
 @bp.route('/update-user/<badge>', methods=['GET', 'POST'])
+@manager_required
 def updateStudent(badge):
     user = get_user(badge)
     if request.method == 'POST':
