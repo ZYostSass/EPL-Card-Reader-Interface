@@ -2,7 +2,7 @@ import base64
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id, checkin_user
+from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id, checkin_user, update_user_option
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
@@ -277,6 +277,47 @@ def remove_user_form():
             return redirect(url_for('views.remove_user_form'))
     else:
         return render_template("remove_user_form.html")
+
+
+@bp.route('/update-user/', methods=['GET', 'POST'])
+@manager_required
+def update_user():
+    if request.method == "POST":
+        user_badge = request.form['badge']
+        try:
+            user = get_user(user_badge)
+            if user is None:
+                flash ("User does not exist")
+                return render_template('update_user.html', badge = user_badge)
+            else:
+                return redirect(url_for('views.updateStudent', badge = user_badge))
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.update_user'))
+    else:
+        return render_template("update_user.html")
+@bp.route('/update-user/<badge>', methods=['GET', 'POST'])
+@manager_required
+def updateStudent(badge):
+    user = get_user(badge)
+    if request.method == 'POST':
+        user_id = request.form['id']
+        user_badge = request.form['badge']
+        user_fname = request.form['fname']
+        user_lname = request.form['lname']
+        user_email = request.form['email']
+        try:
+            update_user_option(id = user_id , badge = user_badge, fname = user_fname, lname = user_lname, email = user_email)
+            flash("Successfully Updated", "success")
+            return redirect(url_for('views.update_user'))
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.update_user'))
+        
+    else:
+        return render_template("updateStudent.html", user = user)
+
+
 
 # Creating a form for promoting a user
 

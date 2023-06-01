@@ -1,0 +1,28 @@
+{% extends "index.html" %} {% block content %}
+
+<div class="form-content px-3 pt-4">
+  <h2 class="fs-5 pe-2">Update User</h2>
+  <form action="/update-user/" method="POST" class="m-5">
+    <div class="mb-3">
+      <label for="badge" class="form-label">Badge Number</label>
+      <input
+        type="text"
+        class="form-control"
+        name="badge"
+        id="badge"
+        value="{{ badge }}"
+        maxlength="6"
+        inputmode="numeric"
+        pattern="[0-6]{6}"
+        required
+      />
+      <div id="idHelp" class="form-text">Must be a 6 digit number</div>
+    </div>
+    <button type="submit" class="btn-primary" id="submit-btn">
+      Find User
+    </button>
+  </form>
+  
+  
+</div>
+{% endblock %}

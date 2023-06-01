@@ -148,6 +148,19 @@ def remove_user(badge_number):
         database_init.session.delete(to_delete)
         database_init.session.commit()
 
+# Update user's information 
+def update_user_option(id, badge, fname, lname, email):
+    user = get_user(badge)
+    if user is not None:
+        user.psu_id = id
+        user.badge = badge
+        user.firstname = fname
+        user.lastname = lname
+        user.email = email
+        database_init.session.commit()
+    else:
+        raise ValueError("User doesn not exist")
+
 def all_categories():
     return database_init.session.execute(select(class_models.MachineTag)).scalars().all()
 
@@ -316,19 +329,6 @@ def edit_user_email(idnumber, new_email):
     # Otherwise, edit the User's email
     to_edit.email = new_email
     database_init.session.commit()
-
-# # Update user's role for promotion
-# def promote_user(idnumber,role):
-#     # Check if user already exists
-#     to_promote = database_init.session.execute(select(class_models.User)
-#         .where(class_models.User.id == idnumber)).scalar_one_or_none()
-#     #If not, raise an exception
-#     if to_promote == None:
-#         raise ValueError(f"User with ID {idnumber} is not in the database")
-#     else:   
-#         to_promote.role = role
-#         database_init.session.update(to_promote)
-#         database_init.session.commit()
 
 
 # Method to see who is currently in the lab
