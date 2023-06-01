@@ -10,7 +10,6 @@ cancel = False
 thread_lock = Lock()
 cancel_lock = Lock()
 
-
 def badge_reading_task():
     global cancel
     session = Session()

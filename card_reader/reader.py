@@ -91,5 +91,8 @@ class CardReader:
         print(port_list)
         return port_list
 
+    def __del__(self):
+        self.ser.close()
+
     def close(self):
         self.ser.close()

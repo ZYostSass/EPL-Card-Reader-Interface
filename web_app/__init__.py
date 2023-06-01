@@ -31,12 +31,11 @@ except OSError:
 card_reader = None # Note- add option for timeout prefs?
 
 def get_card_reader():
-    return card_reader
+  global card_reader
+  if card_reader is None:
+    card_reader = CardReader(fake=app.debug)
 
-@app.before_first_request
-def init_card_reader():
-   global card_reader
-   card_reader = CardReader(fake=app.debug)
+  return card_reader
 
 from .views import admin_bp
 
