@@ -73,7 +73,11 @@ $(function () {
       .then(response => response.json())  // Parse the JSON response
       .then(data => {
         if (data.card_number) {
-          window.location.href = "/permissions/" + data.card_number + "/";  // Redirect to the permissions route with card_number as a parameter
+          if (window.location.pathname.includes('student-checkin')) {
+            window.location.href = "/student-checkin/" + data.card_number;
+          } else {
+            window.location.href = "/permissions/" + data.card_number + "/";  // Redirect to the permissions route with card_number as a parameter
+          }
         }
       })
       .catch(error => {

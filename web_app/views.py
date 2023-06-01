@@ -7,7 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
-from . import card_reader
+from . import get_card_reader
 # from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
@@ -227,7 +227,7 @@ def card_test():
 
 @bp.route("/card_data/")
 def card_data():
-    card_data = card_reader.get_data()
+    card_data = get_card_reader().get_data()
     if card_data is not None:
         card_number, facility_code = card_data
     else:
@@ -235,7 +235,6 @@ def card_data():
     return jsonify(card_number=card_number, facility_code=facility_code)
 
 @bp.route("/permissions/<badge>/")
-@manager_required
 def permissionsStudent(badge):
     user = get_user(badge)
     categories = all_categories()

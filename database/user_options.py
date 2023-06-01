@@ -17,10 +17,23 @@ from datetime import datetime
 
 # Helper Methods
 
+def process_badge(badge):
+    if not isinstance(badge, (str, int)):
+        raise ValueError(f"Badge must be a string or integer, not {type(badge)}")
+
+    if isinstance(badge, int):
+        badge = str(badge)
+
+    if len(badge) > 6:
+        raise ValueError(f"Badge must contain 6 digits, received: {badge}")
+
+    badge = badge.zfill(6)
+    return badge
+
 # Checks to see if a given user is in the database, via badge number
 # Returns result (either the user or None)
 def is_user_badge_present(badge):
-    badge = badge.zfill(6)
+    badge = process_badge(badge)
     return database_init.session.execute(select(class_models.User)
         .where(class_models.User.badge == badge)).scalar_one_or_none()
 
@@ -51,7 +64,7 @@ def get_category(id):
 # Returns either a LookupError or the User
 # Can be used to access User members
 def checkin_user(badge):
-    badge = badge.zfill(6)
+    badge = process_badge(badge)
     # Checks to see if the user is in the database
     user = is_user_badge_present(badge)
     # If not, leave
@@ -74,7 +87,7 @@ def access_logs():
 # Gets the first name, last name, and id number of a given badge number
 # Returns either None or the entire User
 def get_user(badge):
-    badge = badge.zfill(6)
+    badge = process_badge(badge)
     to_display = is_user_badge_present(badge)
     if to_display == None:
         return None
@@ -236,7 +249,7 @@ def remove_category_by_id(id):
 
 # Add trainings to a passed User
 def add_training(badge, machine_id):
-    badge = badge.zfill(6)
+    badge = process_badge(badge)
     # Check to see if the user is in the database
     to_train = get_user(badge)
     # If they aren't, leave
@@ -253,7 +266,7 @@ def add_training(badge, machine_id):
 
 # Remove trainings to a passed User
 def remove_training(user_badge, machine_id):
-    user_badge = user_badge.zfill(6)
+    user_badge = user_process_badge(badge)
     # Check to see if the user is in the database
     to_untrain = is_user_badge_present(user_badge)
     # If they aren't, leave
@@ -284,7 +297,7 @@ def read_all():
 
 # Edit User badge
 def edit_user_badge(idnumber, new_badge):
-    new_badge = new_badge.zfill(6)
+    new_badge = new_process_badge(badge)
     # Ensure the user is in the database, via ID
     to_edit = is_user_id_present(idnumber)
     # If not, raise an error
