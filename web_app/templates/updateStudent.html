@@ -1,0 +1,79 @@
+{% extends "index.html" %} {% block content %}
+<div class="form-content px-3 pt-4">
+  <h2 class="fs-2 pe-2">Update User</h2>
+  
+  
+  <form action="/update-user/{{user.badge}}" method="POST" class="m-5">
+    <div class="mb-3">
+      <label for="id" class="form-label">PSU ID</label>
+      <input
+        type="text"
+        class="form-control"
+        name="id"
+        id="id"
+        value="{{ user.id }}"
+        maxlength="9"
+        inputmode="numeric"
+        pattern="[0-9]{9}"
+        required
+      />
+      <div id="idHelp" class="form-text">Must be a 9 digit number</div>
+    </div>
+    <div class="mb-3">
+      <label for="badge" class="form-label">Access badge ID</label>
+      <input
+        type="text"
+        class="form-control"
+        name="badge"
+        id="badge"
+        value="{{ user.badge }}"
+        maxlength="6"
+        inputmode="numeric"
+        pattern="[0-6]{6}"
+        required
+      />
+      <div id="idHelp" class="form-text">Must be a 6 digit number</div>
+    </div>
+    <div class="mb-3">
+      <label for="fname" class="form-label">First name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="fname"
+        id="fname"
+        value="{{ user.firstname }}"
+        pattern="[A-Za-z]+"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="lname" class="form-label">Last name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="lname"
+        id="lname"
+        value="{{ user.lastname }}"
+        pattern="[A-Za-z]+"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input
+        type="email"
+        class="form-control"
+        placeholder="user@pdx.edu"
+        name="email"
+        id="email"
+        value="{{ user.email }}"
+        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}"
+        required
+      />
+    </div>
+    <button type="submit" class="btn-primary" id="submit-btn">Save Changes</button>
+  </form>
+  <!-- End Manual Entry-->
+</div>
+
+{% endblock %}
