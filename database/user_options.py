@@ -266,7 +266,7 @@ def add_training(badge, machine_id):
 
 # Remove trainings to a passed User
 def remove_training(user_badge, machine_id):
-    user_badge = user_process_badge(badge)
+    user_badge = process_badge(user_badge)
     # Check to see if the user is in the database
     to_untrain = is_user_badge_present(user_badge)
     # If they aren't, leave
@@ -297,7 +297,7 @@ def read_all():
 
 # Edit User badge
 def edit_user_badge(idnumber, new_badge):
-    new_badge = new_process_badge(badge)
+    new_badge = process_badge(new_badge)
     # Ensure the user is in the database, via ID
     to_edit = is_user_id_present(idnumber)
     # If not, raise an error
