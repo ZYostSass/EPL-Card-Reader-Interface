@@ -7,7 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
-from . import card_reader
+from . import get_card_reader
 # from wtforms.validators import DataRequired
 
 from . import live_checkin
@@ -227,7 +227,7 @@ def card_test():
 
 @bp.route("/card_data/")
 def card_data():
-    card_data = card_reader.get_data(old=True)
+    card_data = get_card_reader().get_data(old=True)
     if card_data is not None:
         card_number, facility_code = card_data        
         checkin_user(card_number)

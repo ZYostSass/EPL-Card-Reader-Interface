@@ -28,8 +28,15 @@ try:
 except OSError:
   pass
 
-# Commented out until card reader fix for other OS
-card_reader = CardReader(fake=app.debug) # Note- add option for timeout prefs?
+card_reader = None # Note- add option for timeout prefs?
+
+def get_card_reader():
+    return card_reader
+
+@app.before_first_request
+def init_card_reader():
+   global card_reader
+   card_reader = CardReader(fake=app.debug)
 
 from .views import admin_bp
 
@@ -38,6 +45,7 @@ app.register_blueprint(admin_bp)
 from .views import bp as views_bp
 
 app.register_blueprint(views_bp)
+
 
 @app.context_processor
 def add_current_role():

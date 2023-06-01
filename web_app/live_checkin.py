@@ -2,7 +2,7 @@ from threading import Lock
 from database.database_init import Session
 
 from database.user_options import checkin_user, process_badge
-from . import socketio, card_reader
+from . import socketio, get_card_reader
 from flask_socketio import emit
 
 thread = None
@@ -22,7 +22,7 @@ def badge_reading_task():
                 break
         socketio.sleep(.1)
         try:
-            data = card_reader.get_data()
+            data = get_card_reader().get_data()
             if data is not None:
                 badge, access = data
                 badge = process_badge(badge)

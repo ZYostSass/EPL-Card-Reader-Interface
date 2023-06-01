@@ -122,7 +122,7 @@
       // to the client. The data is then displayed in the "Received"
       // section of the page.
       socket.on('found_badge', function (msg, cb) {
-        console.dir(msg)
+        alert(msg)
         console.log('Received:' + msg)
         if (cb)
           cb();
