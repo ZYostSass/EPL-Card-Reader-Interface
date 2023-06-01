@@ -152,7 +152,7 @@ def remove_user(badge_number):
 def update_user_option(id, badge, fname, lname, email):
     user = get_user(badge)
     if user is not None:
-        user.id = id
+        user.psu_id = id
         user.badge = badge
         user.firstname = fname
         user.lastname = lname
