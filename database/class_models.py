@@ -34,7 +34,7 @@ class TrainingLog(Base):
 	# Last Name
     # Email
     # Role
-    # Last Log In datetime
+    # Password Hash (only for Managers and Admins)
     # List of machines the user is trained on (can be none) -> training_log.user
 class User(Base):
     __tablename__ = "user"
