@@ -41,6 +41,10 @@ if not (check_file):
     Session = sessionmaker(engine)
     session = Session()
 
+    logout_time = class_models.KeyValue(key=class_models.LOGOUT_TIME, value="30")
+    session.add(logout_time)
+    session.commit()
+
     # Create Base Admin
     # TODO - Fill in correct info
     base_admin = class_models.User(
@@ -48,9 +52,7 @@ if not (check_file):
         lname="Admin", email="jadmin@pdx.edu", password=b"password", role="Admin")
     session.add(base_admin)
 
-    base_manager = class_models.User(
-        psu_id="900000001", access="000002", fname="John",
-        lname="Manager", email="jmanager@pdx.edu", password=b"password", role="Manager")
+    base_manager = class_models.User(psu_id="900000001", access="227166", fname="John", lname="Manager", email="jmanager@pdx.edu", password=b"password", role="Manager")
     session.add(base_manager)
 
     student1 = class_models.User(psu_id="900000011", access="000011", fname="John", lname="Student", email="jstudent@pdx.edu", password=None, role="Student")

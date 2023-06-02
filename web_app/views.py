@@ -2,21 +2,18 @@ import base64
 from functools import wraps
 from flask import Flask, abort, g, render_template, request, redirect, escape, Blueprint, session, jsonify, make_response, flash, url_for
 from database.class_models import *
-from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id
+from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id, checkin_user, update_user_option
 from sqlalchemy.orm.exc import NoResultFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
-#from . import card_reader
+from . import card_reader
 # from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
-# bp.config['SECRET_KEY'] = "asdfghjkl"
-
 
 @bp.route("/")
 def index():
-    print(g.user)
     if g.user is None:
         next = url_for("views.dashboard")
         if request.args.get('next') is not None:
@@ -49,6 +46,7 @@ def login():
             return render_template("login.html")
         else:
             session["user_id"] = user.id
+            session["user_active_at"] = datetime.datetime.now()
             redirect_arg = request.args.get('next')
             if redirect_arg is None:
                 return redirect("/", code=302)
@@ -57,10 +55,49 @@ def login():
 
     return render_template("login.html")
 
+@bp.route("/student-checkin", methods=['POST', 'GET'])
+def student_checkin():
+    if request.method == "POST":
+        user_badge = request.form['badge']
+        user = get_user(user_badge)
+
+        try:
+            user = checkin_user(user_badge)
+            return redirect(url_for('views.student_checkin_equipment', badge=user_badge))
+
+        except LookupError as e:
+            flash(str(e), "error")
+            return render_template("student_checkin.html")
+        
+
+    return render_template("student_checkin.html")
+
+@bp.route("/student-checkin/<badge>")
+def student_checkin_equipment(badge):
+    user = get_user(badge)
+    categories = all_categories()
+    uncategorized = uncategorized_machines_without_user(user.id)
+
+    # Filter the categories and machines
+    filtered_categories = []
+    for category in categories:
+        filtered_machines = [
+            machine
+            for machine in category.machines
+            if machine not in user.machines
+        ]
+        if filtered_machines:
+            filtered_category = MachineTag(tag=category.tag)
+            filtered_category.machines = filtered_machines
+            filtered_categories.append(filtered_category)
+
+    return render_template("student_checkin_equipment.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
+
 
 @bp.route("/logout")
 def logout():
     session.pop('user_id', None)
+    session.pop('user_active_at', None)
     return redirect(url_for('views.index', next=request.args.get('next')))
 
 
@@ -83,8 +120,7 @@ def admin_required(f):
             abort(403, description="This action is only allowed for admins.")
         return f(*args, **kwargs)
     return decorated_function
-
-
+        
 @admin_bp.route("/")
 @admin_required
 def show_users():
@@ -123,6 +159,7 @@ def add_user_form():
 @manager_required
 def dashboard():
     # TODO: Filter these results by today
+    #check_time()
     logs = access_logs()
     return render_template("dashboard.html", logs=logs)
 
@@ -188,7 +225,6 @@ def card_test():
 # https://api.jquery.com/ (Used in card_test.html to update page)
 
 
-"""
 @bp.route("/card_data/")
 def card_data():
     card_data = card_reader.get_data()
@@ -197,7 +233,7 @@ def card_data():
     else:
         card_number, facility_code = None, None
     return jsonify(card_number=card_number, facility_code=facility_code)
-"""
+
 @bp.route("/permissions/<badge>/")
 @manager_required
 def permissionsStudent(badge):
@@ -220,7 +256,7 @@ def permissionsStudent(badge):
 
     return render_template("permissionsStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
 
-
+    
 @bp.route("/edit_user/")
 @manager_required
 def edit_user():
@@ -241,6 +277,47 @@ def remove_user_form():
             return redirect(url_for('views.remove_user_form'))
     else:
         return render_template("remove_user_form.html")
+
+
+@bp.route('/update-user/', methods=['GET', 'POST'])
+@manager_required
+def update_user():
+    if request.method == "POST":
+        user_badge = request.form['badge']
+        try:
+            user = get_user(user_badge)
+            if user is None:
+                flash ("User does not exist")
+                return render_template('update_user.html', badge = user_badge)
+            else:
+                return redirect(url_for('views.updateStudent', badge = user_badge))
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.update_user'))
+    else:
+        return render_template("update_user.html")
+@bp.route('/update-user/<badge>', methods=['GET', 'POST'])
+@manager_required
+def updateStudent(badge):
+    user = get_user(badge)
+    if request.method == 'POST':
+        user_id = request.form['id']
+        user_badge = request.form['badge']
+        user_fname = request.form['fname']
+        user_lname = request.form['lname']
+        user_email = request.form['email']
+        try:
+            update_user_option(id = user_id , badge = user_badge, fname = user_fname, lname = user_lname, email = user_email)
+            flash("Successfully Updated", "success")
+            return redirect(url_for('views.update_user'))
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.update_user'))
+        
+    else:
+        return render_template("updateStudent.html", user = user)
+
+
 
 # Creating a form for promoting a user
 
@@ -415,3 +492,40 @@ def training_session_details(machine_id):
     else:
         machine = get_machine(machine_id)
         return render_template('training_session_details.html', machine=machine)
+
+@bp.route('/checkin/', methods=['GET', 'POST'])
+@manager_required
+def checkin():
+    if request.method == 'POST':
+        try:
+            user_badge = request.form['badge']
+            user = get_user(user_badge)
+            return redirect(url_for('views.checkinStudent', badge=user_badge))
+        except ValueError as e:
+            flash(str(e), "error")
+            return render_template("permissions.html")
+    else:
+        return render_template("checkin.html")
+    
+@bp.route('/checkin/<badge>')
+@manager_required
+def checkinStudent(badge):
+    user = get_user(badge)
+    checkin_user(badge)
+    categories = all_categories()
+    uncategorized = uncategorized_machines_without_user(user.id)
+
+    # Filter the categories and machines
+    filtered_categories = []
+    for category in categories:
+        filtered_machines = [
+            machine
+            for machine in category.machines
+            if machine not in user.machines
+        ]
+        if filtered_machines:
+            filtered_category = MachineTag(tag=category.tag)
+            filtered_category.machines = filtered_machines
+            filtered_categories.append(filtered_category)
+    
+    return render_template("checkinStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)

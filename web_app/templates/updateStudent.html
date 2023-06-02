@@ -1,8 +1,9 @@
 {% extends "index.html" %} {% block content %}
 <div class="form-content px-3 pt-4">
-  <h2 class="fs-5 pe-2">Add New Account</h2>
-  <!-- New User Form -->
-  <form action="/account-creation-form/" method="POST" class="m-5">
+  <h2 class="fs-2 pe-2">Update User</h2>
+  
+  
+  <form action="/update-user/{{user.badge}}" method="POST" class="m-5">
     <div class="mb-3">
       <label for="id" class="form-label">PSU ID</label>
       <input
@@ -10,7 +11,7 @@
         class="form-control"
         name="id"
         id="id"
-        value="{{ id }}"
+        value="{{ user.psu_id }}"
         maxlength="9"
         inputmode="numeric"
         pattern="[0-9]{9}"
@@ -25,10 +26,10 @@
         class="form-control"
         name="badge"
         id="badge"
-        value="{{ badge }}"
+        value="{{ user.badge }}"
         maxlength="6"
         inputmode="numeric"
-        pattern="[0-9]{6}"
+        pattern="[0-6]{6}"
         required
       />
       <div id="idHelp" class="form-text">Must be a 6 digit number</div>
@@ -40,7 +41,7 @@
         class="form-control"
         name="fname"
         id="fname"
-        value="{{ fname }}"
+        value="{{ user.firstname }}"
         pattern="[A-Za-z]+"
         required
       />
@@ -52,7 +53,7 @@
         class="form-control"
         name="lname"
         id="lname"
-        value="{{ lname }}"
+        value="{{ user.lastname }}"
         pattern="[A-Za-z]+"
         required
       />
@@ -65,18 +66,14 @@
         placeholder="user@pdx.edu"
         name="email"
         id="email"
-        value="{{ email }}"
+        value="{{ user.email }}"
         pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}"
         required
       />
     </div>
-    <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
+    <button type="submit" class="btn-primary" id="submit-btn">Save Changes</button>
   </form>
-  <!-- End New User Form -->
+  <!-- End Manual Entry-->
 </div>
 
 {% endblock %}
-
-<!--
-  *note this form need to redirect after submission to a completed form. more than likely we can just use the same infor from user creation or we can expand this form. tbd...
--->

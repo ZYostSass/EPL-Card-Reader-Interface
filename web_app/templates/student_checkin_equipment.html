@@ -1,0 +1,84 @@
+{% extends "login.html" %} {% block content %}
+<div class="student-checkin-equipment-content">
+  <div class="fixed-content">
+    <span class="icon-close">
+      <i class="fa-solid fa-circle-xmark"></i>
+    </span>
+    <div class="student-info">
+      <h2>Welcome back, {{ user.firstname }}.</h2>
+    </div>
+  </div>
+  <div
+    class="scrollable-content p-2"
+    data-bs-spy="scroll"
+    data-bs-offset="0"
+    tabindex="0"
+  >
+    {% if user.training_log|length > 0 %}
+    <div class="trained_on">
+      <h3>Trained on:</h3>
+      <div class="row row-cols-2 row-cols-md-4 g-4">
+        {% for training_log in user.training_log %}
+        <div class="col equipment">
+          <div class="card">
+            <h4>{{training_log.machine.name}}</h4>
+            <img
+              src="{{training_log.machine.machine_image | base64_to_data_url}}"
+              alt="{{training_log.machine.name}}"
+              class="true"
+            />
+            <span>Since {{training_log.trained_at | format_trained_at}}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+    <div class="trained_on">
+      <h3>No recorded training</h3>
+    </div>
+    {% endif %} {% if categories|length > 0 or uncategorized|length > 0 %}
+    <div>
+      <h3>Not trained on:</h3>
+      {% if categories|length > 0 %} {% for category in categories %}
+      <div class="{{category.tag | format_category}}">
+        <h3>{{category.tag}}</h3>
+        <div class="row row-cols-2 row-cols-md-4 g-4">
+          {% for machine in category.machines %}
+          <div class="col equipment">
+            <div class="card">
+              <h4>{{machine.name}}</h4>
+              <img
+                src="{{machine.machine_image | base64_to_data_url}}"
+                alt="{{machine.name}}"
+                class="false"
+              />
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %} {% endif %} {% if uncategorized|length > 0 %}
+      <div class="uncategorized">
+        <h3>Uncategorized</h3>
+        <div class="row row-cols-2 row-cols-md-4 g-4">
+          {% for machine in uncategorized %}
+          <div class="col equipment">
+            <div class="card">
+              <h4>{{machine.name}}</h4>
+              <img
+                src="{{machine.machine_image | base64_to_data_url}}"
+                alt="{{machine.name}}"
+                class="false"
+              />
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

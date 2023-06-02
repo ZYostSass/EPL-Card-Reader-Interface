@@ -19,43 +19,42 @@
       <a
         href="{{ url_for('views.dashboard')}}"
         class="sidebar-link text-decoration-none px-3 py-2 d-block"
-        ><i class="fa-solid fa-house pe-2"></i>Dashboard</a
+        ><i class="fa-solid fa-house mx-1 pe-3"></i>Dashboard</a
       >
     </li>
     <li class="sidebar-item">
       <a
         href="{{ url_for('views.equipOverview')}}"
         class="sidebar-link text-decoration-none px-3 py-2 d-block"
-        ><i class="fa-solid fa-plug mx-1 pe-2"></i>Equipment Overview</a
+        ><i class="fa-solid fa-plug mx-1 pe-4"></i>Equipment Overview</a
+      >
+    </li>
+    <li class="sidebar-item">
+      <a
+        href="{{url_for('views.checkin')}}"
+        class="sidebar-link text-decoration-none px-3 py-2 d-block"
+        ><i class="fa-solid fa-user-check mx-1 pe-3"></i>Check-in</a
       >
     </li>
     <li class="sidebar-item">
       <a
         href="{{url_for('views.permissions')}}"
         class="sidebar-link text-decoration-none px-3 py-2 d-block"
-        ><i class="fa-regular fa-square-check mx-1 pe-2"></i>Permissions</a
+        ><i class="fa-solid fa-plug-circle-check mx-1 pe-3"></i>Permissions</a
       >
     </li>
     <li class="sidebar-item">
       <a
         href="{{ url_for('views.waiver')}}"
         class="sidebar-link text-decoration-none px-3 py-2 d-block"
-        ><i class="fa-solid fa-clipboard-check mx-1 pe-2"></i>Waiver</a
+        ><i class="fa-solid fa-clipboard-list mx-1 pe-4"></i>Waiver</a
       >
     </li>
-    <li class="sidebar-item">
-      <a
-        href="{{url_for('views.add_user_form')}}"
-        class="sidebar-link text-decoration-none px-3 py-2 d-block"
-        ><i class="fa-solid fa-clipboard-check mx-1 pe-2"></i> Create Account</a
-      >
-    </li>
-    
     <li class="sidebar-item">
       <a
         href="{{url_for('views.card_test')}}"
         class="sidebar-link text-decoration-none px-3 py-2 d-block"
-        ><i class="fa-solid fa-clipboard-check mx-1 pe-2"></i>Card Test</a
+        ><i class="fa-solid fa-id-card-clip mx-1 pe-3"></i>Card Test</a
       >
     </li>
   </ul>
