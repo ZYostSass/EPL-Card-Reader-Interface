@@ -45,6 +45,7 @@ hr.h-color {
 .sidebar li.active a,
 .sidebar li.active a:hover {
   color: black;
+  font-weight: 500;
 }
 
 .sidebar li a {
