@@ -23,7 +23,13 @@ except OSError:
   pass
 
 # Commented out until card reader fix for other OS
-card_reader = CardReader(fake=app.debug) # Note- add option for timeout prefs?
+card_reader = None
+
+def get_card_reader():
+  global card_reader
+  if card_reader is None:
+    card_reader = CardReader(fake=True)
+  return card_reader
 
 from .views import admin_bp
 
