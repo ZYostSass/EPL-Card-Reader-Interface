@@ -161,7 +161,7 @@ def dashboard():
     # TODO: Filter these results by today
     #check_time()
     logs = access_logs()
-    return render_template("dashboard.html", logs=logs)
+    return render_template("dashboard.html", logs=logs, current_url=request.path)
 
 # TODO: Add get parameters for time range
 
@@ -184,7 +184,7 @@ def event_log_csv():
 def equipOverview():
     categories = all_categories()
     uncategorized = uncategorized_machines()
-    return render_template("equipOverview.html", categories=categories, uncategorized=uncategorized)
+    return render_template("equipOverview.html", categories=categories, uncategorized=uncategorized, current_url=request.path)
 
 
 @bp.route("/equipOverview/student/")
@@ -203,21 +203,21 @@ def permissions():
             return redirect(url_for('views.permissionsStudent', badge=user_badge))
         except ValueError as e:
             flash(str(e), "error")
-            return render_template("permissions.html")
+            return render_template("permissions.html", current_url=request.path)
     else:
-        return render_template("permissions.html")
+        return render_template("permissions.html", current_url=request.path)
 
 
 @bp.route("/waiver/")
 @manager_required
 def waiver():
-    return render_template('waiver.html')
+    return render_template('waiver.html', current_url=request.path)
 
 
 # Route for the card reader test page
 @bp.route("/card_test/", methods=['GET'])
 def card_test():
-    return render_template('card_test.html')
+    return render_template('card_test.html', current_url=request.path)
 # Route for checking the queue where card data gets read to
 # Using flask.make_response and flask.jsonify to create an http response header.
 # https://tedboy.github.io/flask/generated/flask.make_response.html
@@ -462,9 +462,9 @@ def checkin():
             return redirect(url_for('views.checkinStudent', badge=user_badge))
         except ValueError as e:
             flash(str(e), "error")
-            return render_template("permissions.html")
+            return render_template("checkin.html", current_url=request.path)
     else:
-        return render_template("checkin.html")
+        return render_template("checkin.html", current_url=request.path)
     
 @bp.route('/checkin/<badge>')
 @manager_required
