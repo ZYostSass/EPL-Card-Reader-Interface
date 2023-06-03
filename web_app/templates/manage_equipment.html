@@ -77,60 +77,6 @@
                       alt="{{row.name}}" />
                   </div>
                   <div class="form-group">
-                    <label for="equipment_name" class="mb-1">EPL Link:</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="EPL_link"
-                      name="epl_link"
-                      value="{{row.epl_link}}"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <legend class="mb-1">Category:</legend>
-                    <fieldset>
-                      {% for category in categories %}
-                      <div>
-                        <input
-                          type="checkbox"
-                          id="category_{{category.tag | format_category}}"
-                          name="category"
-                          value="{{category.id}}"
-                          {%
-                          if
-                          category
-                          in
-                          row.categories
-                          %}checked{%
-                          endif
-                          %}
-                        /><label
-                          for="category_{{category.tag | format_category}}"
-                          >{{category.tag}}</label
-                        >
-                      </div>
-                      {% endfor %}
-                    </fieldset>
-                  </div>
-                  <div class="form-group">
-                    <div>Image</div>
-                    <label for="equipment_name" class="mb-1"
-                      >Upload a new image:</label
-                    >
-                    <input
-                      type="file"
-                      class="form-control"
-                      id="equipment_image"
-                      name="equipment_image"
-                    />
-                    <div>Current Image:</div>
-                    <img
-                      style="width: 100%; height: auto"
-                      src="{{row.machine_image | base64_to_data_url}}"
-                      alt="{{row.name}}"
-                    />
-                  </div>
-                  <div class="form-group">
                     <button class="btn" type="submit">Update Equipment</button>
                   </div>
                 </form>
