@@ -3,7 +3,7 @@ echo \" <<'POWERSHELL_SCRIPT' >/dev/null # " | Out-Null
 venv\Scripts\activate
 Remove-Item 'database.db'
 pip install -qr requirements.txt
-flask --app web_app\webapp.py --debug run
+python webapp_launch.py
 # ====== PowerShell Script End ======
 while ( ! $MyInvocation.MyCommand.Source ) { $input_line = Read-Host }
 exit
@@ -16,7 +16,7 @@ set +o histexpand 2>/dev/null
 . venv/bin/activate
 rm database.db
 pip install -qr requirements.txt
-flask --app web_app/webapp.py --debug run -p 5000
+python webapp_launch.py
 # ====== Bash Script End ======
 case $- in *"i"*) cat /dev/stdin >/dev/null ;; esac
 exit

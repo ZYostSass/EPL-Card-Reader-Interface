@@ -1,3 +1,4 @@
+from threading import Lock
 import serial
 import serial.tools.list_ports
 
@@ -8,6 +9,7 @@ class CardReader:
     # locates the card reader by either a passed in device name
     # or the default value.
     def __init__(self, fake=True, port=None, baud_rate=9600, device_name=None):
+        self.lock = Lock()
         if fake:
             self.fake = fake
             return
@@ -43,35 +45,36 @@ class CardReader:
     # A None response indicates no data in buffer
     # TODO: add proper error handling
     def get_data(self):
-        print(self.fake)
-        if self.fake is not None:
-            try:
-                with open("fake-data.txt", "r") as f:
-                    text = f.read()
-                    items = text.split(",")
-                    print(items)
-                    result = (int(items[0]), int(items[1]))
-                    if result != self.fake:
-                        self.fake = result
-                        return result
-                    else:
-                        return None
-            except Exception as e:
-                return None
+        with self.lock:
+            if self.fake is not None:
+                try:
+                    with open("fake-data.txt", "r") as f:
+                        text = f.read()
+                        items = text.split(",")
+                        result = (int(items[0]), int(items[1]))
+                        if result != self.fake:
+                            self.fake = result
+                            return result
+                        else:
+                            return None
+                except Exception as e:
+                    return None
 
-        elif self.ser.in_waiting > 0:
-            data = self.ser.readline().decode().strip()
-            clean = data[4:]
-            clean_int = int(clean, 16)
-            # Bitshift to remove parity and mask to isolate 19 bits
-            card_number = (clean_int >> 1) & 0x7FFFF
-            facility_code = (clean_int >> 20)
-            print(f"Card: " + str(card_number))
-            print(f"Fac: " + str(facility_code))
-            self.ser.reset_input_buffer()
-            return (card_number, facility_code)
-        else:
-            return None
+            elif self.ser.in_waiting > 0:
+                data = self.ser.readline().decode().strip()
+                try: 
+                    clean = data[4:]
+                    clean_int = int(clean, 16)
+                    # Bitshift to remove parity and mask to isolate 19 bits
+                    card_number = (clean_int >> 1) & 0x7FFFF
+                    facility_code = (clean_int >> 20)
+                    self.ser.reset_input_buffer()
+                    return (card_number, facility_code)
+                except Exception as e:
+                    return None
+            else:
+                return None
+            
     # See documentation here: https://pyserial.readthedocs.io/en/latest/tools.html
     # Get a list of ports
     # port.device contains the full pathname of the port (eg '/dev/ttyUSB0')
@@ -86,6 +89,10 @@ class CardReader:
             port_list.append(port.device)
         print(port_list)
         return port_list
+
+
+    def __del__(self):
+        self.close()
 
     def close(self):
         self.ser.close()

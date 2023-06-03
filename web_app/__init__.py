@@ -4,6 +4,7 @@ from flask import Flask, g, session
 from card_reader.reader import CardReader
 import os
 from database.class_models import LOGOUT_TIME
+from flask_socketio import SocketIO
 
 from database.user_options import get_int_key, get_user_by_id
 from datetime import datetime, timedelta
@@ -11,11 +12,15 @@ from datetime import datetime, timedelta
 #TODO: Store this in a seperate database table
 LOGOUT_TIME_DEFAULT = 30 # minutes
 
+async_mode = None
+
 app = Flask(__name__)
 app.debug = True
 app.config["SECRET_KEY"] = "dev"
 app.config["EXPLAIN_TEMPLATE_LOADING"] = True
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 # 16 MB
+
+socketio = SocketIO(app, async_mode=async_mode)
 
 try:
   os.makedirs(app.instance_path)

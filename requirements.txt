@@ -4,3 +4,4 @@ pyserial
 WTForms
 Flask-WTF
 bcrypt
+Flask-SocketIO

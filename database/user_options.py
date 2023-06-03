@@ -32,9 +32,11 @@ def process_badge(badge):
 
 # Checks to see if a given user is in the database, via badge number
 # Returns result (either the user or None)
-def is_user_badge_present(badge):
+def is_user_badge_present(badge, session = None):
+    if session is None:
+        session = database_init.session
     badge = process_badge(badge)
-    return database_init.session.execute(select(class_models.User)
+    return session.execute(select(class_models.User)
         .where(class_models.User.badge == badge)).scalar_one_or_none()
 
 # Checks to see if a given user is in the database, via PSU ID
@@ -63,10 +65,12 @@ def get_category(id):
 # Takes parsed card data and inputs it into the database
 # Returns either a LookupError or the User
 # Can be used to access User members
-def checkin_user(badge):
+def checkin_user(badge, session = None):
+    if session is None:
+        session = database_init.session
     badge = process_badge(badge)
     # Checks to see if the user is in the database
-    user = is_user_badge_present(badge)
+    user = is_user_badge_present(badge, session)
     # If not, leave
     if user == None:
         # raise LookupError(f"User with access number {badge} does not exist")
@@ -74,13 +78,12 @@ def checkin_user(badge):
     
     # If they are, check them in
     # TODO: Add checkouts to the log somewhere
-    else:
-        log = class_models.EventLog.check_in(user)
-        database_init.session.add(log)
-        database_init.session.commit()
+    log = class_models.EventLog.check_in(user)
+    session.add(log)
+    session.commit()
     
     # Return the User checked in
-        return user
+    return user
 
 def access_logs():
     # TODO: add time range filters
