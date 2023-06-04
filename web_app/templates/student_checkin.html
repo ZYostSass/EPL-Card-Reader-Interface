@@ -1,0 +1,32 @@
+{% extends "login.html" %} {% block content %}
+<!-- Student Check-in -->
+<div class="check-in">
+  <span class="icon-close">
+    <i class="fa-solid fa-circle-xmark"></i>
+  </span>
+  <div class="card-prompt">
+    <h3 id="scan-btn">Scan PSU ID Card</h3>
+    <h4><span>OR</span></h4>
+  </div>
+  <form method="post" class="m-5" id="checkin-form" action="/student-checkin">
+    <h3>Enter Manually</h3>
+    <div class="mb-3">
+      <label for="badge" class="form-label">Access Badge ID</label>
+      <input
+        type="text"
+        class="form-control"
+        name="badge"
+        id="badge"
+        value="{{ badge }}"
+        maxlength="6"
+        inputmode="numeric"
+        pattern="[0-9]{6}"
+        required
+      />
+      <div id="idHelp" class="form-text">Must be a 6 digit number</div>
+    </div>
+    <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
+  </form>
+</div>
+<!-- End Student Check-in -->
+{% endblock %}

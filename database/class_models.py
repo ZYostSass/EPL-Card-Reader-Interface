@@ -7,26 +7,49 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.associationproxy import AssociationProxy
 from bcrypt import checkpw, gensalt, hashpw
 
+# Base class for all derived classes
 # Replaced depreciated 'Base = declarative_base()'
 class Base(DeclarativeBase):
     pass
 
+# Key Value Table for storing global settings:
+class KeyValue(Base):
+    __tablename__ = "key_value"
+    key: Mapped[str] = mapped_column(primary_key=True)
+    value: Mapped[str]
+
+# Well known keys:
+LOGOUT_TIME = "LOGOUT_TIME" # int, minutes
+
+
+# Bi-directional join table for many-to-many relationships
+# using sqlalchemy.Column construct
+    # Primary Key: User ID -> user.id
+    # Primary Key: Machine ID -> machine.id
+user_machine_join_table = Table(
+    "user_machine_table",
+    Base.metadata,
+    Column("user_id", ForeignKey("user.id"), primary_key=True),
+    Column("machine_id", ForeignKey("machine.id"), primary_key=True),
+)
 class TrainingLog(Base):
     __tablename__ = "training_log"
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), primary_key=True)
-    machine_id: Mapped[int] = mapped_column(ForeignKey("machine.id"), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
+    machine_id: Mapped[int] = mapped_column(ForeignKey("machine.id", ondelete="CASCADE"), primary_key=True)
     trained_at: Mapped[datetime] 
     machine: Mapped["Machine"] = relationship(back_populates="trained_users")
     user: Mapped["User"] = relationship(back_populates="training_log")
 
 # User Table:
 	# Primary Key: ID Number
+    # PSU ID
+    # Access Badge Number
 	# First Name
 	# Last Name
     # Email
     # Role
-    # Last Log In datetime
-    # List of machines the user is trained on (can be none) -> user_machine assosiation table
+    # Password Hash (only for Managers and Admins)
+    # List of machines the user is trained on (can be none) -> training_log.user
 class User(Base):
     __tablename__ = "user"
     # Declarative Form, prefered as of SQLAlchemy 2.0
@@ -39,7 +62,7 @@ class User(Base):
     role: Mapped[str]
     pw_hash: Mapped[Optional[str]]
     # List of machines the user is trained on
-    training_log: Mapped[List["TrainingLog"]] = relationship(back_populates="user")
+    training_log: Mapped[List["TrainingLog"]] = relationship(back_populates="user", cascade="all, delete", passive_deletes=True)
     machines: AssociationProxy[List["Machine"]] = association_proxy(
         "training_log",
         "machine",
@@ -76,42 +99,45 @@ class User(Base):
         self.role = new_role
         if password is not None:
             self.pw_hash = hashpw(bytes(password, 'utf-8'), gensalt())
+        
 
 machine_tag_association = Table(
     "machine_tag_association",
     Base.metadata,
-    Column("machine_id", ForeignKey("machine.id"), primary_key=True),
-    Column("tag_id", ForeignKey("machine_tag.id"), primary_key=True),
+    Column("machine_id", ForeignKey("machine.id", ondelete="CASCADE"), primary_key=True),
+    Column("tag_id", ForeignKey("machine_tag.id", ondelete="CASCADE"), primary_key=True),
 )
 
 # Machine Table:
     # Primary Key: ID Number
     # Name
+    # Machine image
+    # EPL_link (hyperlink)
+    # Trained Users -> training_log.machine
 class Machine(Base):
     __tablename__ = "machine"
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str]
-    machine_image: Mapped[bytes] = mapped_column(LargeBinary, deferred=True) # Lazily load the image
-    epl_link: Mapped[str] = mapped_column(deferred=True) # Lazily load the link
+    machine_image: Mapped[Optional[bytes]] = mapped_column(LargeBinary, deferred=True, nullable=True) # Lazily load the image
+    epl_link: Mapped[Optional[str]] = mapped_column(deferred=True) # Lazily load the link
     # List of Users that are trained on this machine
-    trained_users: Mapped[List[TrainingLog]] = relationship(back_populates="machine")
+    trained_users: Mapped[List[TrainingLog]] = relationship(back_populates="machine", cascade="all, delete", passive_deletes=True)
     # Categories associated with each machine
-    categories: Mapped[List["MachineTag"]] = relationship(secondary=machine_tag_association, back_populates="machines")
+    categories: Mapped[List["MachineTag"]] = relationship(secondary=machine_tag_association, back_populates="machines", cascade="all, delete", passive_deletes=True)
     
-    def __init__(self, id, name, epl_link, file_name = None, machine_image = None):
-        self.id = id
+    def __init__(self, name, epl_link, file_name = None, machine_image = None):
         self.name = name
         self.epl_link = epl_link
         self.categories = []
         self.trained_users = []
-        if file_name is None and machine_image is None:
+        if file_name is not None and machine_image is not None:
             raise ValueError("Must provide either file_name or machine_image")
         
         if file_name is not None:
             with open(file_name, "rb") as f:
                 self.machine_image = base64.b64encode(f.read())
-        else:
+        elif machine_image is not None:
             if not isinstance(machine_image, bytes):
                 raise ValueError("machine_image must be of type bytes")
             
@@ -120,12 +146,16 @@ class Machine(Base):
     def __repr__(self):
         return self.name
     
+    def set_image(self, image: bytes):
+        self.machine_image = base64.b64encode(image)
+
+    
 
 class MachineTag(Base):
     __tablename__ = "machine_tag"
     # Declarative Form, prefered as of SQLAlchemy 2.0
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    machines: Mapped[List[Machine]] = relationship(secondary=machine_tag_association, back_populates="categories")
+    machines: Mapped[List[Machine]] = relationship(secondary=machine_tag_association, back_populates="categories", cascade="all, delete", passive_deletes=True)
     tag: Mapped[str]
     
     def __init__(self, tag):

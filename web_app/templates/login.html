@@ -41,50 +41,65 @@
   </head>
   <body>
     <!-- Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=True) %} {% if
-    messages %} {% for category, message in messages %} {% if category ==
-    'error' %}
-    <div
-      class="alert alert-danger alert-dismissable fade show d-flex justify-content-between"
-      role="alert"
-    >
-      {{ message }}
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
+    <div class="flash-messages">
+      {% with messages = get_flashed_messages(with_categories=True) %} {% if
+      messages %} {% for category, message in messages %} {% if category ==
+      'error' %}
+      <div
+        class="alert alert-danger alert-dismissable fade show d-flex justify-content-between"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% else %}
+      <div
+        class="alert alert-success alert-dismissable fade show d-flex justify-content-between"
+        role="alert"
+      >
+        {{message}}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endif %} {% endfor %} {% endif %} {% endwith %}
     </div>
-    {% else %}
-    <div
-      class="alert alert-success alert-dismissable fade show d-flex justify-content-between"
-      role="alert"
-    >
-      {{message}}
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
-    </div>
-    {% endif %} {% endfor %} {% endif %} {% endwith %}
     <!-- End Flash messages -->
-    <div class="heading">
-      <i class="fa-solid fa-bolt"></i>
-      <h1>EPL Card Reader</h1>
-    </div>
-    <main role="main" aria-label="Login Form">
+    <!-- Navigation Bar -->
+    <header>
+      <div class="logo">
+        <i class="fa-solid fa-bolt fa-2xl"></i>
+        <h1>EPL Card Reader</h1>
+      </div>
+      <nav class="navigation">
+        <a href="{{ url_for('views.student_checkin') }}" id="checkin"
+          >Student Check-in</a
+        >
+        <button type="button" class="btn btn-primary login-popup">Login</button>
+      </nav>
+    </header>
+    <!-- End Navigation Bar -->
+    <!-- Login -->
+    <div role="login" aria-label="Login Form">
       <div class="center">
         <h2>Login</h2>
-        <form method="post">
+        <form method="post" action="/login">
           <div class="input-field">
+            <i class="fa-solid fa-envelope"></i>
             <input type="text" id="email" name="email" required />
             <span></span>
             <label for="email">Email</label>
           </div>
           <div class="input-field">
+            <i class="fa-solid fa-key"></i>
             <input type="password" id="password" name="password" required />
             <span></span>
             <label for="password">Password</label>
@@ -92,7 +107,11 @@
           <input type="submit" value="Login" />
         </form>
       </div>
-    </main>
+    </div>
+    <!-- End Login -->
+    <div class="student-checkin-content">
+      {% block content %} {% endblock %}
+    </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

@@ -18,7 +18,7 @@
                 {% for row in machines %}
                 <tr
                   class="clickable-row"
-                  onclick="location.href = `{{ url_for('views.training_session_details', machine_id=row.id, name=row.name) }}`;"
+                  onclick="location.href = `{{ url_for('views.training_session_details', machine_id=row.id) }}`;"
                 >
                   <td><b>{{row.id}}</b></td>
                   <td class="equipment-name">{{row.name}}</td>
@@ -33,4 +33,6 @@
     </div>
   </div>
 </div>
+
+
 {% endblock %}

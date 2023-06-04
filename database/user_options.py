@@ -12,14 +12,28 @@ from typing import Optional
 from bcrypt import checkpw
 from . import database_init
 from . import class_models
-from sqlalchemy import select, func
+from sqlalchemy import and_, literal_column, select, func, text
 from datetime import datetime
 
 # Helper Methods
 
+def process_badge(badge):
+    if not isinstance(badge, (str, int)):
+        raise ValueError(f"Badge must be a string or integer, not {type(badge)}")
+
+    if isinstance(badge, int):
+        badge = str(badge)
+
+    if len(badge) > 6:
+        raise ValueError(f"Badge must contain 6 digits, received: {badge}")
+
+    badge = badge.zfill(6)
+    return badge
+
 # Checks to see if a given user is in the database, via badge number
 # Returns result (either the user or None)
 def is_user_badge_present(badge):
+    badge = process_badge(badge)
     return database_init.session.execute(select(class_models.User)
         .where(class_models.User.badge == badge)).scalar_one_or_none()
 
@@ -33,20 +47,29 @@ def is_user_id_present(psu_id):
 # Returns result (either the user or None)
 def is_machine_present(name):
     return database_init.session.execute(select(class_models.Machine)
-        .where(class_models.Machine.name == name)).scalar_one_or_none()
+        .where(class_models.Machine.name == name)).scalar_one_or_none()    
+
+def get_machine(id):
+    return database_init.session.execute(select(class_models.Machine)
+        .where(class_models.Machine.id == id)).scalar_one_or_none()
+
+def get_category(id):
+    return database_init.session.execute(select(class_models.MachineTag)
+        .where(class_models.MachineTag.id == id)).scalar_one_or_none()
+
 
 # Universal Commands
 
 # Takes parsed card data and inputs it into the database
-# Returns either None or the User
+# Returns either a LookupError or the User
 # Can be used to access User members
 def checkin_user(badge):
+    badge = process_badge(badge)
     # Checks to see if the user is in the database
     user = is_user_badge_present(badge)
     # If not, leave
     if user == None:
         raise LookupError(f"User with access number {badge} does not exist")
-        return None
     
     # If they are, check them in
     # TODO: Add checkouts to the log somewhere
@@ -74,6 +97,7 @@ class DisplayAccessLog:
 # Gets the first name, last name, and id number of a given badge number
 # Returns either None or the entire User
 def get_user(badge):
+    badge = process_badge(badge)
     to_display = is_user_badge_present(badge)
     if to_display == None:
         return None
@@ -93,6 +117,16 @@ def get_user_by_id(id):
     if user == None:
         raise ValueError(f"User with {id} is not in the database")
     return user
+
+def get_int_key(key): 
+    try:
+        value =  database_init.session.execute(select(class_models.KeyValue)
+            .where(class_models.KeyValue.key == key)).scalar_one_or_none()
+        return int(value.value)
+    except:
+        return None
+    
+
 
 def check_user_password(email, password):
     if email is None or password is None:
@@ -125,63 +159,125 @@ def add_new_user(psu_id, access, firstname, lastname, email, role):
     database_init.session.commit()
 
 # Removes a user from the database, if they are present
-def remove_user(idnumber):
+def remove_user(badge_number):
+    badge_number = badge_number.zfill(6)
     # Looks for the User with a matching ID
-    to_delete = is_user_id_present(idnumber)
+    to_delete = is_user_badge_present(badge_number)
     # If not found, return
     if to_delete is None:
-        raise ValueError(f"User with PSU ID {idnumber} does not exist")
+        raise ValueError(f"User with badge {badge_number} does not exist")
     # Else, remove from the database
     else:
         database_init.session.delete(to_delete)
         database_init.session.commit()
 
+# Update user's information 
+def update_user_option(id, badge, fname, lname, email):
+    user = get_user(badge)
+    if user is not None:
+        user.psu_id = id
+        user.badge = badge
+        user.firstname = fname
+        user.lastname = lname
+        user.email = email
+        database_init.session.commit()
+    else:
+        raise ValueError("User doesn not exist")
+
 def all_categories():
     return database_init.session.execute(select(class_models.MachineTag)).scalars().all()
 
-# Add new machines to the database
-def add_machine (name):
-    # Check to see if the machine is already in the database
-    machine = is_machine_present(name)
-    # If it is, leave
-    if machine != None:
-        raise ValueError(f"{name} is already in the database")
-    # Otherwise, add it to the end of the database
-    max_id = database_init.session.query(func.max(class_models.Machine.id)).scalar()
-    next_id = (max_id or 0) + 1
+def uncategorized_machines():
+    subq = select(literal_column("machine_id")).select_from(text("machine_tag_association"))
+    return database_init.session.execute(select(class_models.Machine).where(class_models.Machine.id.not_in(subq))).scalars().all()
 
-    to_add = class_models.Machine(next_id, name)
-    database_init.session.add(to_add)
+def uncategorized_machines_without_user(user_id):
+    subq_machines = select(literal_column("machine_id")).select_from(text("machine_tag_association"))
+    subq_user_machines = select(class_models.TrainingLog.machine_id).where(class_models.TrainingLog.user_id == user_id)
+    return database_init.session.execute(select(class_models.Machine).where(and_(class_models.Machine.id.not_in(subq_machines), class_models.Machine.id.not_in(subq_user_machines)))).scalars().all()
+
+
+# Add new machines to the database
+def add_machine(name, link, categories, img):
+    print(img)
+    if img is not None and img.filename != "":
+        img = img.read()
+        print(type(img))
+        machine = class_models.Machine(name=name, epl_link=link, machine_image=img)
+    else:
+        machine = class_models.Machine(name=name, epl_link=link)
+    for category in categories:
+        if category is not None:
+            machine.categories.append(get_category(category))
+
+    database_init.session.add(machine)
     database_init.session.commit()
 
 # Edit a given machine's name
-def edit_machine(name, new_name):
+def edit_machine(id, name, link, categories, img):
     # Check to see if the machine is already in the database
-    machine = is_machine_present(name)
-    # If it isn't, leave
+    machine = get_machine(id)
+    
     if machine == None:
-        raise LookupError(f"Machine with name {name} does not exist")
-    # Otherwise, edit it
-    machine.name = new_name
+        raise LookupError(f"Machine with id {id} does not exist")
+
+    machine.name = name
+    machine.epl_link = link
+
+    machine.categories.clear()
+    for category in categories:
+        if category is not None:
+            machine.categories.append(get_category(category))
+
+    if img is not None and img.filename != "":
+        machine.set_image(img.read())
+
     database_init.session.commit()
 
 # Remove a machine from the database
-def remove_machine(name):
+def remove_machine(id):
     # Check to see if the machine is already in the database
-    machine = is_machine_present(name)
+    machine = get_machine(id)
     # If it is, leave
     if machine == None:
-        raise LookupError(f"Machine with name {name} does not exist")
+        raise LookupError(f"Machine with id {id} does not exist")
     database_init.session.delete(machine)
     database_init.session.commit()
 
+def update_category_by_id(id, name):
+    category = get_category(id)
+
+    if category == None:
+        raise LookupError(f"Category with id {id} does not exist")
+    
+    category.tag = name
+
+    database_init.session.commit()
+
+
+def insert_category_name(name):
+    category = class_models.MachineTag(tag=name)
+    database_init.session.add(category)
+    database_init.session.commit()
+
+# Remove a machine from the database
+def remove_category_by_id(id):
+    # Check to see if the machine is already in the database
+    category = get_category(id)
+    # If it is, leave
+    if category == None:
+        raise LookupError(f"Category with id {id} does not exist")
+    database_init.session.delete(category)
+    database_init.session.commit()
+
 # Add trainings to a passed User
-def add_training(user_id, machine_id):
+def add_training(badge, machine_id):
+    badge = process_badge(badge)
     # Check to see if the user is in the database
-    to_train = is_user_id_present(user_id)
+    to_train = get_user(badge)
     # If they aren't, leave
     if to_train == None:
-        raise LookupError(f"User with ID {user_id} does not exist")
+        raise LookupError(f"User with ID {badge} does not exist")
     # Check to see if the machine is in the database
     machine = database_init.session.execute(select(class_models.Machine)
         .where(class_models.Machine.id == machine_id)).scalar_one_or_none()
@@ -192,12 +288,13 @@ def add_training(user_id, machine_id):
     database_init.session.commit()
 
 # Remove trainings to a passed User
-def remove_training(user_id, machine_id):
+def remove_training(user_badge, machine_id):
+    user_badge = process_badge(user_badge)
     # Check to see if the user is in the database
-    to_untrain = is_user_id_present(user_id)
+    to_untrain = is_user_badge_present(user_badge)
     # If they aren't, leave
     if to_untrain == None:
-        raise LookupError(f"User with ID {user_id} does not exist")
+        raise LookupError(f"User with Badge {user_badge} does not exist")
     # Check to see if the machine is in the database
     # Works off of machine ID rather than name
     machine = database_init.session.execute(select(class_models.Machine)
@@ -223,6 +320,7 @@ def read_all():
 
 # Edit User badge
 def edit_user_badge(idnumber, new_badge):
+    new_badge = process_badge(new_badge)
     # Ensure the user is in the database, via ID
     to_edit = is_user_id_present(idnumber)
     # If not, raise an error
@@ -254,19 +352,6 @@ def edit_user_email(idnumber, new_email):
     # Otherwise, edit the User's email
     to_edit.email = new_email
     database_init.session.commit()
-
-# # Update user's role for promotion
-# def promote_user(idnumber,role):
-#     # Check if user already exists
-#     to_promote = database_init.session.execute(select(class_models.User)
-#         .where(class_models.User.id == idnumber)).scalar_one_or_none()
-#     #If not, raise an exception
-#     if to_promote == None:
-#         raise ValueError(f"User with ID {idnumber} is not in the database")
-#     else:   
-#         to_promote.role = role
-#         database_init.session.update(to_promote)
-#         database_init.session.commit()
 
 
 # Method to see who is currently in the lab

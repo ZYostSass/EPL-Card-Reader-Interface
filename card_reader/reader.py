@@ -7,8 +7,16 @@ class CardReader:
     # Instead of relying on input for the port path, it now
     # locates the card reader by either a passed in device name
     # or the default value.
-    def __init__(self, baud_rate, device_name=None):
-        self.port = self.set_port(device_name)
+    def __init__(self, fake=True, port=None, baud_rate=9600, device_name=None):
+        if fake:
+            self.fake = fake
+            return
+        
+        self.fake = None
+        if port:
+            self.port = port
+        else:
+            self.port = self.set_port(device_name)
         self.baud_rate = baud_rate
         self.ser = serial.Serial(
             port=self.port, baudrate=self.baud_rate, timeout=1)
@@ -19,12 +27,15 @@ class CardReader:
     # Otherwise raises an Exception - validate the port name in use
     def set_port(self, device_name=None):
         if not device_name:
-            device_name = 'CP2102 USB to UART'
+            device_name = 'USB to UART'
         ports = serial.tools.list_ports.comports()
         for port in ports:
             if device_name in port.name or device_name in port.description:
                 return port.device
-            raise Exception("No port found at " + device_name)
+        for port in ports:
+            if '/dev/' in port.device or '/dev/' in port.name or '/dev/' in port.description:
+                return port.device
+        raise Exception("No port found at " + device_name)
 
     # When called, checks for data in serial buffer. If present, it
     # formats the hexadecimal string (See card reader documentation)
@@ -32,7 +43,23 @@ class CardReader:
     # A None response indicates no data in buffer
     # TODO: add proper error handling
     def get_data(self):
-        if self.ser.in_waiting > 0:
+        print(self.fake)
+        if self.fake is not None:
+            try:
+                with open("fake-data.txt", "r") as f:
+                    text = f.read()
+                    items = text.split(",")
+                    print(items)
+                    result = (int(items[0]), int(items[1]))
+                    if result != self.fake:
+                        self.fake = result
+                        return result
+                    else:
+                        return None
+            except Exception as e:
+                return None
+
+        elif self.ser.in_waiting > 0:
             data = self.ser.readline().decode().strip()
             clean = data[4:]
             clean_int = int(clean, 16)

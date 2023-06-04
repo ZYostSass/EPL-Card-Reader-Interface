@@ -1,38 +1,41 @@
 {% extends "index.html" %} {% block content %}
 <div class="training-session-details-content px-3 pt-4">
   <h2 class="fs-5 pe-2">
-    Training Session for <b class="equipment-name">{{ name|escape }}</b>
+    Training Session for <b class="equipment-name">{{ machine.name|escape }}</b>
   </h2>
   <!-- Card Prompt -->
   <div class="card-prompt">
-    <h3>Scan PSU ID card</h3>
-    <h4><span>OR</span></h4>
+    <div class="card-prompt">
+      <h3><a href="/card_data/" class="btn btn-primary" id="scan-btn">Scan PSU ID card</a></h3>
+      <h4><span>OR</span></h4>
+    </div>
   </div>
   <!-- End Card Prompt -->
   <!-- Manual Entry -->
   <form
-    action="{{ url_for('views.training_session_details', machine_id=machine_id, name=name)}}"
+    action="{{ url_for('views.training_session_details', machine_id=machine.id)}}"
     method="POST"
     class="m-5"
   >
     <h3>Enter Manually</h3>
     <div class="mb-3">
-      <label for="user_id" class="form-label">PSU ID</label>
+      <label for="badge" class="form-label">Badge Number</label>
       <input
         type="text"
         class="form-control"
-        name="user_id"
-        id="user_id"
-        value="{{ user_id }}"
-        maxlength="9"
+        name="badge"
+        id="badge"
+        value="{{ badge }}"
+        maxlength="6"
         inputmode="numeric"
-        pattern="[0-9]{9}"
+        pattern="[0-9]{6}"
         required
       />
-      <div id="idHelp" class="form-text">Must be a 9 digit number</div>
+      <div id="idHelp" class="form-text">Must be a 6 digit number</div>
     </div>
     <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
   </form>
   <!-- End Manual Entry -->
 </div>
+
 {% endblock %}

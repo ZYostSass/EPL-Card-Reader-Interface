@@ -14,13 +14,33 @@
             <h4>{{machine.name}}</h4>
             <img
               src="{{machine.machine_image | base64_to_data_url}}"
-              alt="{{machine.name}}" />
+              alt="{{machine.name}}"
+            />
           </a>
         </div>
       </div>
       {% endfor %}
     </div>
   </div>
-  {% endfor %}
+  {% endfor %} {% if uncategorized|length > 0 %}
+  <div class="uncategorized">
+    <h3>Uncategorized</h3>
+    <div class="row row-cols-2 row-cols-md-4 g-4">
+      {% for machine in uncategorized %}
+      <div class="col equipment">
+        <div class="card">
+          <a href="{{machine.epl_link}}" target="_blank" class="epl-link">
+            <h4>{{machine.name}}</h4>
+            <img
+              src="{{machine.machine_image | base64_to_data_url}}"
+              alt="{{machine.name}}"
+            />
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

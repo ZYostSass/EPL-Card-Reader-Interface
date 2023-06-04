@@ -1,4 +1,5 @@
 database.db
+fake-data.txt
 
 # Created by https://www.toptal.com/developers/gitignore/api/flask,python,macos,windows,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=flask,python,macos,windows,linux

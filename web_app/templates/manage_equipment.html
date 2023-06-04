@@ -6,7 +6,12 @@
         <div class="jumbotron p-3">
           <h2>
             Manage <b>Equipment</b>
-            <button class="btn btn-success float-end" type="button" data-bs-toggle="modal" data-bs-target="#add_modal">
+            <button
+              class="btn btn-success float-end"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#add_modal"
+            >
               Add new equipment
             </button>
           </h2>
@@ -25,12 +30,21 @@
                 <td><b>{{row.id}}</b></td>
                 <td>{{row.name}}</td>
                 <td>
-                  <a href="/update-equipment/{{row.id}}" class="btn edit" data-bs-toggle="modal"
-                    data-bs-target="#edit_modal{{row.id}}" aria-label="Edit equipment"><i
-                      class="fa-solid fa-pen-to-square"></i></a>
-                  <a href="{{ url_for('views.remove_equipment', name=row.name)}}" class="btn delete"
+                  <a
+                    href="/update-equipment/{{row.id}}"
+                    class="btn edit"
+                    data-bs-toggle="modal"
+                    data-bs-target="#edit_modal{{row.id}}"
+                    aria-label="Edit equipment"
+                    ><i class="fa-solid fa-pen-to-square"></i
+                  ></a>
+                  <a
+                    href="{{ url_for('views.remove_equipment', id=row.id)}}"
+                    class="btn delete"
                     onclick="return confirm('Are you sure you want to remove ' + '{{row.name}}' + '?')"
-                    aria-label="Delete equipment"><i class="fa-solid fa-trash"></i></a>
+                    aria-label="Delete equipment"
+                    ><i class="fa-solid fa-trash"></i
+                  ></a>
                 </td>
               </tr>
               {% endfor %}
@@ -47,35 +61,129 @@
                 <h3 class="modal-title">Edit {{row.name}}</h3>
               </div>
               <div class="modal-body">
-                <form action="{{url_for('views.update_equipment')}}" method="POST">
+                <form
+                  action="{{url_for('views.update_equipment')}}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
                   <input type="hidden" name="equipment_id" value="{{row.id}}" />
                   <div class="form-group">
-                    <label for="new_equipment_name" class="mb-1">Name:</label>
-                    <input type="text" class="form-control" id="new_equipment_name" name="new_equipment_name"
-                      value="{{row.name}}" />
+                    <label for="equipment_name" class="mb-1">Name:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="equipment_name"
+                      name="equipment_name"
+                      value="{{row.name}}"
+                    />
                   </div>
                   <div class="form-group">
-                    <label for="equipment_name" class="mb-1">EPL Link:</label>
-                    <input type="text" class="form-control" id="EPL_link" name="epl_link" value="{{row.epl_link}}" />
+                    <label for="epl_link" class="mb-1">EPL Link:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="EPL_link"
+                      name="epl_link"
+                      value="{{row.epl_link}}"
+                    />
                   </div>
                   <div class="form-group">
                     <legend class="mb-1">Category:</legend>
                     <fieldset>
                       {% for category in categories %}
-                      <div><input type="checkbox" id="category_{{category.tag | format_category}}" name="category"
-                          value="{{category.id}}" {% if category in row.categories %}checked{% endif %} /><label
-                          for="category_{{category.tag | format_category}}">{{category.tag}}</label>
+                      <div>
+                        <label
+                          ><input
+                            type="checkbox"
+                            id="category_{{category.tag | format_category}}"
+                            name="categories"
+                            value="{{category.id}}"
+                            {%
+                            if
+                            category
+                            in
+                            row.categories
+                            %}checked{%
+                            endif
+                            %}
+                          />{{category.tag}}</label
+                        >
                       </div>
                       {% endfor %}
                     </fieldset>
                   </div>
                   <div class="form-group">
                     <div>Image</div>
-                    <label for="equipment_name" class="mb-1">Upload a new image:</label>
-                    <input type="file" class="form-control" id="equipment_image" name="equipment_image" />
+                    <label for="equipment_name" class="mb-1"
+                      >Upload a new image:</label
+                    >
+                    <input
+                      type="file"
+                      accept="image/jpeg"
+                      class="form-control"
+                      id="equipment_image"
+                      name="equipment_image"
+                    />
                     <div>Current Image:</div>
-                    <img style="width: 100%; height: auto;" src="{{row.machine_image | base64_to_data_url}}"
-                      alt="{{row.name}}" />
+                    <img
+                      style="width: 100%; height: auto"
+                      src="{{row.machine_image | base64_to_data_url}}"
+                      alt="{{row.name}}"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="equipment_name" class="mb-1">EPL Link:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="EPL_link"
+                      name="epl_link"
+                      value="{{row.epl_link}}"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <legend class="mb-1">Category:</legend>
+                    <fieldset>
+                      {% for category in categories %}
+                      <div>
+                        <input
+                          type="checkbox"
+                          id="category_{{category.tag | format_category}}"
+                          name="category"
+                          value="{{category.id}}"
+                          {%
+                          if
+                          category
+                          in
+                          row.categories
+                          %}checked{%
+                          endif
+                          %}
+                        /><label
+                          for="category_{{category.tag | format_category}}"
+                          >{{category.tag}}</label
+                        >
+                      </div>
+                      {% endfor %}
+                    </fieldset>
+                  </div>
+                  <div class="form-group">
+                    <div>Image</div>
+                    <label for="equipment_name" class="mb-1"
+                      >Upload a new image:</label
+                    >
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="equipment_image"
+                      name="equipment_image"
+                    />
+                    <div>Current Image:</div>
+                    <img
+                      style="width: 100%; height: auto"
+                      src="{{row.machine_image | base64_to_data_url}}"
+                      alt="{{row.name}}"
+                    />
                   </div>
                   <div class="form-group">
                     <button class="btn" type="submit">Update Equipment</button>
@@ -83,7 +191,11 @@
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
                   Close
                 </button>
               </div>
@@ -100,30 +212,59 @@
                 <h3 class="modal-title">Add Equipment</h3>
               </div>
               <div class="modal-body">
-                <form action="{{url_for('views.insert_equipment')}}" method="POST">
+                <form
+                  action="{{url_for('views.insert_equipment')}}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
                   <div class="form-group">
-                    <label for="new_equipment_name" class="mb-1">Name:</label>
-                    <input type="text" class="form-control" id="new_equipment_name" name="new_equipment_name" />
+                    <label for="equipment_name" class="mb-1">Name:</label>
+                    <input
+                      required
+                      type="text"
+                      class="form-control"
+                      id="equipment_name"
+                      name="equipment_name"
+                    />
                   </div>
                   <div class="form-group">
-                    <label for="equipment_name" class="mb-1">EPL Link:</label>
-                    <input type="text" class="form-control" id="EPL_link" name="epl_link" />
+                    <label for="epl_link" class="mb-1">EPL Link:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="EPL_link"
+                      name="epl_link"
+                    />
                   </div>
                   <div class="form-group">
                     <legend class="mb-1">Category:</legend>
                     <fieldset>
                       {% for category in categories %}
-                      <div><input type="checkbox" id="category_{{category.tag | format_category}}" name="category"
-                          value="{{category.id}}" /><label
-                          for="category_{{category.tag | format_category}}">{{category.tag}}</label>
+                      <div>
+                        <label
+                          ><input
+                            type="checkbox"
+                            id="category_{{category.tag | format_category}}"
+                            name="categories"
+                            value="{{category.id}}"
+                          />{{category.tag}}</label
+                        >
                       </div>
                       {% endfor %}
                     </fieldset>
                   </div>
                   <div class="form-group">
                     <div>Image</div>
-                    <label for="equipment_name" class="mb-1">Upload an image:</label>
-                    <input type="file" class="form-control" id="equipment_image" name="equipment_image" />
+                    <label for="equipment_image" class="mb-1"
+                      >Upload an image:</label
+                    >
+                    <input
+                      type="file"
+                      accept="image/jpeg"
+                      class="form-control"
+                      id="equipment_image"
+                      name="equipment_image"
+                    />
                   </div>
                   <div class="form-group">
                     <button class="btn" type="submit">Add Equipment</button>
@@ -131,7 +272,11 @@
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
                   Close
                 </button>
               </div>
@@ -144,7 +289,12 @@
         <div class="jumbotron p-3">
           <h2>
             Manage <b>Categories</b>
-            <button class="btn btn-success float-end" type="button" data-bs-toggle="modal" data-bs-target="#add_category_modal">
+            <button
+              class="btn btn-success float-end"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#add_category_modal"
+            >
               Add new Category
             </button>
           </h2>
@@ -163,12 +313,21 @@
                 <td><b>{{category.id}}</b></td>
                 <td>{{category.tag}}</td>
                 <td>
-                  <a href="/update-equipment/{{category.id}}" class="btn edit" data-bs-toggle="modal"
-                    data-bs-target="#edit_category_modal{{category.id}}" aria-label="Edit category"><i
-                      class="fa-solid fa-pen-to-square"></i></a>
-                  <a href="{{ url_for('views.remove_equipment', name=category.tag)}}" class="btn delete"
+                  <a
+                    href="/update-equipment/{{category.id}}"
+                    class="btn edit"
+                    data-bs-toggle="modal"
+                    data-bs-target="#edit_category_modal{{category.id}}"
+                    aria-label="Edit category"
+                    ><i class="fa-solid fa-pen-to-square"></i
+                  ></a>
+                  <a
+                    href="{{ url_for('views.remove_category', id=category.id)}}"
+                    class="btn delete"
                     onclick="return confirm('Are you sure you want to remove ' + '{{category.tag}}' + '?')"
-                    aria-label="Delete category"><i class="fa-solid fa-trash"></i></a>
+                    aria-label="Delete category"
+                    ><i class="fa-solid fa-trash"></i
+                  ></a>
                 </td>
               </tr>
               {% endfor %}
@@ -177,19 +336,35 @@
         </div>
 
         {% for category in categories %}
-        <div id="edit_category_modal{{category.id}}" class="modal fade" role="dialog">
+        <div
+          id="edit_category_modal{{category.id}}"
+          class="modal fade"
+          role="dialog"
+        >
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
                 <h3 class="modal-title">Edit Category</h3>
               </div>
               <div class="modal-body">
-                <form action="{{url_for('views.update_equipment')}}" method="POST">
-                  <input type="hidden" name="category_id" value="{{category.id}}" />
+                <form
+                  action="{{url_for('views.update_category')}}"
+                  method="POST"
+                >
+                  <input
+                    type="hidden"
+                    name="category_id"
+                    value="{{category.id}}"
+                  />
                   <div class="form-group">
-                    <label for="new_category_name" class="mb-1">Name:</label>
-                    <input type="text" class="form-control" id="new_category_name" name="new_category_name"
-                      value="{{category.tag}}" />
+                    <label for="category_name" class="mb-1">Name:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="category_name"
+                      name="category_name"
+                      value="{{category.tag}}"
+                    />
                   </div>
                   <div class="form-group">
                     <button class="btn" type="submit">Update category</button>
@@ -197,7 +372,11 @@
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
                   Close
                 </button>
               </div>
@@ -213,10 +392,18 @@
                 <h3 class="modal-title">Add Category</h3>
               </div>
               <div class="modal-body">
-                <form action="{{url_for('views.insert_equipment')}}" method="POST">
+                <form
+                  action="{{url_for('views.insert_category')}}"
+                  method="POST"
+                >
                   <div class="form-group">
-                    <label for="new_category_name" class="mb-1">Name:</label>
-                    <input type="text" class="form-control" id="new_category_name" name="new_category_name" />
+                    <label for="category_name" class="mb-1">Name:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="category_name"
+                      name="category_name"
+                    />
                   </div>
                   <div class="form-group">
                     <button class="btn" type="submit">Add Category</button>
@@ -224,7 +411,11 @@
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
                   Close
                 </button>
               </div>
