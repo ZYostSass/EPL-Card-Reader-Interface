@@ -42,35 +42,35 @@
   <body>
     <!-- Flash messages -->
     {% with messages = get_flashed_messages(with_categories=True) %} {% if
-      messages %} {% for category, message in messages %} {% if category ==
-      'error' %}
-      <div
-        class="alert alert-danger alert-dismissable fade show d-flex justify-content-between"
-        role="alert"
-      >
-        {{ message }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-      {% else %}
-      <div
-        class="alert alert-success alert-dismissable fade show d-flex justify-content-between"
-        role="alert"
-      >
-        {{message}}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-      {% endif %} {% endfor %} {% endif %} {% endwith %}
-      <!-- End Flash messages -->
+    messages %} {% for category, message in messages %} {% if category ==
+    'error' %}
+    <div
+      class="alert alert-danger alert-dismissable fade show d-flex justify-content-between"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% else %}
+    <div
+      class="alert alert-success alert-dismissable fade show d-flex justify-content-between"
+      role="alert"
+    >
+      {{message}}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <!-- End Flash messages -->
     <div class="heading">
       <i class="fa-solid fa-bolt"></i>
       <h1>EPL Card Reader</h1>
