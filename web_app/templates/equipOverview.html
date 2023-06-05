@@ -1,7 +1,15 @@
 {% extends "index.html" %} {% block content %}
 <div class="equipOverview-content">
   <div class="header">
-    <h2>Equipment Overview</h2>
+    <h2>Equipment Overview
+       
+       <a class="btn btn-success float-end" type = "button" href= "{{ url_for('views.manage_equipment') }}"> 
+        Manage Equipment
+       </a>
+    
+      
+    </h2>
+    
   </div>
   {% for category in categories %}
   <div class="{{category.tag | format_category}}">
