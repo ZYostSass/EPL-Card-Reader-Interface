@@ -19,11 +19,13 @@
       <div id="idHelp" class="form-text">Must be a 9 digit number</div>
     </div>
     <div class="mb-3">
-      <p>Please select a new role:</p>
-      <input type="radio" id="admin" name="role" value="{{ role }}" />
-      <label for="html">Admin</label><br />
-      <input type="radio" id="manager" name="role" value="{{ role }}" />
-      <label for="css">Lab Manager</label><br />
+      <fieldset>
+        <legend>Please select a new role:</legend>
+        <input type="radio" id="admin" name="role" value="Admin" />
+        <label for="admin">Admin</label><br />
+        <input type="radio" id="manager" name="role" value="Manager" />
+        <label for="manager">Lab Manager</label><br />
+      </fieldset>
     </div>
     <div class="mb-3">
       <label for="pwd" class="form-label">Password</label>
