@@ -131,15 +131,12 @@ def show_users():
 @manager_required
 def add_user_form():
     if request.method == "POST":
-        # TODO (if time): Function call to get badge number by scanning in
-        # Otherwise, proceed with getting inputs via manual entry
         user_id = request.form['id']
         user_badge = request.form['badge']
         user_fname = request.form['fname']
         user_lname = request.form['lname']
         user_email = request.form['email']
         try:
-            # Potential TODO: Change role from Admin to Student for this form (not sure why it's Admin currently)
             add_new_user(psu_id=user_id, access=user_badge, firstname=user_fname,
                          lastname=user_lname, email=user_email, role="Student")
             flash("User Added Successfully", "success")
