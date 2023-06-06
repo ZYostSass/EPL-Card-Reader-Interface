@@ -1,32 +1,43 @@
-{% extends "index.html" %}
-
-
-{% block content %}
-
-<h1>Promotion</h1>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {%for message in messages %}
-            <p> {{ message }}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-<form method = "POST">
-    {{form.hidden_tag()}}
-
-    {{form.id.label}}
-    {{form.id()}}
-    <br/>
-    {{form.role.label}}
-    {{form.role()}}
-    <br/>
-    {{form.password.label}}
-    {{form.password()}}
-
-
-    <br/>
-    {{form.submit}}
-</form>
-
-
+{% extends "index.html" %} {% block content %}
+<div class="form-content px-3 pt-4">
+  <h2 class="fs-2 pe-2">Promotion</h2>
+  <!-- Manual Entry -->
+  <form action="/promote" method="POST" class="m-5">
+    <div class="mb-3">
+      <label for="id" class="form-label">PSU ID</label>
+      <input
+        type="text"
+        class="form-control"
+        name="id"
+        id="id"
+        value="{{ id }}"
+        maxlength="9"
+        inputmode="numeric"
+        pattern="[0-9]{9}"
+        required
+      />
+      <div id="idHelp" class="form-text">Must be a 9 digit number</div>
+    </div>
+    <div class="mb-3">
+      <p>Please select a new role:</p>
+      <input type="radio" id="admin" name="role" value="{{ role }}" />
+      <label for="html">Admin</label><br />
+      <input type="radio" id="manager" name="role" value="{{ role }}" />
+      <label for="css">Lab Manager</label><br />
+    </div>
+    <div class="mb-3">
+      <label for="pwd" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        name="pwd"
+        id="pwd"
+        value="{{ pwd }}"
+        required
+      />
+    </div>
+    <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
+  </form>
+  <!-- End Manual Entry-->
+</div>
 {% endblock %}
