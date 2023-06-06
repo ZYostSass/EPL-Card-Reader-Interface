@@ -4,11 +4,8 @@ from flask import Flask, abort, g, render_template, request, redirect, escape, B
 from database.class_models import *
 from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id, checkin_user, update_user_option
 from sqlalchemy.orm.exc import NoResultFound
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
 from . import card_reader
-# from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
 
@@ -296,6 +293,7 @@ def update_user():
             return redirect(url_for('views.update_user'))
     else:
         return render_template("update_user.html")
+    
 @bp.route('/update-user/<badge>', methods=['GET', 'POST'])
 @manager_required
 def updateStudent(badge):
@@ -317,45 +315,22 @@ def updateStudent(badge):
     else:
         return render_template("updateStudent.html", user = user)
 
-
-
-# Creating a form for promoting a user
-
-
-class PromoteForm(FlaskForm):
-    id = StringField("Enter PSU ID", [validators.DataRequired()])
-    role = RadioField('Role', choices=[
-                      ('Admin', 'Admin'), ('Manager', 'Manager')], validators=[validators.DataRequired()])
-    password = StringField("Add a password")
-    submit = SubmitField("Update")
-
-# Create a Promote Page
-
-
 @bp.route("/promote", methods=["POST", "GET"])
 @admin_required
 def promote_user():
-    id = None
-    role = None
-    form = PromoteForm()
-    # Validate Form
-    if form.validate_on_submit():
-        id = form.id.data
-        role = form.role.data
-        password = form.password.data
-        if password == "":
-            password = None
-        print(role)
-        if (role):
-            try:
-                change_user_access_level(id, role, password)
-                flash("Successfully updated")
-                return redirect('/promote')
-            except Exception as e:
-                flash(str(e), "error")
-                return render_template("promote_user.html", id=id, role=role, form=form)
+    if request.method == 'POST':
+        user_id = request.form['id']
+        role = request.form['role']
+        pwd = request.form['pwd']
 
-    return render_template("promote_user.html", id=id, role=role, form=form)
+        try:
+            change_user_access_level(user_id, role, pwd)
+            flash("Promotion Successful", "success")
+            return redirect(url_for('views.promote_user'))
+        except (LookupError, ValueError) as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.promote_user'))
+    return render_template("promote_user.html")
 
 
 @bp.route('/manage-equipment/')
