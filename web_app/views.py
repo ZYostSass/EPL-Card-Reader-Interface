@@ -319,6 +319,11 @@ def promote_user():
         user_id = request.form['id']
         role = request.form['role']
         pwd = request.form['pwd']
+        conf_pwd = request.form['confPwd']
+
+        if pwd != conf_pwd:
+            flash("Passwords didn't match, please try again", "error")
+            return redirect(url_for('views.promote_user'))
 
         try:
             change_user_access_level(user_id, role, pwd)
