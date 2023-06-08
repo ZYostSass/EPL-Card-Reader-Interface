@@ -28,13 +28,24 @@
       </fieldset>
     </div>
     <div class="mb-3">
-      <label for="pwd" class="form-label">Password</label>
+      <label for="pwd" class="form-label">Create password</label>
       <input
         type="password"
         class="form-control"
         name="pwd"
         id="pwd"
         value="{{ pwd }}"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="confPwd" class="form-label">Confirm password</label>
+      <input
+        type="password"
+        class="form-control"
+        name="confPwd"
+        id="confPwd"
+        value="{{ confPwd }}"
         required
       />
     </div>
