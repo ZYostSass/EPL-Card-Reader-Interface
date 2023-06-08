@@ -598,6 +598,66 @@ hr.h-color {
   border-radius: 5px;
 }
 
+/* Promotion */
+.role-selection legend {
+  font-size: 18px;
+  margin: 12px 0;
+}
+
+.role-selection .container {
+  display: block;
+  position: relative;
+  padding-left: 55px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+.role-selection fieldset input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.role-selection .checkmark {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  height: 25px;
+  width: 25px;
+  background-color: var(--lightGrey);
+  border-radius: 50%;
+}
+
+.role-selection .container:hover input ~ .checkmark {
+  background-color: var(--dimGray);
+}
+
+.role-selection .container input:checked ~ .checkmark {
+  background-color: var(--lightPSUgreen);
+}
+
+.role-selection .checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.role-selection .container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.role-selection .container .checkmark:after {
+  top: 9px;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--white);
+}
+
 /* Media Queries */
 @media (max-width: 767px) {
   /* Sidebar */
