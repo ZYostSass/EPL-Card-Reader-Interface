@@ -275,18 +275,25 @@ hr.h-color {
 
 #scan-btn {
   width: 50%;
-  background: var(--lightPSUgreen);
-  border: 1px solid var(--PSUgreen);
-  color: var(--white);
-  padding: 0.5em 1em;
-  border-radius: 10px;
+  display: inline-block;
+  padding: 0.5em 1.2em;
   margin-top: 15px;
+  border: 0.25em solid var(--white);
+  border-radius: 1em;
+  box-sizing: border-box;
+  background: var(--lightPSUgreen);
+  color: var(--white);
+  font-size: 85%;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
   cursor: pointer;
+  text-decoration: none;
 }
 
 #scan-btn:hover {
   background: var(--lightPSUgreen);
-  border-color: var(--lightPSUgreen);
+  border-color: var(--PSUgreen);
 }
 
 .card-prompt h3 {
@@ -328,20 +335,25 @@ hr.h-color {
   color: var(--dimGray);
 }
 
-.badge-form button {
+#submit-btn {
   width: 100%;
-  background: var(--lightPSUgreen);
-  border: 1px solid var(--PSUgreen);
-  color: var(--white);
-  padding: 0.5em 1em;
-  border-radius: 10px;
+  padding: 0.5em 1.2em;
   margin-top: 15px;
+  border: 0.25em solid var(--white);
+  border-radius: 1em;
+  box-sizing: border-box;
+  background: var(--lightPSUgreen);
+  color: var(--white);
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.badge-form button:hover {
+#submit-btn:hover {
   background: var(--lightPSUgreen);
-  border-color: var(--lightPSUgreen);
+  border-color: var(--PSUgreen);
 }
 
 .badge-form input:focus {
@@ -463,22 +475,26 @@ hr.h-color {
 
 .form-content form button,
 .psu-button {
+  display: inline-block;
   width: 100%;
   background: var(--lightPSUgreen);
-  border: 1px solid var(--PSUgreen);
+  border: 0.25em solid var(--white);
   color: var(--white);
-  padding: 0.5em 1em;
-  border-radius: 10px;
+  padding: 0.5em 1.2em;
+  border-radius: 1em;
+  box-sizing: border-box;
   margin-top: 15px;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
   cursor: pointer;
   text-decoration: none;
 }
 
 .form-content form button:hover,
 .psu-button:hover {
+  border-color: var(--PSUgreen);
   background: var(--lightPSUgreen);
-  border: 1px solid var(--PSUgreen);
-  box-shadow: 0 0 2px var(--PSUgreen);
 }
 
 .form-content input:focus {
