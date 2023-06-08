@@ -35,13 +35,13 @@
             <div class="logged-user-info ">Logged in as: {{ g.user }}</div>
           </li>
           <li class="nav-item">
-            <a href="{{ url_for('views.logout') }}" type="submit" class="btn-primary psu-button" id="submit-btn">
+            <a href="{{ url_for('views.logout') }}" type="submit" class="btn-primary" id="submit-btn">
               Log Out
             </a>
           </li>
           {% else %}
           <li class="nav-item">
-            <a href="{{ url_for('views.login') }}" type="submit" class="btn-primary psu-button" id="submit-btn">
+            <a href="{{ url_for('views.login') }}" type="submit" class="btn-primary" id="submit-btn">
               Log In
             </a>      
           </li>

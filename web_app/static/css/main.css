@@ -74,6 +74,28 @@ hr.h-color {
   left: 20px;
 }
 
+.navbar-nav a {
+  display: inline-block;
+  padding: 0.5em 1.2em;
+  margin-top: 15px;
+  border: 0.25em solid var(--lightPSUgreen);
+  border-radius: 1em;
+  box-sizing: border-box;
+  background: var(--lightPSUgreen);
+  color: var(--white);
+  font-size: 85%;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.navbar-nav a:hover {
+  border-color: var(--PSUgreen);
+  background: var(--lightPSUgreen);
+}
+
 /* Dashboard */
 .dashboard {
   position: relative;
@@ -105,6 +127,7 @@ hr.h-color {
   padding: 5px;
   font-size: 2.5em;
 }
+
 .dashboard-menu .card h1 {
   margin: 10px;
   font-size: 100%;
@@ -122,14 +145,23 @@ hr.h-color {
 
 .dashboard-menu .card a {
   display: inline-block;
+  padding: 0.5em 1.2em;
+  margin-top: 15px;
+  border: 0.25em solid var(--white);
+  border-radius: 1em;
+  box-sizing: border-box;
   background: var(--lightPSUgreen);
   color: var(--white);
-  font-size: 75%;
-  padding: 0.5em 1em;
-  border-radius: 10px;
-  margin-top: 15px;
+  font-size: 85%;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
   cursor: pointer;
   text-decoration: none;
+}
+
+.dashboard-menu .card a:hover {
+  border-color: var(--PSUgreen);
 }
 
 .daily-user-log {
@@ -137,6 +169,8 @@ hr.h-color {
   background: var(--white);
   margin: 40px 10px;
   padding: 0.5em 1em;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 
@@ -160,6 +194,24 @@ hr.h-color {
 .daily-user-log .title a {
   max-width: 150px;
   margin-left: auto;
+  display: inline-block;
+  padding: 0.5em 1.2em;
+  margin-top: 15px;
+  border: 0.25em solid var(--white);
+  border-radius: 1em;
+  box-sizing: border-box;
+  background: var(--lightPSUgreen);
+  color: var(--white);
+  font-size: 100%;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.daily-user-log .title a:hover {
+  border-color: var(--PSUgreen);
 }
 
 .daily-user-log .data-row {
