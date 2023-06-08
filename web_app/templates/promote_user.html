@@ -18,13 +18,17 @@
       />
       <div id="idHelp" class="form-text">Must be a 9 digit number</div>
     </div>
-    <div class="mb-3">
+    <div class="role-selection mb-3">
       <fieldset>
         <legend>Please select a new role:</legend>
-        <input type="radio" id="admin" name="role" value="Admin" />
-        <label for="admin">Admin</label><br />
-        <input type="radio" id="manager" name="role" value="Manager" />
-        <label for="manager">Lab Manager</label><br />
+        <label class="container" for="admin">Admin
+          <input type="radio" id="admin" name="role" value="Admin" />
+          <span class="checkmark"></span>
+        </label><br />
+        <label class="container" for="manager">Lab Manager
+          <input type="radio" id="manager" name="role" value="Manager" />
+          <span class="checkmark"></span>
+        </label><br />
       </fieldset>
     </div>
     <div class="mb-3">
