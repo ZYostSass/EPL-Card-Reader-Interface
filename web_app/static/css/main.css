@@ -400,10 +400,12 @@ hr.h-color {
 
 .permissionsStudent-content img.true {
   border: 5px solid green;
+  border-radius: 10px;
 }
 
 .permissionsStudent-content img.false {
   border: 5px solid red;
+  border-radius: 10px;
 }
 
 /* Equipment Overview */
@@ -658,12 +660,12 @@ hr.h-color {
 
 .checkinStudent-content img.true {
   border: 5px solid green;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .checkinStudent-content img.false {
   border: 5px solid red;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 /* Promotion */
