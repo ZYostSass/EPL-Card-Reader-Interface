@@ -32,16 +32,16 @@
       <ul class="navbar-nav mb-2 mb-lg-0">
           {% if g.user is not none %}
           <li class="nav-item">
-            <div style="color: white; margin-right: 10px;">Logged in as: {{ g.user }}</div>
+            <div class="logged-user-info ">Logged in as: {{ g.user }}</div>
           </li>
           <li class="nav-item">
-            <a href="{{ url_for('views.logout') }}" type="submit" class="btn-primary psu-button" id="submit-btn">
+            <a href="{{ url_for('views.logout') }}" type="submit" class="btn-primary" id="log-btn">
               Log Out
             </a>
           </li>
           {% else %}
           <li class="nav-item">
-            <a href="{{ url_for('views.login') }}" type="submit" class="btn-primary psu-button" id="submit-btn">
+            <a href="{{ url_for('views.login') }}" type="submit" class="btn-primary" id="log-btn">
               Log In
             </a>      
           </li>

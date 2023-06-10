@@ -4,11 +4,8 @@ from flask import Flask, abort, g, render_template, request, redirect, escape, B
 from database.class_models import *
 from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id, checkin_user, update_user_option
 from sqlalchemy.orm.exc import NoResultFound
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, validators, RadioField
 import datetime
 from . import get_card_reader
-# from wtforms.validators import DataRequired
 
 bp = Blueprint('views', __name__)
 
@@ -134,15 +131,12 @@ def show_users():
 @manager_required
 def add_user_form():
     if request.method == "POST":
-        # TODO (if time): Function call to get badge number by scanning in
-        # Otherwise, proceed with getting inputs via manual entry
         user_id = request.form['id']
         user_badge = request.form['badge']
         user_fname = request.form['fname']
         user_lname = request.form['lname']
         user_email = request.form['email']
         try:
-            # Potential TODO: Change role from Admin to Student for this form (not sure why it's Admin currently)
             add_new_user(psu_id=user_id, access=user_badge, firstname=user_fname,
                          lastname=user_lname, email=user_email, role="Student")
             flash("User Added Successfully", "success")
@@ -161,7 +155,7 @@ def dashboard():
     # TODO: Filter these results by today
     #check_time()
     logs = access_logs()
-    return render_template("dashboard.html", logs=logs)
+    return render_template("dashboard.html", logs=logs, current_url=request.path)
 
 # TODO: Add get parameters for time range
 
@@ -184,7 +178,7 @@ def event_log_csv():
 def equipOverview():
     categories = all_categories()
     uncategorized = uncategorized_machines()
-    return render_template("equipOverview.html", categories=categories, uncategorized=uncategorized)
+    return render_template("equipOverview.html", categories=categories, uncategorized=uncategorized, current_url=request.path)
 
 
 @bp.route("/equipOverview/student/")
@@ -203,21 +197,21 @@ def permissions():
             return redirect(url_for('views.permissionsStudent', badge=user_badge))
         except ValueError as e:
             flash(str(e), "error")
-            return render_template("permissions.html")
+            return render_template("permissions.html", current_url=request.path)
     else:
-        return render_template("permissions.html")
+        return render_template("permissions.html", current_url=request.path)
 
 
 @bp.route("/waiver/")
 @manager_required
 def waiver():
-    return render_template('waiver.html')
+    return render_template('waiver.html', current_url=request.path)
 
 
 # Route for the card reader test page
 @bp.route("/card_test/", methods=['GET'])
 def card_test():
-    return render_template('card_test.html')
+    return render_template('card_test.html', current_url=request.path)
 # Route for checking the queue where card data gets read to
 # Using flask.make_response and flask.jsonify to create an http response header.
 # https://tedboy.github.io/flask/generated/flask.make_response.html
@@ -295,6 +289,7 @@ def update_user():
             return redirect(url_for('views.update_user'))
     else:
         return render_template("update_user.html")
+    
 @bp.route('/update-user/<badge>', methods=['GET', 'POST'])
 @manager_required
 def updateStudent(badge):
@@ -316,45 +311,27 @@ def updateStudent(badge):
     else:
         return render_template("updateStudent.html", user = user)
 
-
-
-# Creating a form for promoting a user
-
-
-class PromoteForm(FlaskForm):
-    id = StringField("Enter PSU ID", [validators.DataRequired()])
-    role = RadioField('Role', choices=[
-                      ('Admin', 'Admin'), ('Manager', 'Manager')], validators=[validators.DataRequired()])
-    password = StringField("Add a password")
-    submit = SubmitField("Update")
-
-# Create a Promote Page
-
-
 @bp.route("/promote", methods=["POST", "GET"])
 @admin_required
 def promote_user():
-    id = None
-    role = None
-    form = PromoteForm()
-    # Validate Form
-    if form.validate_on_submit():
-        id = form.id.data
-        role = form.role.data
-        password = form.password.data
-        if password == "":
-            password = None
-        print(role)
-        if (role):
-            try:
-                change_user_access_level(id, role, password)
-                flash("Successfully updated")
-                return redirect('/promote')
-            except Exception as e:
-                flash(str(e), "error")
-                return render_template("promote_user.html", id=id, role=role, form=form)
+    if request.method == 'POST':
+        user_id = request.form['id']
+        role = request.form['role']
+        pwd = request.form['pwd']
+        conf_pwd = request.form['confPwd']
 
-    return render_template("promote_user.html", id=id, role=role, form=form)
+        if pwd != conf_pwd:
+            flash("Passwords didn't match, please try again", "error")
+            return redirect(url_for('views.promote_user'))
+
+        try:
+            change_user_access_level(user_id, role, pwd)
+            flash("Promotion Successful", "success")
+            return redirect(url_for('views.promote_user'))
+        except (LookupError, ValueError) as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.promote_user'))
+    return render_template("promote_user.html")
 
 
 @bp.route('/manage-equipment/')
@@ -502,9 +479,9 @@ def checkin():
             return redirect(url_for('views.checkinStudent', badge=user_badge))
         except ValueError as e:
             flash(str(e), "error")
-            return render_template("permissions.html")
+            return render_template("checkin.html", current_url=request.path)
     else:
-        return render_template("checkin.html")
+        return render_template("checkin.html", current_url=request.path)
     
 @bp.route('/checkin/<badge>')
 @manager_required

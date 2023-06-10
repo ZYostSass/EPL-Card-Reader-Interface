@@ -45,6 +45,7 @@ hr.h-color {
 .sidebar li.active a,
 .sidebar li.active a:hover {
   color: black;
+  font-weight: 500;
 }
 
 .sidebar li a {
@@ -57,12 +58,42 @@ hr.h-color {
   background: var(--PSUgreen);
 }
 
-.nav-item {
-  text-align: right;
-}
-
 .navbar i {
   color: var(--white);
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .logged-user-info {
+  color: var(--white);
+  font-weight: 500;
+  position: absolute;
+  left: 20px;
+}
+
+.navbar-nav a {
+  display: inline-block;
+  padding: 0.5em 1.2em;
+  margin-top: 15px;
+  border: 0.25em solid var(--lightPSUgreen);
+  border-radius: 1em;
+  box-sizing: border-box;
+  background: var(--lightPSUgreen);
+  color: var(--white);
+  font-size: 85%;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.navbar-nav a:hover {
+  border-color: var(--PSUgreen);
+  background: var(--lightPSUgreen);
 }
 
 /* Dashboard */
@@ -96,6 +127,7 @@ hr.h-color {
   padding: 5px;
   font-size: 2.5em;
 }
+
 .dashboard-menu .card h1 {
   margin: 10px;
   font-size: 100%;
@@ -113,14 +145,23 @@ hr.h-color {
 
 .dashboard-menu .card a {
   display: inline-block;
+  padding: 0.5em 1.2em;
+  margin-top: 15px;
+  border: 0.25em solid var(--white);
+  border-radius: 1em;
+  box-sizing: border-box;
   background: var(--lightPSUgreen);
   color: var(--white);
-  font-size: 75%;
-  padding: 0.5em 1em;
-  border-radius: 10px;
-  margin-top: 15px;
+  font-size: 85%;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
   cursor: pointer;
   text-decoration: none;
+}
+
+.dashboard-menu .card a:hover {
+  border-color: var(--PSUgreen);
 }
 
 .daily-user-log {
@@ -128,6 +169,8 @@ hr.h-color {
   background: var(--white);
   margin: 40px 10px;
   padding: 0.5em 1em;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 
@@ -146,6 +189,29 @@ hr.h-color {
 .daily-user-log .title h1 {
   font-size: 125%;
   margin: 0;
+}
+
+.daily-user-log .title a {
+  max-width: 150px;
+  margin-left: auto;
+  display: inline-block;
+  padding: 0.5em 1.2em;
+  margin-top: 15px;
+  border: 0.25em solid var(--white);
+  border-radius: 1em;
+  box-sizing: border-box;
+  background: var(--lightPSUgreen);
+  color: var(--white);
+  font-size: 100%;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.daily-user-log .title a:hover {
+  border-color: var(--PSUgreen);
 }
 
 .daily-user-log .data-row {
@@ -207,6 +273,29 @@ hr.h-color {
   margin: 40px 0 0 48px;
 }
 
+#scan-btn {
+  width: 50%;
+  display: inline-block;
+  padding: 0.5em 1.2em;
+  margin-top: 15px;
+  border: 0.25em solid var(--white);
+  border-radius: 1em;
+  box-sizing: border-box;
+  background: var(--lightPSUgreen);
+  color: var(--white);
+  font-size: 85%;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#scan-btn:hover {
+  background: var(--lightPSUgreen);
+  border-color: var(--PSUgreen);
+}
+
 .card-prompt h3 {
   width: 50%;
   background: var(--white);
@@ -246,20 +335,25 @@ hr.h-color {
   color: var(--dimGray);
 }
 
-.badge-form button {
+#submit-btn {
   width: 100%;
-  background: var(--lightPSUgreen);
-  border: 1px solid var(--PSUgreen);
-  color: var(--white);
-  padding: 0.5em 1em;
-  border-radius: 10px;
+  padding: 0.5em 1.2em;
   margin-top: 15px;
+  border: 0.25em solid var(--white);
+  border-radius: 1em;
+  box-sizing: border-box;
+  background: var(--lightPSUgreen);
+  color: var(--white);
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.badge-form button:hover {
+#submit-btn:hover {
   background: var(--lightPSUgreen);
-  border-color: var(--lightPSUgreen);
+  border-color: var(--PSUgreen);
 }
 
 .badge-form input:focus {
@@ -306,10 +400,12 @@ hr.h-color {
 
 .permissionsStudent-content img.true {
   border: 5px solid green;
+  border-radius: 10px;
 }
 
 .permissionsStudent-content img.false {
   border: 5px solid red;
+  border-radius: 10px;
 }
 
 /* Equipment Overview */
@@ -381,22 +477,26 @@ hr.h-color {
 
 .form-content form button,
 .psu-button {
+  display: inline-block;
   width: 100%;
   background: var(--lightPSUgreen);
-  border: 1px solid var(--PSUgreen);
+  border: 0.25em solid var(--white);
   color: var(--white);
-  padding: 0.5em 1em;
-  border-radius: 10px;
+  padding: 0.5em 1.2em;
+  border-radius: 1em;
+  box-sizing: border-box;
   margin-top: 15px;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
   cursor: pointer;
   text-decoration: none;
 }
 
 .form-content form button:hover,
 .psu-button:hover {
+  border-color: var(--PSUgreen);
   background: var(--lightPSUgreen);
-  border: 1px solid var(--PSUgreen);
-  box-shadow: 0 0 2px var(--PSUgreen);
 }
 
 .form-content input:focus {
@@ -560,12 +660,72 @@ hr.h-color {
 
 .checkinStudent-content img.true {
   border: 5px solid green;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .checkinStudent-content img.false {
   border: 5px solid red;
-  border-radius: 5px;
+  border-radius: 10px;
+}
+
+/* Promotion */
+.role-selection legend {
+  font-size: 18px;
+  margin: 12px 0;
+}
+
+.role-selection .container {
+  display: block;
+  position: relative;
+  padding-left: 55px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+.role-selection fieldset input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.role-selection .checkmark {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  height: 25px;
+  width: 25px;
+  background-color: var(--lightGrey);
+  border-radius: 50%;
+}
+
+.role-selection .container:hover input ~ .checkmark {
+  background-color: var(--dimGray);
+}
+
+.role-selection .container input:checked ~ .checkmark {
+  background-color: var(--lightPSUgreen);
+}
+
+.role-selection .checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.role-selection .container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.role-selection .container .checkmark:after {
+  top: 9px;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--white);
 }
 
 /* Media Queries */
@@ -580,6 +740,23 @@ hr.h-color {
 
   #side_nav.active {
     margin-left: 0;
+  }
+
+  /* Navbar */
+
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-item {
+    margin-left: auto;
+  }
+
+  .nav-item .logged-user-info {
+    order: -1;
+    margin-right: auto;
+    top: 60%;
   }
 
   /* Dashboard */
