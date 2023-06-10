@@ -5,7 +5,7 @@ from database.class_models import *
 from database.user_options import access_logs, add_new_user, all_categories, get_machine, get_user, get_user_by_psu_id, insert_category_name, remove_category_by_id, remove_user, read_all_machines, edit_machine, add_machine, remove_machine, change_user_access_level, check_user_password, read_all, add_training, uncategorized_machines, uncategorized_machines_without_user, update_category_by_id, checkin_user, update_user_option
 from sqlalchemy.orm.exc import NoResultFound
 import datetime
-from . import card_reader
+from . import get_card_reader
 
 bp = Blueprint('views', __name__)
 
@@ -221,7 +221,7 @@ def card_test():
 
 @bp.route("/card_data/")
 def card_data():
-    card_data = card_reader.get_data()
+    card_data = get_card_reader().get_data()
     if card_data is not None:
         card_number, facility_code = card_data
     else:
@@ -229,7 +229,6 @@ def card_data():
     return jsonify(card_number=card_number, facility_code=facility_code)
 
 @bp.route("/permissions/<badge>/")
-@manager_required
 def permissionsStudent(badge):
     user = get_user(badge)
     categories = all_categories()

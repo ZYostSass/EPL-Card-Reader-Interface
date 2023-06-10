@@ -7,6 +7,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.associationproxy import AssociationProxy
 from bcrypt import checkpw, gensalt, hashpw
 
+# Base class for all derived classes
 # Replaced depreciated 'Base = declarative_base()'
 class Base(DeclarativeBase):
     pass
@@ -41,12 +42,14 @@ class TrainingLog(Base):
 
 # User Table:
 	# Primary Key: ID Number
+    # PSU ID
+    # Access Badge Number
 	# First Name
 	# Last Name
     # Email
     # Role
-    # Last Log In datetime
-    # List of machines the user is trained on (can be none) -> user_machine assosiation table
+    # Password Hash (only for Managers and Admins)
+    # List of machines the user is trained on (can be none) -> training_log.user
 class User(Base):
     __tablename__ = "user"
     # Declarative Form, prefered as of SQLAlchemy 2.0
@@ -108,6 +111,9 @@ machine_tag_association = Table(
 # Machine Table:
     # Primary Key: ID Number
     # Name
+    # Machine image
+    # EPL_link (hyperlink)
+    # Trained Users -> training_log.machine
 class Machine(Base):
     __tablename__ = "machine"
     # Declarative Form, prefered as of SQLAlchemy 2.0
