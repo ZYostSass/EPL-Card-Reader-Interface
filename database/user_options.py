@@ -56,16 +56,18 @@ def checkin_user(badge):
     user = is_user_badge_present(badge)
     # If not, leave
     if user == None:
-        raise LookupError(f"User with access number {badge} does not exist")
+        # raise LookupError(f"User with access number {badge} does not exist")
+        return None
     
     # If they are, check them in
     # TODO: Add checkouts to the log somewhere
-    log = class_models.EventLog.check_in(user)
-    database_init.session.add(log)
-    database_init.session.commit()
+    else:
+        log = class_models.EventLog.check_in(user)
+        database_init.session.add(log)
+        database_init.session.commit()
     
     # Return the User checked in
-    return user
+        return user
 
 def access_logs():
     # TODO: add time range filters
