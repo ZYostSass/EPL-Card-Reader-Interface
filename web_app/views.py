@@ -60,7 +60,11 @@ def student_checkin():
 
         try:
             user = checkin_user(user_badge)
-            return redirect(url_for('views.student_checkin_equipment', badge=user_badge))
+            if user is None:
+                flash ("User does not exist")
+                return render_template("student_checkin.html")
+            else:
+                return redirect(url_for('views.student_checkin_equipment', badge=user_badge))
 
         except LookupError as e:
             flash(str(e), "error")
@@ -194,7 +198,11 @@ def permissions():
         try:
             user_badge = request.form['badge']
             user = get_user(user_badge)
-            return redirect(url_for('views.permissionsStudent', badge=user_badge))
+            if user is None:
+                flash ("User does not exist")
+                return render_template("permissions.html")
+            else:
+                return redirect(url_for('views.permissionsStudent', badge=user_badge))
         except ValueError as e:
             flash(str(e), "error")
             return render_template("permissions.html", current_url=request.path)
@@ -476,7 +484,11 @@ def checkin():
         try:
             user_badge = request.form['badge']
             user = get_user(user_badge)
-            return redirect(url_for('views.checkinStudent', badge=user_badge))
+            if user is None:
+                flash("User does not exist")
+                return render_template("checkin.html")
+            else:
+                return redirect(url_for('views.checkinStudent', badge=user_badge))
         except ValueError as e:
             flash(str(e), "error")
             return render_template("checkin.html", current_url=request.path)
