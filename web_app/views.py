@@ -152,7 +152,26 @@ def add_user_form():
     else:
         return render_template("add_user_form.html")
 
+@bp.route("/new-user-form/", methods=['POST', 'GET'])
+def new_user_form():
+    if request.method == "POST":
+        user_id = request.form['id']
+        user_badge = request.form['badge']
+        user_fname = request.form['fname']
+        user_lname = request.form['lname']
+        user_email = request.form['email']
+        try:
+            add_new_user(psu_id=user_id, access=user_badge, firstname=user_fname,
+                         lastname=user_lname, email=user_email, role="Student")
+            flash("New User Created", "success")
+            return redirect(url_for('views.new_user_form'))
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect(url_for('views.new_user_form'))
 
+    else:
+        return render_template("new_user_form.html")
+    
 @bp.route("/dashboard/")
 @manager_required
 def dashboard():
