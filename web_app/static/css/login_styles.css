@@ -255,6 +255,37 @@ input[type='submit']:hover {
   z-index: 1;
 }
 
+.login .card-prompt {
+  width: 70%;
+  border: 5px solid;
+  margin: 0 auto;
+  margin-top: 30vh;
+  cursor: pointer;
+}
+
+.login .card-prompt h3 {
+  width: 100%;
+  background: var(--white);
+  padding: 1em;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.login .card-prompt h4 {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid var(--dimGray);
+  margin: 60px 0 30px;
+  line-height: 0.1em;
+}
+
+.login .card-prompt h4 span {
+  background-color: var(--bootstrapLight);
+  padding: 0 10px;
+}
+
 .check-in .card-prompt {
   width: 70%;
 }

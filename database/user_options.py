@@ -73,7 +73,6 @@ def checkin_user(badge, session = None):
     user = is_user_badge_present(badge, session)
     # If not, leave
     if user == None:
-        # raise LookupError(f"User with access number {badge} does not exist")
         return None
     
     # If they are, check them in

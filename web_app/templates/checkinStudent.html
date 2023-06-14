@@ -1,5 +1,6 @@
 {% extends "index.html" %} {% block content %}
 <div class="checkinStudent-content">
+  {% if user %}
   <div class="student-info">
     <h2>{{ user.firstname }} {{ user.lastname }}</h2>
   </div>
@@ -66,6 +67,11 @@
       </div>
     </div>
     {% endif %}
+  </div>
+  {% endif %}
+  {% else %}
+  <div class="student-info">
+    <h2>No student found for badge {{not_found}}</h2>
   </div>
   {% endif %}
 </div>

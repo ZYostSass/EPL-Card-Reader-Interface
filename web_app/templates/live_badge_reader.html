@@ -1,0 +1,40 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"
+integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ=="
+crossorigin="anonymous"></script>
+
+<script>
+    // This template expects the include script to have defined a function called:
+    // handle_badge(badge). badge is a string containing the badge number read from the card reader
+    // It also expects jQuery to be loaded
+    // It also grabs a dom element with id = "badge_reader", to report it's status and do manual card reader checks
+
+    $(document).ready(function () {
+      $("#badge_reader").on("click", function(event) {
+        event.preventDefault();  // Prevent default link behavior
+        fetch("/card_data/")  // Make the request to the card_data route
+        .then(response => response.json())  // Parse the JSON response
+        .then(data => {
+            handle_badge(data.card_number);  // Log the JSON data
+        })
+        .catch(error => {
+          console.log(error);  // Handle any errors
+        });
+      })
+
+      var socket = io();
+
+      socket.on('connect', function () {
+        $("#badge_reader").css("border-color", "green");
+      });
+
+      socket.on('disconnect', function () {
+        $("#badge_reader").css("border-color", "red");
+      });
+
+      socket.on('found_badge', function (msg, cb) {
+        handle_badge(msg);
+        if (cb)
+          cb();
+      });
+    });
+  </script>

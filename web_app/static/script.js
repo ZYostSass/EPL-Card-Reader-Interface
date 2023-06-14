@@ -67,21 +67,21 @@ $(function () {
     }, 300);
   }
 
-  $("#scan-btn").on("click", function (event) {
-    event.preventDefault();  // Prevent default link behavior
-    fetch("/card_data/")  // Make the request to the card_data route
-      .then(response => response.json())  // Parse the JSON response
-      .then(data => {
-        if (data.card_number) {
-          if (window.location.pathname.includes('student-checkin')) {
-            window.location.href = "/student-checkin/" + data.card_number;
-          } else {
-            window.location.href = "/permissions/" + data.card_number + "/";  // Redirect to the permissions route with card_number as a parameter
-          }
-        }
-      })
-      .catch(error => {
-        console.log(error);  // Handle any errors
-      });
-  });
+  // $("#scan-btn").on("click", function (event) {
+  //   event.preventDefault();  // Prevent default link behavior
+  //   fetch("/card_data/")  // Make the request to the card_data route
+  //     .then(response => response.json())  // Parse the JSON response
+  //     .then(data => {
+  //       if (data.card_number) {
+  //         if (window.location.pathname.includes('student-checkin')) {
+  //           window.location.href = "/student-checkin/" + data.card_number;
+  //         } else {
+  //           window.location.href = "/permissions/" + data.card_number + "/";  // Redirect to the permissions route with card_number as a parameter
+  //         }
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log(error);  // Handle any errors
+  //     });
+  // });
 });

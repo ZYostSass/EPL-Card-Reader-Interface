@@ -78,23 +78,27 @@ def student_checkin():
 @bp.route("/student-checkin/<badge>")
 def student_checkin_equipment(badge):
     user = get_user(badge)
-    categories = all_categories()
-    uncategorized = uncategorized_machines_without_user(user.id)
+    if user is not None:
+        checkin_user(badge)
+        categories = all_categories()
+        uncategorized = uncategorized_machines_without_user(user.id)
 
-    # Filter the categories and machines
-    filtered_categories = []
-    for category in categories:
-        filtered_machines = [
-            machine
-            for machine in category.machines
-            if machine not in user.machines
-        ]
-        if filtered_machines:
-            filtered_category = MachineTag(tag=category.tag)
-            filtered_category.machines = filtered_machines
-            filtered_categories.append(filtered_category)
+        # Filter the categories and machines
+        filtered_categories = []
+        for category in categories:
+            filtered_machines = [
+                machine
+                for machine in category.machines
+                if machine not in user.machines
+            ]
+            if filtered_machines:
+                filtered_category = MachineTag(tag=category.tag)
+                filtered_category.machines = filtered_machines
+                filtered_categories.append(filtered_category)
 
-    return render_template("student_checkin_equipment.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
+        return render_template("student_checkin_equipment.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
+    else:
+        return render_template("student_checkin_equipment.html", not_found=badge)
 
 
 @bp.route("/logout")
@@ -519,21 +523,25 @@ def checkin():
 @manager_required
 def checkinStudent(badge):
     user = get_user(badge)
-    checkin_user(badge)
-    categories = all_categories()
-    uncategorized = uncategorized_machines_without_user(user.id)
+    print(user)
+    if user is not None:
+        checkin_user(badge)
+        categories = all_categories()
+        uncategorized = uncategorized_machines_without_user(user.id)
 
-    # Filter the categories and machines
-    filtered_categories = []
-    for category in categories:
-        filtered_machines = [
-            machine
-            for machine in category.machines
-            if machine not in user.machines
-        ]
-        if filtered_machines:
-            filtered_category = MachineTag(tag=category.tag)
-            filtered_category.machines = filtered_machines
-            filtered_categories.append(filtered_category)
+        # Filter the categories and machines
+        filtered_categories = []
+        for category in categories:
+            filtered_machines = [
+                machine
+                for machine in category.machines
+                if machine not in user.machines
+            ]
+            if filtered_machines:
+                filtered_category = MachineTag(tag=category.tag)
+                filtered_category.machines = filtered_machines
+                filtered_categories.append(filtered_category)
     
-    return render_template("checkinStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
+        return render_template("checkinStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
+    else:
+        return render_template("checkinStudent.html", not_found=badge)
