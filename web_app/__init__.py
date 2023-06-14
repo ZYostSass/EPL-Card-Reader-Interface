@@ -76,8 +76,13 @@ def set_user_global():
         g.user = None
     else:
         session["user_active_at"] = datetime.now()
-        user = get_user_by_id(user_id)
-        g.user = user
+        try: 
+            user = get_user_by_id(user_id)
+            g.user = user
+        except:
+           session.pop("user_id", None)
+           session.pop("user_active_at", None)
+           g.user = None 
 
 @app.template_filter('format_category')
 def format_category(value):
