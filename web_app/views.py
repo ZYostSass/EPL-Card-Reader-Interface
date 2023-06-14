@@ -63,8 +63,7 @@ def student_checkin():
         try:
             user = checkin_user(user_badge)
             if user is None:
-                flash ("User does not exist")
-                return render_template("student_checkin.html")
+                return render_template("student_checkin_equipment.html", not_found=user_badge)
             else:
                 return redirect(url_for('views.student_checkin_equipment', badge=user_badge))
 

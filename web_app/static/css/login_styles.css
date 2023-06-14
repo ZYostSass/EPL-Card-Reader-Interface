@@ -255,6 +255,12 @@ input[type='submit']:hover {
   z-index: 1;
 }
 
+.login #checkin-form {
+  width: 70%;
+  background-color: white;
+  padding: 1em;
+  margin: 2em auto !important;}
+
 .login .card-prompt {
   width: 70%;
   border: 5px solid;

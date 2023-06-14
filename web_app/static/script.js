@@ -31,6 +31,11 @@ $(function () {
       else {
         openPopup(studentCheckin);
       }
+
+      // A horrifying hack. 
+      if ($("#dont-open-popup").length) {
+        closePopup(studentCheckin);
+      }
     }
 
     studentCheckin.addEventListener('click', function (event) {
