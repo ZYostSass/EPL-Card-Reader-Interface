@@ -7,6 +7,8 @@ from sqlalchemy.orm.exc import NoResultFound
 import datetime
 from . import get_card_reader
 
+from . import live_checkin
+
 bp = Blueprint('views', __name__)
 
 @bp.route("/")
@@ -248,7 +250,7 @@ def card_test():
 
 @bp.route("/card_data/")
 def card_data():
-    card_data = get_card_reader().get_data()
+    card_data = get_card_reader().get_data(use_old=True)
     if card_data is not None:
         card_number, facility_code = card_data
     else:

@@ -44,7 +44,7 @@ class CardReader:
     # and returns the card number and facility code as a tuple.
     # A None response indicates no data in buffer
     # TODO: add proper error handling
-    def get_data(self):
+    def get_data(self, use_old=False):
         with self.lock:
             if self.fake is not None:
                 try:
@@ -52,7 +52,9 @@ class CardReader:
                         text = f.read()
                         items = text.split(",")
                         result = (int(items[0]), int(items[1]))
-                        if result != self.fake:
+                        if use_old:
+                            return result
+                        elif result != self.fake:
                             self.fake = result
                             return result
                         else:

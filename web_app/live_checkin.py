@@ -26,7 +26,6 @@ def badge_reading_task():
             if data is not None:
                 badge, access = data
                 badge = process_badge(badge)
-                checkin_user(badge, session)
                 socketio.emit('found_badge', badge)
         except Exception as e:
             print(e)
