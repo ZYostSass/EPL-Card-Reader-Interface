@@ -44,7 +44,8 @@ def disconnect():
         with cancel_lock:
             cancel = True
 
-        thread.join()
+        if thread is not None:
+            thread.join()
         thread = None
 
 

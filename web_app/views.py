@@ -25,7 +25,13 @@ def index():
 @bp.errorhandler(403)
 def access_denied(e):
     flash(str(e), "error")
-    return render_template('access-denied.html', next=url_for(request.endpoint), no_sidebar=True, no_navbar=True), 403
+
+    try:
+        next = url_for(request.endpoint, request.args)
+    except:
+        next = None
+    
+    return render_template('access-denied.html', next=next, no_sidebar=True, no_navbar=True), 403
 
 
 @bp.route("/login", methods=['POST', 'GET'])
@@ -223,7 +229,7 @@ def permissions():
             user_badge = request.form['badge']
             user = get_user(user_badge)
             if user is None:
-                flash ("User does not exist")
+                flash ("User does not exist", "error")
                 return render_template("permissions.html")
             else:
                 return redirect(url_for('views.permissionsStudent', badge=user_badge))
@@ -263,23 +269,27 @@ def card_data():
 @bp.route("/permissions/<badge>/")
 def permissionsStudent(badge):
     user = get_user(badge)
-    categories = all_categories()
-    uncategorized = uncategorized_machines_without_user(user.id)
+    if user is not None:
+        categories = all_categories()
+        uncategorized = uncategorized_machines_without_user(user.id)
 
-    # Filter the categories and machines
-    filtered_categories = []
-    for category in categories:
-        filtered_machines = [
-            machine
-            for machine in category.machines
-            if machine not in user.machines
-        ]
-        if filtered_machines:
-            filtered_category = MachineTag(tag=category.tag)
-            filtered_category.machines = filtered_machines
-            filtered_categories.append(filtered_category)
+        # Filter the categories and machines
+        filtered_categories = []
+        for category in categories:
+            filtered_machines = [
+                machine
+                for machine in category.machines
+                if machine not in user.machines
+            ]
+            if filtered_machines:
+                filtered_category = MachineTag(tag=category.tag)
+                filtered_category.machines = filtered_machines
+                filtered_categories.append(filtered_category)
 
-    return render_template("permissionsStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
+        return render_template("permissionsStudent.html", user=user, categories=filtered_categories, uncategorized=uncategorized)
+    else:
+        flash ("User does not exist", "error")
+        return redirect(url_for('views.permissions'))
 
     
 @bp.route("/edit_user/")
@@ -492,7 +502,7 @@ def training_session_details(machine_id):
             flash(
                 f"Training for user with Badge {user_badge} updated successfully", "success")
             return redirect(url_for('views.training_session_details', machine_id=machine_id))
-        except ValueError as e:
+        except Exception as e:
             flash(str(e), "error")
             return redirect(url_for('views.training_session_details', machine_id=machine_id))
 

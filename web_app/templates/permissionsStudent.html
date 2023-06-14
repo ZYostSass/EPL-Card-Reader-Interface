@@ -2,6 +2,7 @@
 <div class="permissionsStudent-content">
   <div class="student-info">
     <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+    <a href="{{ url_for('views.permissions') }}">
   </div>
   {% if user.training_log|length > 0 %}
   <div class="trained_on">
@@ -27,7 +28,7 @@
   {% if categories|length > 0 or uncategorized|length > 0 %}
   <div>
     <h3>Not trained on:</h3>
-    {% if categories|length > 0 %}
+  {% if categories|length > 0 %}
       {% for category in categories %}
       <div class="{{category.tag | format_category}}">
         <h3>{{category.tag}}</h3>

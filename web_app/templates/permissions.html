@@ -2,28 +2,29 @@
 <div class="permissions-content px-3 pt-4">
   <h2 class="fs-5 pe-2">View Student Equipment Permissions</h2>
   <div class="card-prompt">
-    <h3><a href="/card_data/" class="btn btn-primary" id="scan-btn">Scan PSU ID card</a></h3>
+    <h3><a href="/card_data/" class="btn btn-primary" id="badge_reader">Scan PSU ID card</a></h3>
     <h4><span>OR</span></h4>
   </div>
   <form action="/permissions/" method="POST" class="badge-form m-5">
     <h3>Enter Manually</h3>
     <div class="mb-3">
       <label for="badge" class="form-label">Badge Number</label>
-      <input
-        type="text"
-        class="form-control"
-        name="badge"
-        id="badge"
-        value="{{ badge }}"
-        maxlength="6"
-        inputmode="numeric"
-        pattern="[0-9]{6}"
-        required
-      />
+      <input type="text" class="form-control" name="badge" id="badge" value="{{ badge }}" maxlength="6"
+        inputmode="numeric" pattern="[0-9]{6}" required />
       <div id="idHelp" class="form-text">Must be a 6-digit number</div>
     </div>
     <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
   </form>
 </div>
 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  function handle_badge(badge) {
+    if (badge != null) {
+      window.location.href = "/permissions/" + badge
+    }
+  }
+</script>
+{% include "live_badge_reader.html" %}
 {% endblock %}

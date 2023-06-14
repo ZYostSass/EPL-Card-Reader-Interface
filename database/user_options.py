@@ -278,7 +278,12 @@ def add_training(badge, machine_id):
     # If is isn't, leave
     if machine == None:
         raise LookupError(f"Machine with ID {machine_id} does not exist")
+    for m in to_train.machines:
+        if m.id == machine_id:
+            raise LookupError(f"User with ID {badge} is already trained on machine with ID {machine_id}")
+    
     to_train.machines.append(machine)
+    
     database_init.session.commit()
 
 # Remove trainings to a passed User
