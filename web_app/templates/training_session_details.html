@@ -4,36 +4,67 @@
     Training Session for <b class="equipment-name">{{ machine.name|escape }}</b>
   </h2>
   <!-- Card Prompt -->
-    <div class="card-prompt">
-      <h3><a href="/card_data/" class="btn btn-primary" id="scan-btn">Scan PSU ID card</a></h3>
-      <h4><span>OR</span></h4>
+  <div class="card-prompt">
+    <h3><a href="/card_data/" class="btn btn-primary" id="badge_reader">Scan PSU ID card</a></h3>
+    <h4><span>OR</span></h4>
   </div>
   <!-- End Card Prompt -->
   <!-- Manual Entry -->
-  <form
-    action="{{ url_for('views.training_session_details', machine_id=machine.id)}}"
-    method="POST"
-    class="m-5"
-  >
+  <form action="{{ url_for('views.training_session_details', machine_id=machine.id)}}" method="POST" class="m-5">
     <h3>Enter Manually</h3>
     <div class="mb-3">
       <label for="badge" class="form-label">Badge Number</label>
-      <input
-        type="text"
-        class="form-control"
-        name="badge"
-        id="badge"
-        value="{{ badge }}"
-        maxlength="6"
-        inputmode="numeric"
-        pattern="[0-9]{6}"
-        required
-      />
+      <input type="text" class="form-control" name="badge" id="badge" value="{{ badge }}" maxlength="6"
+        inputmode="numeric" pattern="[0-9]{6}" required />
       <div id="idHelp" class="form-text">Must be a 6 digit number</div>
     </div>
     <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
   </form>
   <!-- End Manual Entry -->
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  /**
+   * sends a request to the specified url from a form. this will change the window location.
+   * @param {string} path the path to send the post request to
+   * @param {object} params the parameters to add to the url
+   * @param {string} [method=post] the method to use on the form
+   * 
+   * From: https://stackoverflow.com/a/133997
+   */
+  function post(path, params, method = 'post') {
+    // The rest of this code assumes you are not using a library.
+    // It can be made less verbose if you use one.
+    const form = document.createElement('form');
+    form.method = method;
+    form.action = path;
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = key;
+        hiddenField.value = params[key];
+
+        form.appendChild(hiddenField);
+      }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+
+  function handle_badge(badge) {
+    if (badge != null) {
+      post(
+        "{{ url_for('views.training_session_details', machine_id=machine.id)}}",
+        { badge }
+      );
+    }
+  }
+</script>
+{% include "live_badge_reader.html" %}
 
 {% endblock %}

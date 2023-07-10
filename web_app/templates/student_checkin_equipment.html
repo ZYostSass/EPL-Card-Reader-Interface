@@ -4,10 +4,17 @@
     <span class="icon-close">
       <i class="fa-solid fa-circle-xmark"></i>
     </span>
+    {% if user %}
     <div class="student-info">
       <h2>Welcome back, {{ user.firstname }}.</h2>
     </div>
+    {% else %}
+    <div class="student-info">
+      <h2>Could not find badge {{ not_found }}.</h2>
+    </div>
+    {% endif %}
   </div>
+  {% if user %}
   <div
     class="scrollable-content p-2"
     data-bs-spy="scroll"
@@ -80,5 +87,15 @@
     </div>
     {% endif %}
   </div>
+  {% else %}
+  <div
+  class="scrollable-content p-2"
+  data-bs-spy="scroll"
+  data-bs-offset="0"
+  tabindex="0"
+  >
+  Ask a lab manager to get you set up with an account.
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

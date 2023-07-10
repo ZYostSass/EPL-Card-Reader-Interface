@@ -39,7 +39,7 @@
     />
     <title>EPL Card Reader</title>
   </head>
-  <body>
+  <body class="login">
     <!-- Flash messages -->
     {% with messages = get_flashed_messages(with_categories=True) %} {% if
     messages %} {% for category, message in messages %} {% if category ==
@@ -83,10 +83,13 @@
         <h1>EPL Card Reader</h1>
       </div>
       <nav class="navigation">
-        <a href="{{ url_for('views.student_checkin') }}" id="checkin"
-          >Student Check-in</a
+        {% if current_role is not none %}
+        <a href="{{ url_for('views.dashboard') }}"
+          >Dashboard</a
         >
-        <button type="button" class="btn btn-primary login-popup">Login</button>
+        {% else %}
+          <button type="button" class="btn btn-primary login-popup">Login</button>
+        {% endif %}
       </nav>
     </header>
     <!-- End Navigation Bar -->
@@ -111,6 +114,35 @@
         </form>
       </div>
     </div>
+
+    <div id="badge_reader" class="card-prompt">
+      <h3 id="scan-btn">Scan PSU ID Card</h3>
+    </div>
+  
+    <form method="post" class="m-5" id="checkin-form" action="/student-checkin">
+      <h3>Enter Manually</h3>
+      <div class="mb-3">
+        <label for="badge" class="form-label">Access Badge ID</label>
+        <input
+          type="text"
+          class="form-control"
+          name="badge"
+          id="badge"
+          value="{{ badge }}"
+          maxlength="6"
+          inputmode="numeric"
+          pattern="[0-9]{6}"
+          required
+        />
+        <div id="idHelp" class="form-text">Must be a 6 digit number</div>
+      </div>
+      <button type="submit" class="btn-primary" id="submit-btn">Submit</button>
+    </form>
+
+    <!-- <div id="badge_reader" style="width: 100px; height: 100px; background-color: white; position: absolute; top: 100px; left: 100px; border:5px solid">
+      click for manual card reader check
+    </div> -->
+    
     <!-- End Login -->
     <div class="student-checkin-content">
       {% block content %} {% endblock %}
@@ -122,5 +154,15 @@
     ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{url_for('static', filename='script.js')}}"></script>
+
+    <script>
+      function handle_badge(badge) {
+        if (badge != null) {
+            window.location.href = "/student-checkin/" + badge
+        } 
+      }
+    </script>
+
+    {% include "live_badge_reader.html" %}
   </body>
 </html>
